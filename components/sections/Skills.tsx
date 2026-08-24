@@ -7,7 +7,7 @@ export function Skills() {
     <section
       id="skills"
       aria-labelledby="skills-heading"
-      className="mx-auto max-w-3xl px-6 py-24"
+      className="mx-auto max-w-3xl px-6 py-16 sm:py-24"
     >
       <SectionHeading id="skills-heading" eyebrow="Skills" title="Grouped by area" />
       <dl className="grid gap-8 sm:grid-cols-2">

@@ -13,7 +13,7 @@ export function Experience() {
     <section
       id="experience"
       aria-labelledby="experience-heading"
-      className="mx-auto max-w-3xl px-6 py-24"
+      className="mx-auto max-w-3xl px-6 py-16 sm:py-24"
     >
       <SectionHeading
         id="experience-heading"
@@ -55,7 +55,7 @@ export function Experience() {
           onClick={() => setShowEarlier((prev) => !prev)}
           aria-expanded={showEarlier}
           aria-controls="earlier-roles"
-          className="rounded text-sm font-medium underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          className="rounded text-sm font-medium text-accent underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         >
           {showEarlier ? "Hide earlier roles" : "Show earlier roles"}
         </button>

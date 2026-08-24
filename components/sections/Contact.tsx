@@ -8,7 +8,7 @@ export function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="mx-auto max-w-3xl px-6 py-24"
+      className="mx-auto max-w-3xl px-6 py-16 sm:py-24"
     >
       <SectionHeading id="contact-heading" eyebrow="Contact" title="Get in touch" />
       {contact.availableForConsulting ? (
@@ -22,7 +22,7 @@ export function Contact() {
       ) : null}
       <a
         href={`mailto:${contact.email}`}
-        className="block w-fit rounded text-2xl font-semibold underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+        className="block w-fit rounded text-xl font-semibold break-words text-accent underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:text-2xl"
       >
         {contact.email}
       </a>

@@ -63,12 +63,28 @@ no-JS-required baseline at every point.
 
 ## Phase 3 — Visual identity
 
-- [ ] Apply the "confident, modern, not corporate-generic" tone: finalize
-      palette, spacing, and type scale in Tailwind config
-- [ ] Style all sections built in Phase 2 against the finalized palette
-- [ ] Check color contrast against WCAG AA for all text/background pairs
-      (spec §7)
-- [ ] Responsive pass: mobile, tablet, desktop breakpoints for every section
+- [x] Finalized palette/type in `app/globals.css` (Tailwind v4 is CSS-first —
+      no `tailwind.config.ts` needed). Near-black/white base with a single
+      violet accent (`#6d28d9` light / `#a78bfa` dark) used consistently for
+      section eyebrows, links, and the primary interactive states. Fixed a
+      scaffold bug where `body` hardcoded Arial instead of the Geist
+      font-sans variable. Hero name and section headings use fluid
+      `clamp()` sizing instead of fixed breakpoint jumps.
+- [x] Styled all Phase 2 sections against the finalized palette; replaced
+      the emoji hint text with a proper `<kbd>`-styled ⌘K badge in the hero
+      (foreshadows the Phase 5 command palette)
+- [x] Color contrast: computed WCAG ratios by hand for the palette itself
+      (all ≥5.25:1, well above AA), then ran an automated
+      `@axe-core/playwright` `wcag2aa` scan in both light and dark
+      (`prefers-color-scheme`) — 0 violations in either. Caught and fixed
+      one real bug in the process: the original hero hint at 40% text
+      opacity was only 2.71:1, below AA; standardized on 60% as the opacity
+      floor for any real text.
+- [x] Responsive pass at 375/768/1280px via Playwright: no horizontal
+      overflow at any width. Nav collapses to a "JS" mark below `sm`
+      (full name kept for screen readers via `sr-only`), section padding
+      scales down on mobile (`py-16` → `py-24`), and the contact email
+      wraps instead of overflowing on narrow viewports.
 
 ## Phase 4 — Motion layer
 

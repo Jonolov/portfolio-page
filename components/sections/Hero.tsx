@@ -5,19 +5,21 @@ export function Hero() {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="mx-auto flex min-h-[80vh] max-w-5xl flex-col justify-center px-6 py-24"
+      className="mx-auto flex min-h-[70vh] max-w-5xl flex-col justify-center px-6 py-16 sm:min-h-[80vh] sm:py-24"
     >
       <p className="text-sm font-medium uppercase tracking-wide text-foreground/60">
         {profile.contact.location} · {profile.contact.company}
       </p>
       <h1
         id="hero-heading"
-        className="mt-4 text-5xl font-semibold tracking-tight sm:text-6xl"
+        className="mt-4 text-[clamp(2.75rem,7vw,4.75rem)] font-semibold tracking-tight"
       >
         {profile.name}
       </h1>
-      <p className="mt-4 text-xl text-foreground/80">{profile.roleLine}</p>
-      <p className="mt-6 max-w-2xl text-lg text-foreground/70">
+      <p className="mt-4 text-lg text-foreground/80 sm:text-xl">
+        {profile.roleLine}
+      </p>
+      <p className="mt-6 max-w-2xl text-base text-foreground/70 sm:text-lg">
         {profile.heroHook}
       </p>
       <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -34,8 +36,11 @@ export function Hero() {
           See experience
         </a>
       </div>
-      <p className="mt-12 text-sm text-foreground/40">
-        Press ⌘K to jump around
+      <p className="mt-12 flex items-center gap-2 text-sm text-foreground/60">
+        <kbd className="rounded border border-foreground/20 bg-foreground/5 px-2 py-1 font-mono text-xs">
+          ⌘K
+        </kbd>
+        Jump around the site
       </p>
     </section>
   );
