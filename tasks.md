@@ -261,14 +261,34 @@ no-JS-required baseline at every point.
 
 ## Phase 8 — Testing
 
-- [ ] `tests/e2e/smoke.spec.ts` — all sections render, Contact reachable
-      within one click/scroll from any scroll position
-- [ ] `tests/e2e/a11y.spec.ts` — axe scan + scripted keyboard-only traversal
-      (nav → palette open/close → Contact)
-- [ ] `tests/e2e/reduced-motion.spec.ts` — emulate
-      `prefers-reduced-motion: reduce`, assert no transform-based animation
-      fires, content still fully visible
-- [ ] Run full Playwright suite in CI-equivalent local run before deploy
+- [x] `tests/e2e/smoke.spec.ts` — all sections render with their key
+      content, Contact reachable within one click from the top and by
+      scroll from the bottom, mailto link is correct, and the Experience
+      "show earlier roles" toggle works
+- [x] `tests/e2e/a11y.spec.ts` — full `wcag2a`/`2aa`/`21a`/`21aa` axe scan
+      (both on the base page and with the palette open), skip-link check,
+      keyboard-only traversal through nav/hero/CTAs, and a dedicated
+      command-palette test covering keyboard open, focus trap (8x Tab stays
+      inside the dialog), and focus restoration on close
+- [x] `tests/e2e/reduced-motion.spec.ts` — `contextOptions: { reducedMotion: "reduce" }`
+      (**note:** this Playwright version, 1.62.1, moved `reducedMotion` out
+      of the flat `test.use()` options into a nested `contextOptions`
+      object — `tsc` caught this immediately as a real type error, not a
+      style nit). Asserts the Hero is immediately visible with no
+      animation dependency, every below-the-fold section is fully visible
+      once scrolled to, Experience cards carry no residual transform, the
+      hover-tilt is fully inert (before/after mouse-move equality — a
+      `transformPerspective`-only 3D matrix is never literally the string
+      `"none"`, so asserting exact equality is the correct check, not a
+      literal `"none"` match), and the palette's open/close transition has
+      `0s` duration
+- [x] Ran the full suite twice: once against `pnpm dev` (16/16 passing) and
+      once against the actual production build (`pnpm build && pnpm start`,
+      reusing the running server per `playwright.config.ts`'s
+      `reuseExistingServer` — 16/16 passing, faster). One real test bug
+      found and fixed along the way (the literal-`"none"` assertion above);
+      no product bugs found in this phase — the ones that existed were
+      already caught and fixed in Phases 4/6/7.
 
 ## Phase 9 — Deployment
 
