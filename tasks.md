@@ -330,12 +330,58 @@ no-JS-required baseline at every point.
       behavior outside what a headless browser can confirm, but the link
       itself is correct and was already keyboard/axe-verified as reachable)
 
+## Phase 10 — SEO (added post-launch, 2026-08-24)
+
+Not in the original plan — added after Jon asked whether Google would pick
+the site up. spec.md §5 explicitly lists SEO as part of Jon's professional
+positioning, so this was a real gap worth closing rather than an
+afterthought.
+
+- [x] `lib/site.ts` — single `SITE_URL` constant
+      (`https://jonstjarnstrom.se`), used everywhere below. **Deliberate
+      choice:** pointed at the not-yet-propagated custom domain rather than
+      the live `*.vercel.app` URL, since that's the clear long-term intent
+      and avoids having to update every metadata reference again once DNS
+      resolves. Trade-off: canonical/OG URLs point at a domain that doesn't
+      resolve yet — acceptable for a few hours/days of propagation, not
+      something to leave long-term if the domain switch stalls.
+- [x] `app/layout.tsx` — full `metadata` export: `metadataBase`,
+      `alternates.canonical`, Open Graph (title/description/url/siteName/
+      type/locale/image), Twitter Card (`summary_large_image`). Also added
+      a `Person` JSON-LD script sourced from `content/profile.ts` (name,
+      jobTitle, description, address, worksFor) — this is what lets Google
+      potentially understand "this page is a person's professional
+      profile" rather than just parsing prose.
+- [x] `app/opengraph-image.tsx` — generated (not uploaded) 1200×630 OG
+      image via `next/og`'s `ImageResponse`, matching the site's dark-mode
+      palette (violet accent on near-black). Fetches Geist Bold TTF from
+      the font's GitHub release at build time so `next/og`'s default font
+      doesn't fail to render Swedish characters — verified by actually
+      rendering it and checking "Jon Stjärnström" shows correctly, not
+      tofu. Twitter's card picked this same image up automatically as a
+      fallback (confirmed in the rendered `<head>`), so no separate
+      `twitter-image.tsx` was needed.
+- [x] `app/robots.ts` / `app/sitemap.ts` — Next.js's native
+      `MetadataRoute.Robots`/`Sitemap` file conventions; verified both
+      routes build and serve correct content.
+- [x] Verified end-to-end: full production build succeeds (all 5 routes
+      including `/opengraph-image`, `/robots.txt`, `/sitemap.xml` build as
+      static), the OG image renders correctly with no missing glyphs, all
+      `<head>` tags (canonical, `og:*`, `twitter:*`, JSON-LD) confirmed via
+      the actual rendered HTML, and the full 16-test Playwright suite still
+      passes — nothing regressed from touching the shared layout.
+- [ ] **Still on Jon:** technical SEO can't make Google discover a brand
+      new, unlinked site by itself. Once the domain is live: submit it in
+      Google Search Console (with the sitemap URL above), and link to it
+      from somewhere already indexed — LinkedIn profile and GitHub profile
+      README are the fastest wins for initial discovery.
+
 ---
 
 Open items carried over from plan.md that still need your input before or
 during implementation:
 - Confirm current "available for consulting" status is accurate (UR
   contract per spec.md shows an end date of Jun 2026, already passed as of
-  today).
+  today). **Confirmed 2026-08-24 — still accurate.**
 - Confirm ordering assumption (strict recency: UR → Hemnet → KTH) vs. a
   `featured`-flag override if you want Hemnet leading regardless of date.
