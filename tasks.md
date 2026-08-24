@@ -309,6 +309,12 @@ no-JS-required baseline at every point.
       supports up to 50 custom domains per project, so this is unblocked
       whenever Jon has one — no redeploy needed, just add it in Vercel's
       domain settings.
+      **Jon asked to have this added once he's registered a domain** —
+      when that happens: give him the exact DNS records Vercel needs (A
+      record for an apex domain, or CNAME for a subdomain — depends on
+      which he registers) and walk him through adding the domain in
+      Vercel's project settings. Neither step can be done from here
+      without his registrar/Vercel access.
 - [x] Final live-site pass against https://jon-portfolio-page.vercel.app/
       (real network conditions, not localhost): axe `wcag2a`/`2aa`/`21a`/`21aa`
       scan in light and dark — **0 violations, matching local results**.
