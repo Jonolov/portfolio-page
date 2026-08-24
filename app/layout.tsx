@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { MotionConfig } from "motion/react";
 import { Nav } from "@/components/Nav";
+import { CommandPalette } from "@/components/command-palette/CommandPalette";
+import { CommandPaletteProvider } from "@/components/command-palette/useCommandPalette";
 import { profile } from "@/content/profile";
 import "./globals.css";
 
@@ -34,10 +36,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <MotionConfig reducedMotion="user">
-          <Nav />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
+          <CommandPaletteProvider>
+            <Nav />
+            <main id="main" className="flex-1">
+              {children}
+            </main>
+            <CommandPalette />
+          </CommandPaletteProvider>
         </MotionConfig>
       </body>
     </html>

@@ -136,18 +136,41 @@ no-JS-required baseline at every point.
 
 ## Phase 5 — Command palette
 
-- [ ] Build `components/command-palette/useCommandPalette.ts` — open state,
-      ⌘K/Ctrl+K keybinding, closes on Escape/outside click
-- [ ] Build `components/command-palette/CommandPalette.tsx` on top of `cmdk`
-- [ ] Add navigation commands (jump to each section)
-- [ ] Add the playful commands (`whoami`, `stack`, `contact`) returning
-      short styled responses sourced from `content/profile.ts`
-- [ ] Style palette open/close transition with Framer Motion, gated by
-      `useReducedMotion()` (per plan.md, palette functionality itself must
-      not depend on motion)
-- [ ] Keyboard/screen-reader pass specifically on the palette: open via
-      keyboard only, navigate options via arrow keys, confirm `cmdk`'s ARIA
-      roles announce correctly
+- [x] Built `components/command-palette/useCommandPalette.tsx` (`.tsx` not
+      `.ts` — it exports a Provider component, which needs JSX) — a React
+      context holding `open` state, global ⌘K/Ctrl+K keydown listener.
+      Escape and outside-click close are handled for free by `cmdk`'s
+      `Command.Dialog` (wraps Radix Dialog).
+- [x] Built `components/command-palette/CommandPalette.tsx` on `cmdk`'s
+      `Command.Dialog`, wired into `app/layout.tsx` via
+      `CommandPaletteProvider` so it's a single global instance. The
+      Hero's ⌘K hint (Phase 3) is now a real `<button>` that opens it —
+      closing the loop from a foreshadowing detail to actual functionality.
+- [x] "Navigate" group jumps to Hero/About/Experience/Skills/Contact,
+      closes the palette, and calls `scrollIntoView` with
+      `behavior: prefers-reduced-motion ? "auto" : "smooth"`
+- [x] "Ask" group (`whoami`, `stack`, `contact`) uses cmdk's documented
+      "pages" pattern — selecting one pushes a sub-page showing text
+      sourced live from `content/profile.ts`/`content/skills.ts`, with a
+      real "← Back" item plus Backspace-to-go-back when search is empty
+- [x] Open/close transition: **deviated from the plan's "Framer Motion"**
+      — `Command.Dialog` doesn't expose Radix's `forceMount`, so
+      `AnimatePresence` can't control the exit-unmount timing without
+      dropping cmdk's Dialog convenience wrapper entirely. Used Radix's
+      own recommended pattern instead: CSS transitions keyed off the
+      `data-state` attribute it already sets, gated by Tailwind's
+      `motion-safe:`/omitted-otherwise variants (native
+      `prefers-reduced-motion` media query, no JS check needed). Verified
+      via Playwright: 0.15s transition under normal motion, 0s (instant
+      snap, still fully functional) under reduced motion.
+- [x] Verified via Playwright: keyboard-only open (⌘K and Ctrl+K, with a
+      settle-time note — pressing the shortcut in the same tick as
+      navigation can race React hydration attaching the listener, same as
+      any client-hydrated shortcut, not palette-specific), arrow-key
+      navigation lands on the right item, Enter selects and scrolls, click
+      also opens/selects, Escape and outside-click both close, and an axe
+      `wcag2aa` scan with the dialog open returns 0 violations. Full-site
+      axe re-run in light/dark to confirm no regression from this phase.
 
 ## Phase 6 — Accessibility pass (full page)
 

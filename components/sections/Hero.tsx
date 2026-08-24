@@ -1,7 +1,12 @@
+"use client";
+
 import { profile } from "@/content/profile";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
+import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
 
 export function Hero() {
+  const { setOpen } = useCommandPalette();
+
   return (
     <section
       id="hero"
@@ -38,12 +43,16 @@ export function Hero() {
             See experience
           </a>
         </div>
-        <p className="mt-12 flex items-center gap-2 text-sm text-foreground/60">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="mt-12 flex items-center gap-2 rounded text-sm text-foreground/60 transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+        >
           <kbd className="rounded border border-foreground/20 bg-foreground/5 px-2 py-1 font-mono text-xs">
             ⌘K
           </kbd>
           Jump around the site
-        </p>
+        </button>
       </RevealOnScroll>
     </section>
   );
