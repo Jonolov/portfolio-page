@@ -1,7 +1,6 @@
 "use client";
 
 import { profile } from "@/content/profile";
-import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
 
 export function Hero() {
@@ -13,7 +12,7 @@ export function Hero() {
       aria-labelledby="hero-heading"
       className="mx-auto flex min-h-[70vh] max-w-5xl flex-col justify-center px-6 py-16 sm:min-h-[80vh] sm:py-24"
     >
-      <RevealOnScroll>
+      <div>
         <p className="text-sm font-medium uppercase tracking-wide text-foreground/60">
           {profile.contact.location} · {profile.contact.company}
         </p>
@@ -53,7 +52,7 @@ export function Hero() {
           </kbd>
           Jump around the site
         </button>
-      </RevealOnScroll>
+      </div>
     </section>
   );
 }

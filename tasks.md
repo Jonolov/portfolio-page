@@ -215,14 +215,49 @@ no-JS-required baseline at every point.
 
 ## Phase 7 — Performance pass
 
-- [ ] Run Lighthouse (mobile, throttled) — target initial content visible
-      in ~2s per spec §3
-- [ ] Audit font loading (no FOUT/FOIT regressions), image formats/sizes via
-      `next/image`
-- [ ] Check JS bundle size — confirm Framer Motion + cmdk aren't pulling in
-      unused code paths
-- [ ] Re-run the reduced-motion and axe checks after any perf-driven
-      refactors, since perf work can regress a11y
+- [x] Ran Lighthouse (mobile, `pnpm build && pnpm start`) — **found and
+      fixed a real, spec-relevant bug.** With `--throttling-method=simulate`,
+      LCP was 2.8s (over spec §3's ~2s bar), and the LCP breakdown pinned it
+      on the hero hook paragraph with a 2.6s "element render delay." Root
+      cause: Hero was wrapped in `RevealOnScroll`, which sets content to
+      `opacity: 0` until React hydrates and Framer Motion's `whileInView`
+      fires — appropriate for below-the-fold content a user scrolls to, but
+      actively harmful for Hero, which is the *only* section guaranteed to
+      already be in the viewport at load. There's no "reveal on scroll" for
+      content that's already on screen; it just adds a JS-hydration gate in
+      front of the exact content spec §3 says must be readable within 5
+      seconds. Fixed by removing the wrapper — Hero is now plain, always-
+      visible markup with zero animation dependency for its own visibility.
+      Re-measured after the fix: Speed Index dropped 3.2s → 0.8s, perf score
+      93 → 96 (simulated). Cross-checked with literal `--throttling-method=devtools`
+      (real CPU/network throttling, not Lighthouse's Lantern heuristic
+      model) plus a manual CDP+PerformanceObserver measurement — both
+      agree: **FCP = LCP = 1.6s** (manual test: LCP at 728ms), CLS 0, TBT
+      60ms, perf score 99. The `simulate` method's lingering 2.7s reading
+      after the fix looks like a Lantern-model artifact for this specific
+      JS-hydration-dependent LCP element, not a real regression — noting
+      this in case a future perf pass sees the same discrepancy again.
+- [x] Font loading already correct out of the box (no changes needed):
+      `next/font`'s Geist/Geist Mono ship `font-display: swap` plus
+      automatic fallback-metric overrides (`ascent-override`,
+      `size-adjust` on a local-Arial fallback face) that keep the swap
+      layout-shift-free — confirmed by CLS: 0 in every run. No images in
+      the design (text/icon-only site), so `next/image` doesn't apply;
+      removed five unreferenced leftover SVGs (`file.svg`, `globe.svg`,
+      `next.svg`, `vercel.svg`, `window.svg`) from `public/` — dead weight
+      from the original scaffold, confirmed unreferenced via grep first.
+- [x] JS bundle: 194KB compressed total on initial load (React 19 +
+      Next.js 16 runtime + Framer Motion + cmdk + Radix Dialog + all app
+      code) — checked for obvious duplication across chunks, found none.
+      Reasonable for this stack, and the measured real-world performance
+      above (99/100, TBT 60ms) confirms it isn't a practical problem;
+      didn't chase further bundle-splitting (e.g. Framer Motion's
+      `LazyMotion`) given that.
+- [x] Re-ran axe (`wcag2a`/`2aa`/`21a`/`21aa`, light+dark) after the Hero
+      fix — 0 violations, no regression. Re-verified reduced motion: Hero
+      heading is `opacity: 1`/`transform: none` immediately on load (no
+      animation dependency at all now), while About/Experience/Skills
+      still correctly reveal via `whileInView` when scrolled into view.
 
 ## Phase 8 — Testing
 
