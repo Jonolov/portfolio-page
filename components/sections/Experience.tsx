@@ -5,6 +5,9 @@ import { earlierRoles, experience } from "@/content/experience";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
 import { Card } from "@/components/ui/Card";
+import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
+import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
+import { TiltCard } from "@/components/motion/TiltCard";
 
 export function Experience() {
   const [showEarlier, setShowEarlier] = useState(false);
@@ -15,41 +18,51 @@ export function Experience() {
       aria-labelledby="experience-heading"
       className="mx-auto max-w-3xl px-6 py-16 sm:py-24"
     >
-      <SectionHeading
-        id="experience-heading"
-        eyebrow="Experience"
-        title="Selected roles"
-      />
-      <ol className="flex flex-col gap-8">
-        {experience.map((role) => (
-          <li key={role.company}>
-            <Card>
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h3 className="text-xl font-semibold">{role.company}</h3>
-                <p className="text-sm text-foreground/60">
-                  {role.dates.start} – {role.dates.end}
-                </p>
-              </div>
-              <p className="mt-1 text-sm font-medium text-foreground/70">
-                {role.title}
-              </p>
-              <p className="mt-4 text-foreground/80">{role.summary}</p>
-              <ul className="mt-4 list-disc space-y-1 pl-5 text-foreground/80">
-                {role.highlights.map((highlight) => (
-                  <li key={highlight}>{highlight}</li>
-                ))}
-              </ul>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {role.tech.map((tech) => (
-                  <Tag key={tech}>{tech}</Tag>
-                ))}
-              </div>
-            </Card>
-          </li>
-        ))}
-      </ol>
+      <RevealOnScroll>
+        <SectionHeading
+          id="experience-heading"
+          eyebrow="Experience"
+          title="Selected roles"
+        />
+      </RevealOnScroll>
+      <StaggerGroup>
+        <ol className="flex flex-col gap-8">
+          {experience.map((role) => (
+            <li key={role.company}>
+              <StaggerItem>
+                <TiltCard>
+                  <Card>
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                      <h3 className="text-xl font-semibold">
+                        {role.company}
+                      </h3>
+                      <p className="text-sm text-foreground/60">
+                        {role.dates.start} – {role.dates.end}
+                      </p>
+                    </div>
+                    <p className="mt-1 text-sm font-medium text-foreground/70">
+                      {role.title}
+                    </p>
+                    <p className="mt-4 text-foreground/80">{role.summary}</p>
+                    <ul className="mt-4 list-disc space-y-1 pl-5 text-foreground/80">
+                      {role.highlights.map((highlight) => (
+                        <li key={highlight}>{highlight}</li>
+                      ))}
+                    </ul>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {role.tech.map((tech) => (
+                        <Tag key={tech}>{tech}</Tag>
+                      ))}
+                    </div>
+                  </Card>
+                </TiltCard>
+              </StaggerItem>
+            </li>
+          ))}
+        </ol>
+      </StaggerGroup>
 
-      <div className="mt-8">
+      <RevealOnScroll className="mt-8">
         <button
           type="button"
           onClick={() => setShowEarlier((prev) => !prev)}
@@ -81,7 +94,7 @@ export function Experience() {
             </li>
           ))}
         </ul>
-      </div>
+      </RevealOnScroll>
     </section>
   );
 }

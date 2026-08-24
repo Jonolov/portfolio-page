@@ -88,17 +88,51 @@ no-JS-required baseline at every point.
 
 ## Phase 4 — Motion layer
 
-- [ ] Build `components/motion/RevealOnScroll.tsx` wrapping `whileInView`,
-      internally checking `useReducedMotion()` and falling back to an
-      instant opacity swap when true
-- [ ] Define shared variants in `components/motion/variants.ts`
-- [ ] Apply `RevealOnScroll` to section entrances and staggered list items
-      (Experience roles, Skills groups)
-- [ ] Add active-section highlighting to the anchor nav on scroll
-- [ ] Add hover-tilt interaction to Experience cards
-      (`useMotionValue`/pointer tracking), disabled under reduced motion
-- [ ] Manual check: enable OS-level "reduce motion," reload, confirm no
-      transform/slide animations fire and all content is still fully visible
+- [x] Built `components/motion/RevealOnScroll.tsx`, `components/motion/Stagger.tsx`
+      (`StaggerGroup`/`StaggerItem`), and `components/motion/variants.ts`.
+      **Architecture note (found via a real bug):** these always render
+      `motion.div` rather than branching between `motion.div`/plain `div`
+      based on `useReducedMotion()`. The branching approach caused a React
+      hydration mismatch — `useReducedMotion()` is `null` during SSR, so
+      under reduced motion the server renders the animated-hidden state and
+      React's hydration keeps that stale server markup instead of patching
+      to the client's plain-div output, permanently stranding a
+      `translateY(16px)`. Fixed by wrapping the app in
+      `<MotionConfig reducedMotion="user">` (`app/layout.tsx`) instead,
+      which keeps DOM shape identical between server/client and instead
+      neutralizes transform-based animation at the Framer Motion engine
+      level (opacity still fades; slide/transform snaps instantly) —
+      verified via Playwright with `reducedMotion: "reduce"`.
+- [x] Applied `RevealOnScroll` to Hero, About, Contact, and the
+      Experience "show earlier roles" block; `StaggerGroup`/`StaggerItem`
+      to the Experience role list and Skills groups (confirmed `<div>`
+      wrapping `dt`/`dd` inside `<dl>` is valid HTML5, so `StaggerItem`
+      could directly replace the old grouping wrapper)
+- [x] Active-section nav highlighting in `components/Nav.tsx`. Originally
+      built on `IntersectionObserver` with a percentage-based `rootMargin`,
+      but that never activated the last nav item (Contact) once scrolled to
+      the bottom of the page — a short last section can't reach the
+      "active" viewport band if there's no room left to scroll. Replaced
+      with a scroll-position approach that explicitly special-cases
+      "scrolled to the bottom → activate the last item," verified for all
+      four sections including Contact at the true page bottom.
+- [x] `components/motion/TiltCard.tsx` — pointer-tracked hover tilt via
+      `useMotionValue`/`useTransform`/`useSpring`, applied to Experience
+      cards. Kept a manual `useReducedMotion()` check here specifically
+      (unlike the reveal components) since real-time mouse-tracked tilt is
+      worth fully suppressing under reduced motion, not just de-eased —
+      implemented as a behavioral gate inside the mousemove handler rather
+      than branching the rendered element, so it doesn't reintroduce the
+      hydration bug above.
+- [x] Verified via Playwright with `reducedMotion: "reduce"`: axe scan
+      clean once animations settle, no transform-based movement, hover
+      tilt fully inert, and all content visible. Also caught and confirmed
+      as a non-issue: axe flags a transient `color-contrast` dip on
+      partially-opaque text ~50-200ms into the fade-in (mathematically
+      unavoidable for any opacity transition ending above but not far above
+      the AA floor) — resolves within the animation's own duration and is
+      not present in the settled/at-rest state, which is what Phase 6's
+      accessibility pass will audit.
 
 ## Phase 5 — Command palette
 

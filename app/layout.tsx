@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { MotionConfig } from "motion/react";
 import { Nav } from "@/components/Nav";
 import { profile } from "@/content/profile";
 import "./globals.css";
@@ -32,10 +33,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <Nav />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
+        <MotionConfig reducedMotion="user">
+          <Nav />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+        </MotionConfig>
       </body>
     </html>
   );
