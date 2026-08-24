@@ -19,19 +19,19 @@ implementation — nothing here is scaffolded yet.
 
 ## Phase 1 — Content layer
 
-- [ ] Define shared types in `lib/types.ts` (`Role`, `SkillGroup`, `Profile`,
-      etc.) matching the fields spec.md §5 actually uses (company, title,
-      dates, summary, tech, featured/collapsed flag)
-- [ ] Write `content/profile.ts` — name, role line, hero hook, about copy,
-      contact fields (email, company, location) per plan.md §5.4
-- [ ] Write `content/experience.ts` — UR, Hemnet, KTH as full entries;
-      Ving/Thomas Cook, Fröjd, KTH internship as collapsed/condensed entries
-      per plan.md §5.1–5.2
-- [ ] Write `content/skills.ts` — grouped per spec.md §5 (Frontend, Backend,
+- [x] Define shared types in `lib/types.ts` (`Role`, `CondensedRole`,
+      `SkillGroup`, `Profile`)
+- [x] Write `content/profile.ts` — name, role line, hero hook, about copy,
+      contact fields (email, company, location, availability status line)
+- [x] Write `content/experience.ts` — UR, Hemnet, KTH as full `Role` entries;
+      Ving/Thomas Cook, Fröjd, KTH internship as `CondensedRole` entries
+      (company name only — titles/dates weren't in spec.md, see note below)
+- [x] Write `content/skills.ts` — grouped per spec.md §5 (Frontend, Backend,
       Auth/Identity, Testing, CMS/Platforms, Practice)
-- [ ] Sanity-check: import each content file into a scratch page and confirm
-      it type-checks and renders as plain text — confirms the data shape
-      before any UI is built on top of it
+- [x] Sanity-check: rendered all content as plain text/lists in `app/page.tsx`,
+      confirmed `tsc --noEmit` and `pnpm lint` pass clean, and verified via
+      dev server that every field renders correctly. This scratch render
+      will be replaced by real section components in Phase 2.
 
 ## Phase 2 — Static section components (no motion yet)
 
@@ -39,23 +39,27 @@ Build each as plain, fully-functional, server-rendered markup first —
 motion gets layered on in Phase 4. This keeps a working, accessible,
 no-JS-required baseline at every point.
 
-- [ ] `components/ui/` primitives: `SectionHeading`, `Tag`, `Card`
-- [ ] `components/sections/Hero.tsx` — name, role line, one-line hook,
+- [x] `components/ui/` primitives: `SectionHeading`, `Tag`, `Card`
+- [x] `components/sections/Hero.tsx` — name, role line, one-line hook,
       "Press ⌘K" hint (palette itself comes in Phase 5)
-- [ ] `components/sections/About.tsx`
-- [ ] `components/sections/Experience.tsx` — maps `content/experience.ts`,
+- [x] `components/sections/About.tsx`
+- [x] `components/sections/Experience.tsx` — maps `content/experience.ts`,
       includes the "Show earlier roles" collapse/expand (functional, no
-      animation yet — instant show/hide)
-- [ ] `components/sections/Skills.tsx` — grouped rendering, not a flat tag
+      animation yet — instant show/hide via the `hidden` attribute, element
+      stays mounted so `aria-controls` always points at a real node)
+- [x] `components/sections/Skills.tsx` — grouped rendering, not a flat tag
       cloud
-- [ ] `components/sections/Contact.tsx` — `mailto:` link, company, location,
+- [x] `components/sections/Contact.tsx` — `mailto:` link, company, location,
       "open to consulting" status line
-- [ ] Wire all sections into `app/page.tsx` with anchor IDs matching the nav
-- [ ] Add a persistent anchor nav (no active-section highlighting yet —
-      that's Phase 4) that keeps Contact reachable within one click/scroll
-      from anywhere on the page (spec §3)
-- [ ] Manual pass: keyboard-only tab through the whole page, confirm every
-      interactive element is reachable and has a visible focus state
+- [x] Wire all sections into `app/page.tsx` with anchor IDs matching the nav
+- [x] Add a persistent anchor nav (`components/Nav.tsx`, sticky header, no
+      active-section highlighting yet — that's Phase 4) that keeps Contact
+      reachable within one click/scroll from anywhere on the page (spec §3).
+      Also added a skip-to-content link in `app/layout.tsx`.
+- [x] Manual pass: scripted Tab-through with Playwright confirmed all 10
+      interactive elements (skip link, 5 nav links, 2 hero CTAs, the
+      earlier-roles toggle, the contact mailto link) are reachable in a
+      logical order with a visible focus outline on each
 
 ## Phase 3 — Visual identity
 
