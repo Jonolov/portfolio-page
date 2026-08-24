@@ -174,14 +174,44 @@ no-JS-required baseline at every point.
 
 ## Phase 6 — Accessibility pass (full page)
 
-- [ ] Run an automated `axe` scan against the built page, fix any flagged
-      issues
-- [ ] Full keyboard-only pass: tab order, focus visibility, palette,
-      collapse/expand on Experience, all links
-- [ ] Screen reader spot-check (VoiceOver) on Hero, Experience, and the
-      command palette
-- [ ] Confirm skip-to-content link or equivalent if tab order to Contact is
-      long
+- [x] Ran `pnpm build` (fully static, `○ (Static)` for `/`) + `pnpm start`
+      and scanned the actual production output, not just dev mode. Axe
+      scan widened to `wcag2a`/`wcag2aa`/`wcag21a`/`wcag21aa` (broader than
+      earlier per-phase `wcag2aa`-only scans) in both light and dark —
+      **0 violations.**
+- [x] Full keyboard-only pass across the whole page (12 tab stops, all in
+      logical order with a visible focus outline): skip link → nav (5
+      links) → hero CTAs → ⌘K hint button → Experience's earlier-roles
+      toggle → contact email. Confirmed the toggle button flips
+      `aria-expanded` and reveals `#earlier-roles` correctly via
+      keyboard-only Enter. Confirmed the palette's Radix-driven focus trap
+      never leaks focus to the page behind it across 15 Tab presses while
+      open. **Found and fixed a real bug here:** closing the palette with
+      Escape after opening it via the global ⌘K shortcut (no click target)
+      left focus stranded on `<body>`, since Radix's own focus-restore
+      only knows about a registered trigger element and `cmdk`'s
+      `Command.Dialog` doesn't forward Radix's `onCloseAutoFocus` prop to
+      customize it. Fixed by tracking `document.activeElement` in
+      `useCommandPalette.tsx` at the moment the palette opens and manually
+      restoring it (via `requestAnimationFrame`, so it runs after Radix's
+      own cleanup) when it closes — verified for both the keyboard-shortcut
+      and Hero-button-click open paths.
+- [x] **Screen-reader check — with a caveat.** This environment has no
+      access to a live VoiceOver GUI session, so I could not do a literal
+      manual VoiceOver pass as originally planned. Substituted Playwright's
+      accessibility-tree snapshot (`ariaSnapshot()`) for Hero, Experience,
+      and the open command palette — the same computed AX tree a screen
+      reader consumes — and confirmed clean semantic structure (heading
+      levels, list/listitem roles, the palette's combobox/listbox/option
+      pattern with a labeled dialog). This is a solid proxy but not a
+      substitute for an actual VoiceOver run; flagging this as something
+      to manually verify yourself if you want full confidence before
+      launch.
+- [x] Skip-to-content link confirmed as the first tab stop, and activating
+      it (Enter) correctly moves to `#main`. Tab distance from page load to
+      Contact is short regardless (11 stops through the full page, 6 of
+      which are the nav itself) — the skip link's real value is bypassing
+      the nav on repeat visits, not solving an otherwise-unusable distance.
 
 ## Phase 7 — Performance pass
 
