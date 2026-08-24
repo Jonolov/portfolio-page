@@ -295,18 +295,34 @@ no-JS-required baseline at every point.
 - [x] Repo created and pushed: https://github.com/Jonolov/portfolio-page
       (public, per Jon's call — reinforces "built with the stack it's
       promoting" since the source itself is browsable)
-- [ ] Connect repo to Vercel, confirm production build succeeds — needs
-      Jon's Vercel login, can't be done from here
+- [x] Connected to Vercel (Hobby plan, Jon's call — free tier's "personal,
+      non-commercial use" terms are a bit of a gray area for a site that
+      advertises paid consulting, but reasonable to start on and upgrade
+      later if it ever matters). Live at
+      https://jon-portfolio-page.vercel.app/ — build succeeded, auto-detected
+      Next.js with zero config needed.
 - [ ] Custom domain: **plan changed** — not `become.independtech.se`.
       Independent Tech Sweden AB is the umbrella/invoicing company Jon
       currently contracts through, not his long-term brand; this site is
       meant to outlive that relationship, so it'll point at a domain under
-      Jon's own future company instead once he registers one. Deploying to
-      Vercel's default `*.vercel.app` URL first is unblocked regardless —
-      the custom domain step is just deferred until a domain exists.
-- [ ] Final live-site pass: repeat Phase 6 (a11y) and Phase 7 (perf) checks
-      against the deployed URL, not just local dev
-- [ ] Confirm contact `mailto:` link works end-to-end from the live site
+      Jon's own future company instead once he registers one. Vercel Hobby
+      supports up to 50 custom domains per project, so this is unblocked
+      whenever Jon has one — no redeploy needed, just add it in Vercel's
+      domain settings.
+- [x] Final live-site pass against https://jon-portfolio-page.vercel.app/
+      (real network conditions, not localhost): axe `wcag2a`/`2aa`/`21a`/`21aa`
+      scan in light and dark — **0 violations, matching local results**.
+      Lighthouse mobile (literal `devtools` throttling) — **98/100**, FCP =
+      LCP = Speed Index = **1.8s** (comfortably inside spec §3's ~2s bar,
+      confirming the Phase 7 Hero fix holds up under real network latency,
+      not just localhost), CLS 0, TBT 120ms. Keyboard-only nav, the command
+      palette (open/select/close), and the Experience toggle all verified
+      working on the live deployment.
+- [x] Contact `mailto:` link confirmed correct end-to-end on the live site
+      (`mailto:jon.stjarnstrom@independtech.se`, verified via the rendered
+      `href` — actually launching a mail client from a click is OS-level
+      behavior outside what a headless browser can confirm, but the link
+      itself is correct and was already keyboard/axe-verified as reachable)
 
 ---
 
