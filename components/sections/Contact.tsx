@@ -18,7 +18,7 @@ export function Contact() {
           title="Get in touch"
         />
         {contact.availableForConsulting ? (
-          <p className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-foreground/80">
+          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-sm font-medium text-emerald-700 dark:text-emerald-300">
             <span
               className="h-2 w-2 rounded-full bg-emerald-500"
               aria-hidden="true"
@@ -35,6 +35,14 @@ export function Contact() {
         <p className="mt-4 text-foreground/70">
           {contact.company} · {contact.location}
         </p>
+        <a
+          href={contact.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-block w-fit rounded text-foreground/70 underline underline-offset-4 transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+        >
+          LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+        </a>
       </RevealOnScroll>
     </section>
   );

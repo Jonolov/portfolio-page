@@ -1,8 +1,17 @@
 import { skills } from "@/content/skills";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Tag } from "@/components/ui/Tag";
+import { Tag, type TagTone } from "@/components/ui/Tag";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
+
+const categoryTones: Record<string, TagTone> = {
+  Frontend: "violet",
+  Backend: "blue",
+  "Auth/Identity": "amber",
+  Testing: "emerald",
+  "CMS/Platforms": "rose",
+  Practice: "cyan",
+};
 
 export function Skills() {
   return (
@@ -27,7 +36,9 @@ export function Skills() {
               </dt>
               <dd className="mt-3 flex flex-wrap gap-2">
                 {group.skills.map((skill) => (
-                  <Tag key={skill}>{skill}</Tag>
+                  <Tag key={skill} tone={categoryTones[group.category]}>
+                    {skill}
+                  </Tag>
                 ))}
               </dd>
             </StaggerItem>

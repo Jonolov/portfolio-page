@@ -34,6 +34,7 @@ export interface Profile {
     email: string;
     company: string;
     location: string;
+    linkedin: string;
     availableForConsulting: boolean;
     statusLine: string;
   };

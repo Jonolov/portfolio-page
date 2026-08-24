@@ -17,6 +17,7 @@ export const profile: Profile = {
     email: "jon.stjarnstrom@independtech.se",
     company: "Independent Tech Sweden AB",
     location: "Stockholm",
+    linkedin: "https://www.linkedin.com/in/jon-stjärnström-8225b172",
     availableForConsulting: true,
     statusLine: "Currently open to new consulting engagements.",
   },

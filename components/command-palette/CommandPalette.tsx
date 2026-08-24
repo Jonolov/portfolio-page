@@ -163,6 +163,14 @@ export function CommandPalette() {
               >
                 {profile.contact.email}
               </a>
+              <a
+                href={profile.contact.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 block underline underline-offset-4"
+              >
+                LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+              </a>
             </div>
             <Command.Item
               onSelect={() => setPages((prev) => prev.slice(0, -1))}

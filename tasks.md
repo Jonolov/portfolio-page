@@ -385,3 +385,15 @@ during implementation:
   today). **Confirmed 2026-08-24 — still accurate.**
 - Confirm ordering assumption (strict recency: UR → Hemnet → KTH) vs. a
   `featured`-flag override if you want Hemnet leading regardless of date.
+
+## Future ideas (saved, not built)
+
+- **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator
+  styled as a retro pixel-art figure of Jon climbing down a ladder as the
+  page scrolls. Right-sized version of the rleonardi.com 8-bit-resume
+  inspiration — one playful detail rather than a full theme change. Needs
+  actual sprite assets (bigger lift than anything built so far, which is
+  all CSS/SVG), reduced-motion handling consistent with the rest of the
+  site (freeze at scroll-progress position, no walk-cycle animation), and
+  should sit alongside the native scrollbar rather than replace its
+  function.

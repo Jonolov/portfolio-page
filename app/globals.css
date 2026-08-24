@@ -27,3 +27,27 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
+
+@utility animate-flow-line {
+  animation: flow-line linear infinite;
+}
+
+@keyframes flow-line {
+  to {
+    stroke-dashoffset: -600;
+  }
+}
+
+@utility animate-twinkle {
+  animation: twinkle ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}

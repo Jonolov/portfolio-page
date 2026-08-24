@@ -1,18 +1,53 @@
 "use client";
 
+import { useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { profile } from "@/content/profile";
 import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
+import { NameStar } from "@/components/motion/NameStar";
 
 export function Hero() {
   const { setOpen } = useCommandPalette();
+  const shouldReduceMotion = useReducedMotion();
+
+  const cursorX = useMotionValue(0);
+  const cursorY = useMotionValue(0);
+  const starX = useSpring(useTransform(cursorX, [-0.5, 0.5], [-40, 40]), {
+    stiffness: 60,
+    damping: 20,
+  });
+  const starY = useSpring(useTransform(cursorY, [-0.5, 0.5], [-40, 40]), {
+    stiffness: 60,
+    damping: 20,
+  });
+
+  function handleMouseMove(event: ReactMouseEvent<HTMLElement>) {
+    if (shouldReduceMotion) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    cursorX.set((event.clientX - rect.left) / rect.width - 0.5);
+    cursorY.set((event.clientY - rect.top) / rect.height - 0.5);
+  }
+
+  function handleMouseLeave() {
+    cursorX.set(0);
+    cursorY.set(0);
+  }
 
   return (
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="mx-auto flex min-h-[70vh] max-w-5xl flex-col justify-center px-6 py-16 sm:min-h-[80vh] sm:py-24"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative flex min-h-[70vh] flex-col justify-center overflow-hidden py-16 sm:min-h-[80vh] sm:py-24"
     >
-      <div>
+      <NameStar
+        offsetX={starX}
+        offsetY={starY}
+        cursorX={cursorX}
+        cursorY={cursorY}
+      />
+      <div className="mx-auto w-full max-w-5xl px-6">
         <p className="text-sm font-medium uppercase tracking-wide text-foreground/60">
           {profile.contact.location} · {profile.contact.company}
         </p>

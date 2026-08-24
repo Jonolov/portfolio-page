@@ -51,6 +51,7 @@ const personJsonLd = {
   description: profile.heroHook,
   url: SITE_URL,
   email: profile.contact.email,
+  sameAs: [profile.contact.linkedin],
   address: {
     "@type": "PostalAddress",
     addressLocality: profile.contact.location,
