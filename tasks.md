@@ -292,8 +292,18 @@ no-JS-required baseline at every point.
 
 ## Phase 9 — Deployment
 
-- [ ] Connect repo to Vercel, confirm production build succeeds
-- [ ] Point `become.independtech.se` at the Vercel deployment
+- [x] Repo created and pushed: https://github.com/Jonolov/portfolio-page
+      (public, per Jon's call — reinforces "built with the stack it's
+      promoting" since the source itself is browsable)
+- [ ] Connect repo to Vercel, confirm production build succeeds — needs
+      Jon's Vercel login, can't be done from here
+- [ ] Custom domain: **plan changed** — not `become.independtech.se`.
+      Independent Tech Sweden AB is the umbrella/invoicing company Jon
+      currently contracts through, not his long-term brand; this site is
+      meant to outlive that relationship, so it'll point at a domain under
+      Jon's own future company instead once he registers one. Deploying to
+      Vercel's default `*.vercel.app` URL first is unblocked regardless —
+      the custom domain step is just deferred until a domain exists.
 - [ ] Final live-site pass: repeat Phase 6 (a11y) and Phase 7 (perf) checks
       against the deployed URL, not just local dev
 - [ ] Confirm contact `mailto:` link works end-to-end from the live site
