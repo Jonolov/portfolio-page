@@ -16,7 +16,7 @@ export const skills: SkillGroup[] = [
   },
   {
     category: "Backend",
-    skills: ["Node.js/Express", "GraphQL", "Prisma", "Ruby on Rails"],
+    skills: ["Node.js/Express", "GraphQL", "Prisma"],
   },
   {
     category: "Auth/Identity",

@@ -1,22 +1,18 @@
 interface SectionHeadingProps {
   id: string;
-  eyebrow?: string;
+  eyebrow: string;
   title: string;
 }
 
 export function SectionHeading({ id, eyebrow, title }: SectionHeadingProps) {
   return (
-    <div className="mb-8">
-      {eyebrow ? (
-        <p className="text-sm font-medium uppercase tracking-wide text-accent">
-          {eyebrow}
-        </p>
-      ) : null}
+    <div className="mb-10 border-t border-foreground/10 pt-4">
       <h2
         id={id}
-        className="text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold tracking-tight"
+        className="font-mono text-xs uppercase tracking-wide text-foreground/60"
       >
-        {title}
+        <span className="text-accent">{"// "}</span>
+        {eyebrow} — {title}
       </h2>
     </div>
   );

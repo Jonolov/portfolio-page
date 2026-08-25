@@ -1,17 +1,8 @@
 import { skills } from "@/content/skills";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Tag, type TagTone } from "@/components/ui/Tag";
+import { Tag } from "@/components/ui/Tag";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
-
-const categoryTones: Record<string, TagTone> = {
-  Frontend: "violet",
-  Backend: "blue",
-  "Auth/Identity": "amber",
-  Testing: "emerald",
-  "CMS/Platforms": "rose",
-  Practice: "cyan",
-};
 
 export function Skills() {
   return (
@@ -23,22 +14,20 @@ export function Skills() {
       <RevealOnScroll>
         <SectionHeading
           id="skills-heading"
-          eyebrow="Skills"
-          title="Grouped by area"
+          eyebrow="skills"
+          title="grouped by area"
         />
       </RevealOnScroll>
       <StaggerGroup>
         <dl className="grid gap-8 sm:grid-cols-2">
           {skills.map((group) => (
             <StaggerItem key={group.category}>
-              <dt className="text-sm font-semibold uppercase tracking-wide text-foreground/60">
-                {group.category}
+              <dt className="font-mono text-xs text-foreground/60">
+                # {group.category.toLowerCase()}
               </dt>
               <dd className="mt-3 flex flex-wrap gap-2">
                 {group.skills.map((skill) => (
-                  <Tag key={skill} tone={categoryTones[group.category]}>
-                    {skill}
-                  </Tag>
+                  <Tag key={skill}>{skill}</Tag>
                 ))}
               </dd>
             </StaggerItem>

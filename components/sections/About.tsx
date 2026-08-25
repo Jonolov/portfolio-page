@@ -12,8 +12,8 @@ export function About() {
       <RevealOnScroll>
         <SectionHeading
           id="about-heading"
-          eyebrow="About"
-          title="How he works"
+          eyebrow="about"
+          title="how he works"
         />
         <div className="flex flex-col gap-4 text-base text-foreground/80 sm:text-lg">
           {profile.about.paragraphs.map((paragraph) => (

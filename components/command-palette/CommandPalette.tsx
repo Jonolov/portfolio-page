@@ -151,7 +151,7 @@ export function CommandPalette() {
               {profile.contact.availableForConsulting ? (
                 <p className="mb-2 inline-flex items-center gap-2 font-medium">
                   <span
-                    className="h-2 w-2 rounded-full bg-emerald-500"
+                    className="h-2 w-2 rounded-full bg-accent"
                     aria-hidden="true"
                   />
                   {profile.contact.statusLine}

@@ -38,7 +38,7 @@ test.describe("smoke", () => {
     page,
   }) => {
     await page.goto("/");
-    await page.getByRole("link", { name: "Contact", exact: true }).click();
+    await page.getByRole("link", { name: "contact", exact: true }).click();
     await expect(
       page.getByRole("link", { name: profile.contact.email }),
     ).toBeInViewport();

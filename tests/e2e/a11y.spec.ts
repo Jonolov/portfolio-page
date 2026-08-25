@@ -30,12 +30,12 @@ test.describe("accessibility", () => {
     const expectedStops = [
       "Skip to content",
       /Jon Stjärnström/,
-      "About",
-      "Experience",
-      "Skills",
-      "Contact",
-      "Get in touch",
-      "See experience",
+      "about",
+      "experience",
+      "skills",
+      "contact",
+      "get in touch",
+      "see experience",
     ];
 
     for (const name of expectedStops) {

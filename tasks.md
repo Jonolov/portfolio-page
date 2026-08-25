@@ -386,6 +386,76 @@ during implementation:
 - Confirm ordering assumption (strict recency: UR → Hemnet → KTH) vs. a
   `featured`-flag override if you want Hemnet leading regardless of date.
 
+## Phase 12 — Visual redesign: "Console Status" (2026-08-25)
+
+Jon said the original visual identity (violet accent, near-black default,
+minimal centered layout) wasn't landing — wanted something more
+impressive/modern and less dark. Explored three fully distinct directions
+as live HTML mockups (published as artifacts, not committed to the repo)
+before touching any real code: an editorial "Current & Star" direction
+(daylight blue/gold, a scroll-linked line that draws into a star at
+Contact), a "Console Status" direction (terminal/status-panel identity),
+and a "Blueprint Sheets" direction (architectural drafting, red-pen
+annotations). Jon picked Console Status. Implemented in full:
+
+- [x] Fonts: replaced Geist Sans/Mono with **Archivo** (body) and
+      **Martian Mono** (display, labels, dates, tags — used far more
+      heavily than the old mono face was). Both are valid `next/font/google`
+      exports, confirmed via a clean `tsc`/build.
+- [x] `app/globals.css` — new token set: a light "paper" default
+      (`#f6f7f5`) instead of pure white/near-black, a single deep-green
+      accent (`#0b6130` light / `#3ddc84` dark), and a new **inverting
+      band** pair (`--band-background`/`--band-foreground`/`--band-accent`)
+      used only by the Contact section — dark in light mode, light in dark
+      mode, so the "day becomes night" closing beat holds in both
+      directions. Added a reduced-motion-safe `animate-caret` utility for
+      the terminal cursor; removed the now-unused star keyframes.
+- [x] `components/Nav.tsx` — rebuilt into a real status bar: availability
+      dot + status text, Stockholm location, and a live ticking Europe/Stockholm
+      clock (mounted client-side only, starts as `null` to stay
+      hydration-safe — same lesson as the Phase 4 hydration bug). Kept the
+      existing scroll-position active-section logic unchanged.
+- [x] `components/sections/Hero.tsx` — name set huge in Martian Mono,
+      bracket-style CTAs (`[ get in touch ]`). Removed all cursor-tracking
+      motion-value code and the `NameStar` component/file entirely — the
+      live status bar is the new signature moment, not a hero decoration.
+- [x] `components/sections/Experience.tsx` — dropped `Card`/`TiltCard`
+      (both deleted, nothing else used them) in favor of full-width
+      connected log entries with mono date ranges and `--flag`-style tech
+      tags.
+- [x] `components/sections/Skills.tsx` / `components/ui/Tag.tsx` — dropped
+      the per-category color-tone system in favor of `# category`
+      comment-style labels and uniform bordered mono flag-chips
+      (`--typescript`).
+- [x] `components/sections/Contact.tsx` — full-bleed terminal-window band
+      (chrome dots, `$ contact --jon` prompt, blinking caret, simulated
+      output lines) using the new inverting band tokens.
+- [x] `components/ui/SectionHeading.tsx` — collapsed the old two-line
+      eyebrow+title into a single mono `// section — description` divider,
+      matching the approved mockup.
+- [x] Bugs found and fixed during verification: email address overflowing
+      un-wrapped on mobile in the new terminal card (added `break-words`);
+      two real WCAG AA contrast failures caught by axe — the command
+      palette's `bg-accent/10` selected-state tint against the original
+      accent green was 4.26:1 (needed 4.5:1, fixed by darkening the light-mode
+      accent to `#0b6130`), and the `⌘k` hero hint was at 55% foreground
+      opacity, under this project's established 60% floor (Phase 3).
+      Audited every other sub-60%-opacity text usage introduced by the
+      redesign and brought them in line with the same floor.
+- [x] Updated 3 Playwright specs for legitimate behavior changes: nav/CTA
+      text is now lowercase by design (not a CSS trick — real text, to
+      avoid relying on `text-transform` affecting the accessible name),
+      and the hover-tilt test was replaced with a check that the new
+      terminal caret doesn't animate under `prefers-reduced-motion`.
+- [x] Verified: `tsc`, lint, production build, and the full 16-test
+      Playwright suite all clean. Checked light, dark (including the
+      inverted Contact band in both directions), and mobile (390px, no
+      horizontal overflow at 320–1280px).
+- [x] Content: removed "Ruby on Rails" from the Skills list at Jon's
+      request (not a current skill) — left in place on the Hemnet
+      experience entry's tech tags, since that's accurately what he
+      migrated *from* there, not a claimed current skill.
+
 ## Future ideas (saved, not built)
 
 - **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator

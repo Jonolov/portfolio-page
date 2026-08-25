@@ -44,26 +44,11 @@ test.describe("reduced motion", () => {
     }
   });
 
-  test("hover-tilt is fully inert on experience cards", async ({ page }) => {
+  test("contact terminal caret does not blink", async ({ page }) => {
     await page.goto("/");
-    await page.locator("#experience").scrollIntoViewIfNeeded();
-
-    const tiltCard = page.locator("#experience .rounded-2xl").first().locator("xpath=..");
-    const before = await tiltCard.evaluate((el) => getComputedStyle(el).transform);
-
-    const box = await tiltCard.boundingBox();
-    if (box) {
-      await page.mouse.move(box.x + box.width * 0.85, box.y + box.height * 0.85, {
-        steps: 5,
-      });
-    }
-    await page.waitForTimeout(200);
-
-    const after = await tiltCard.evaluate((el) => getComputedStyle(el).transform);
-    // transformPerspective alone always yields a near-identity 3D matrix
-    // rather than the literal string "none" — what actually proves the
-    // tilt is inert is that hovering doesn't change it at all.
-    expect(after).toBe(before);
+    const caret = page.locator("#contact .motion-safe\\:animate-caret");
+    await caret.scrollIntoViewIfNeeded();
+    await expect(caret).toHaveCSS("animation-name", "none");
   });
 
   test("command palette open/close transition has zero duration", async ({

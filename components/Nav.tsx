@@ -1,16 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { profile } from "@/content/profile";
 
 const navItems = [
-  { href: "#about", label: "About", id: "about" },
-  { href: "#experience", label: "Experience", id: "experience" },
-  { href: "#skills", label: "Skills", id: "skills" },
-  { href: "#contact", label: "Contact", id: "contact" },
+  { href: "#about", label: "about", id: "about" },
+  { href: "#experience", label: "experience", id: "experience" },
+  { href: "#skills", label: "skills", id: "skills" },
+  { href: "#contact", label: "contact", id: "contact" },
 ];
+
+const clockFormatter = new Intl.DateTimeFormat("sv-SE", {
+  timeZone: "Europe/Stockholm",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: false,
+});
 
 export function Nav() {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [time, setTime] = useState<string | null>(null);
 
   useEffect(() => {
     const sectionIds = navItems.map((item) => item.id);
@@ -46,23 +56,46 @@ export function Nav() {
     };
   }, []);
 
+  useEffect(() => {
+    function tick() {
+      setTime(clockFormatter.format(new Date()));
+    }
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background/80 backdrop-blur">
-      <nav
-        aria-label="Primary"
-        className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6"
-      >
-        <a
-          href="#hero"
-          className="rounded font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-        >
-          <span className="hidden sm:inline">Jon Stjärnström</span>
-          <span className="sm:hidden" aria-hidden="true">
-            JS
+    <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background/85 backdrop-blur">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3.5 font-mono text-xs sm:px-6">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+          <a
+            href="#hero"
+            className="shrink-0 rounded font-semibold tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          >
+            <span className="hidden sm:inline">Jon Stjärnström</span>
+            <span className="sm:hidden" aria-hidden="true">
+              JS
+            </span>
+            <span className="sr-only sm:hidden">Jon Stjärnström</span>
+          </a>
+          <span className="hidden items-center gap-1.5 text-foreground/60 md:flex">
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-accent"
+              aria-hidden="true"
+            />
+            status: {profile.contact.availableForConsulting ? "available" : "unavailable"}
           </span>
-          <span className="sr-only sm:hidden">Jon Stjärnström</span>
-        </a>
-        <ul className="flex gap-3 text-sm sm:gap-6">
+          <span className="hidden text-foreground/60 lg:inline">
+            {profile.contact.location.toLowerCase()}, se
+          </span>
+          {time ? (
+            <span className="hidden text-foreground/60 lg:inline" suppressHydrationWarning>
+              {time}
+            </span>
+          ) : null}
+        </div>
+        <ul className="flex gap-3 sm:gap-5">
           {navItems.map((item) => {
             const isActive = activeId === item.id;
             return (
@@ -82,7 +115,7 @@ export function Nav() {
             );
           })}
         </ul>
-      </nav>
+      </div>
     </header>
   );
 }
