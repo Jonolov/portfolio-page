@@ -570,6 +570,43 @@ Jon picked the "underscore cursor" direction (`J` + a green underscore).
       white/paper/dark-gray/black backdrops, the OG image at full
       1200×630, and the nav mark in light, dark, and mobile.
 
+## Phase 16 — Cut the terminal-gimmick, unify around the J mark (2026-08-25)
+
+Jon flagged the `$ whoami` prompt (OG image) and the `const consultant = {...}`
+code panel (Hero) as "cheesy" — both were essentially the same borrowed
+dev-portfolio trope in two places. Built real alternatives for each
+(temporary preview routes + an artifact, not just descriptions) before
+changing anything, same pattern as every other design decision this
+session.
+
+- [x] `app/opengraph-image.tsx` — dropped the terminal-chrome/`$ whoami`
+      version entirely. Now just the name, role, and hook on the fixed
+      dark palette, no chrome. Per Jon's specific request, the name's
+      first letter ("J") carries the same green underline as the
+      favicon/logo mark instead of a separate standalone accent rule —
+      ties the wordmark directly to the mark without needing a separate
+      icon element in the image.
+- [x] `components/sections/Hero.tsx` — removed the decorative code panel
+      and its two-column grid layout entirely; back to a single centered
+      column. Applied the same J-underline treatment to the actual `<h1>`
+      name, matching the OG image and the nav mark.
+- [x] **Real accessibility bug found and fixed:** splitting the name into
+      two `<span>`s to style just the "J" caused browsers to insert a
+      phantom space into the computed accessible name (`"J on
+      Stjärnström"` instead of `"Jon Stjärnström"`) — confirmed via
+      Playwright's `ariaSnapshot()`, not visible in `innerText`/`textContent`,
+      which both looked correct. This is a general trap: splitting styled
+      text across sibling elements can break the accessible name even
+      with zero literal whitespace in the JSX/HTML. Fixed with an explicit
+      `aria-label={profile.name}` on the `<h1>` plus `aria-hidden="true"`
+      on the decorative spans, rather than relying on DOM structure to
+      produce the right name. Worth remembering if this pattern (styling
+      part of a heading/label differently) comes up again anywhere else.
+- [x] Verified: `tsc`, lint, full 16-test suite (this is what caught the
+      accessible-name bug — `smoke.spec.ts`'s `getByRole("heading", ...)`
+      check), and production build all clean. Checked Hero in light,
+      dark, and mobile.
+
 ## Future ideas (saved, not built)
 
 - **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator

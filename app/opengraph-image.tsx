@@ -18,6 +18,9 @@ export default async function Image() {
     ).then((res) => res.arrayBuffer()),
   ]);
 
+  const firstLetter = profile.name.slice(0, 1);
+  const rest = profile.name.slice(1);
+
   return new ImageResponse(
     (
       <div
@@ -26,123 +29,61 @@ export default async function Image() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
           backgroundColor: INK,
           color: PAPER,
+          padding: "80px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            padding: "26px 32px",
-            borderBottom: "1px solid rgba(234,251,241,0.14)",
-          }}
-        >
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: 999,
-              backgroundColor: "rgba(234,251,241,0.18)",
-              display: "flex",
-            }}
-          />
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: 999,
-              backgroundColor: "rgba(234,251,241,0.18)",
-              display: "flex",
-            }}
-          />
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: 999,
-              backgroundColor: "rgba(234,251,241,0.18)",
-              display: "flex",
-            }}
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            padding: "56px 80px",
-            flex: 1,
-          }}
-        >
+        <div style={{ display: "flex", flexDirection: "row", gap: 0 }}>
           <div
             style={{
               display: "flex",
               fontFamily: "Martian Mono",
-              fontSize: 28,
-              color: "rgba(234,251,241,0.68)",
+              fontWeight: 800,
+              fontSize: 92,
+              lineHeight: 1.05,
+              paddingBottom: 8,
+              borderBottom: `10px solid ${GREEN}`,
             }}
           >
-            <span style={{ color: GREEN, display: "flex" }}>$&nbsp;</span>
-            whoami
+            {firstLetter}
           </div>
           <div
             style={{
               display: "flex",
               fontFamily: "Martian Mono",
               fontWeight: 800,
-              fontSize: 84,
+              fontSize: 92,
               lineHeight: 1.05,
-              marginTop: 20,
+              paddingBottom: 18,
             }}
           >
-            {profile.name}
+            {rest}
           </div>
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Archivo",
-              fontSize: 34,
-              color: "rgba(234,251,241,0.78)",
-              marginTop: 22,
-            }}
-          >
-            {profile.roleLine}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Archivo",
-              fontSize: 26,
-              color: "rgba(234,251,241,0.55)",
-              marginTop: 18,
-              maxWidth: 920,
-            }}
-          >
-            {profile.heroHook}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              marginTop: "auto",
-              fontFamily: "Martian Mono",
-              fontSize: 24,
-              color: GREEN,
-            }}
-          >
-            <div
-              style={{
-                width: 12,
-                height: 12,
-                borderRadius: 999,
-                backgroundColor: GREEN,
-                display: "flex",
-              }}
-            />
-            {profile.contact.statusLine}
-          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontFamily: "Archivo",
+            fontSize: 36,
+            color: "rgba(234,251,241,0.78)",
+            marginTop: 26,
+          }}
+        >
+          {profile.roleLine}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontFamily: "Archivo",
+            fontSize: 27,
+            color: "rgba(234,251,241,0.55)",
+            marginTop: 20,
+            maxWidth: 940,
+          }}
+        >
+          {profile.heroHook}
         </div>
       </div>
     ),
