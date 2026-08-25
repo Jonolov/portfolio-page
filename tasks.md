@@ -641,6 +641,43 @@ than guessing — found the real cause.
 - [x] Verified: `tsc`, lint, full 16-test suite, and production build all
       clean.
 
+## Phase 18 — Hero name: mobile wrap + sizing fixes (2026-08-25)
+
+Two real bugs in the Hero `<h1>`'s J-underline treatment (from Phase 16),
+both only visible on actual narrow devices — caught from Jon's own
+screenshots, not from the desktop-centric testing that had been done.
+
+- [x] **Bug 1:** on mobile, "J" was rendering alone on its own row,
+      separated from "on Stjärnström". Root cause: the "on Stjärnström"
+      span was `inline-block`, which (unlike plain `inline`) turns
+      wrapping text into a single atomic multi-line box — the whole box
+      gets shoved to the next line as a unit rather than wrapping word by
+      word alongside "J". Fixed by dropping `inline-block` on both spans
+      (plain `inline` still supports the border-bottom decoration fine,
+      and wraps exactly like normal text).
+- [x] **Bug 2:** once that was fixed, the green underline visually
+      collided with "Stjärnström" wrapping onto the line right below it.
+      Root cause: border/padding-bottom on inline elements render but
+      don't reserve layout space, so in the heading's tight `leading-[0.98]`
+      there was no room reserved for the decoration before the next
+      wrapped line started. Fixed by loosening to `leading-[1.35]` —
+      desktop (single line, so nothing to collide with) is visually
+      unaffected; mobile now has clear separation.
+- [x] **Follow-up refinement:** Jon asked whether the mobile font size
+      should be smaller. Measured it rather than guessing — the
+      `clamp(2.4rem, 7.5vw, 5.25rem)` floor was *pinned* at 38.4px for
+      every viewport below 512px, meaning a 320px phone got the exact
+      same size as a 500px phone, with the heading box measuring exactly
+      288px against 288px of available content width at 320px — zero
+      margin at the narrowest supported width. Lowered the floor to
+      `2.1rem`. Bonus effect confirmed via measurement: the name now fits
+      on one line at 375px+ instead of wrapping to two, which reads
+      better; desktop (governed by the vw/max clamp terms, not the floor)
+      is byte-for-byte unchanged.
+- [x] Verified every change at 320/375/390/414/1280px via real rendered
+      screenshots (not just computed styles), plus `tsc`, lint, full
+      16-test suite, and production build.
+
 ## Future ideas (saved, not built)
 
 - **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator

@@ -21,17 +21,15 @@ export function Hero() {
       <h1
         id="hero-heading"
         aria-label={profile.name}
-        className="mt-5 font-mono text-[clamp(2.4rem,7.5vw,5.25rem)] font-bold leading-[0.98] tracking-tight"
+        className="mt-5 font-mono text-[clamp(2.1rem,7.5vw,5.25rem)] font-bold leading-[1.35] tracking-tight"
       >
         <span
           aria-hidden="true"
-          className="inline-block border-b-[0.12em] border-accent pb-[0.06em]"
+          className="border-b-[0.12em] border-accent pb-[0.06em]"
         >
           {firstLetter}
         </span>
-        <span aria-hidden="true" className="inline-block pb-[0.18em]">
-          {rest}
-        </span>
+        <span aria-hidden="true">{rest}</span>
       </h1>
       <p className="mt-6 max-w-xl text-lg text-foreground/70 sm:text-xl">
         {profile.roleLine}
