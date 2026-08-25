@@ -456,6 +456,51 @@ annotations). Jon picked Console Status. Implemented in full:
       experience entry's tech tags, since that's accurately what he
       migrated *from* there, not a claimed current skill.
 
+## Phase 13 — Console Status elaboration (2026-08-25)
+
+Jon liked Console Status but asked to soften the darkness and make it
+stand out more. Sketched options as an artifact before touching real
+code (per the established pattern), then implemented what he picked.
+
+- [x] Softened both dark surfaces — the dark-mode `--background` and the
+      (always-dark-in-light-mode) `--band-background` — from near-black
+      `#0e1613` to a slate-green `#182420`. Still clearly "dark," not the
+      void it was before. Re-verified contrast margins by hand before
+      committing to the new value (foreground/accent both comfortably
+      ≥8:1 against it).
+- [x] Added a blinking terminal caret after the Hero role line, reusing
+      the `animate-caret` utility already built for the Contact band —
+      makes the caret a consistent site-wide motif instead of a one-off.
+- [x] Added a decorative syntax-highlighted `const consultant = {...}`
+      code panel beside the Hero name (`lg:` and up only). Deliberately
+      restricted to the existing palette (accent green for values,
+      foreground at varying opacity for keys/punctuation/comments) rather
+      than introducing new hues, keeping the "one accent" discipline from
+      Phase 12. Two real layout bugs found and fixed here: the status bar
+      wrapped mid-word at 1280px (fixed with `whitespace-nowrap` and by
+      moving lower-priority items to the `xl` breakpoint), and the code
+      panel initially overflowed its own box on the `stack:` line (fixed
+      via `min-w-0` on the CSS grid item — the classic grid overflow
+      trap — plus wrapping the array across two shorter lines instead of
+      relying on internal scroll for decorative content nobody would
+      think to scroll).
+- [x] **Tried and reverted:** a live "uptime" stat (`lib/uptime.ts`,
+      computed from the earliest `earlierRoles` entry) in the status bar,
+      and an ASCII-art `whoami` avatar in the command palette, generated
+      from a real photo Jon provided (auto-cropped to subject, luminance
+      mapped to a `" .:-=+*#%@"` density ramp at 64 columns — genuinely
+      recognizable, verified working in light/dark/mobile). Jon asked to
+      remove both: the uptime stat came out of the header entirely, and
+      the ASCII avatar is deferred until he has a profile picture he
+      likes better — **not a rejection of the ASCII-avatar idea itself**,
+      just needs a better source photo. If this comes back up, the
+      generation approach (Pillow: autocrop → autocontrast → resize with
+      a ~0.52 aspect-correction factor for monospace character shape →
+      density-ramp mapping) worked well and is worth reusing rather than
+      re-deriving.
+- [x] Verified: `tsc`, lint, full 16-test suite, and production build all
+      clean after every change, including the two revert passes.
+
 ## Future ideas (saved, not built)
 
 - **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator

@@ -4,7 +4,7 @@
   --background: #f6f7f5;
   --foreground: #121815;
   --accent: #0b6130;
-  --band-background: #0e1613;
+  --band-background: #182420;
   --band-foreground: #eafbf1;
   --band-accent: #3ddc84;
 }
@@ -22,7 +22,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0e1613;
+    --background: #182420;
     --foreground: #eafbf1;
     --accent: #3ddc84;
     --band-background: #f6f7f5;

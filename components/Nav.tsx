@@ -79,18 +79,18 @@ export function Nav() {
             </span>
             <span className="sr-only sm:hidden">Jon Stjärnström</span>
           </a>
-          <span className="hidden items-center gap-1.5 text-foreground/60 md:flex">
+          <span className="hidden items-center gap-1.5 whitespace-nowrap text-foreground/60 md:flex">
             <span
-              className="h-1.5 w-1.5 rounded-full bg-accent"
+              className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
               aria-hidden="true"
             />
             status: {profile.contact.availableForConsulting ? "available" : "unavailable"}
           </span>
-          <span className="hidden text-foreground/60 lg:inline">
+          <span className="hidden whitespace-nowrap text-foreground/60 lg:inline">
             {profile.contact.location.toLowerCase()}, se
           </span>
           {time ? (
-            <span className="hidden text-foreground/60 lg:inline" suppressHydrationWarning>
+            <span className="hidden whitespace-nowrap text-foreground/60 lg:inline" suppressHydrationWarning>
               {time}
             </span>
           ) : null}
