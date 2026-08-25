@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { profile } from "@/content/profile";
+import { Mark } from "@/components/ui/Mark";
 
 const navItems = [
   { href: "#about", label: "about", id: "about" },
@@ -71,12 +72,10 @@ export function Nav() {
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           <a
             href="#hero"
-            className="shrink-0 rounded font-semibold tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="flex shrink-0 items-center gap-2 rounded font-semibold tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
+            <Mark className="h-5 w-5 shrink-0" />
             <span className="hidden sm:inline">Jon Stjärnström</span>
-            <span className="sm:hidden" aria-hidden="true">
-              JS
-            </span>
             <span className="sr-only sm:hidden">Jon Stjärnström</span>
           </a>
           <span className="hidden items-center gap-1.5 whitespace-nowrap text-foreground/60 md:flex">

@@ -524,6 +524,52 @@ code (per the established pattern), then implemented what he picked.
       his end). Once enabled, visitor/pageview questions can be answered
       directly in conversation instead of him checking the dashboard.
 
+## Phase 15 — Brand mark: favicon, header, OG image (2026-08-25)
+
+Site was still using the default Next.js scaffold `favicon.ico` and a
+pre-redesign (violet/near-black, Geist font) `opengraph-image.tsx` — the
+last two visual assets that hadn't caught up to Console Status. Sketched
+mark candidates as artifacts (tested at real 16/32/64px sizes plus mocked
+browser-tab and Google-search-result contexts) before building anything;
+Jon picked the "underscore cursor" direction (`J` + a green underscore).
+
+- [x] `app/icon.tsx` / `app/apple-icon.tsx` (new, via `next/og`
+      `ImageResponse`, same technique as the OG image) — 32×32 favicon and
+      180×180 Apple touch icon. Removed the old static `app/favicon.ico`
+      so these are the only icon source.
+      **Real bug caught during review:** first pass gave the icon a
+      transparent background so it'd blend into any browser chrome color,
+      but that meant the ink-colored `J` disappeared against dark browser
+      themes (and Jon specifically remembered/wanted the white-J-on-dark
+      look from the sketch). Fixed by giving the icon its own **fixed**
+      dark background (`#121815`) instead of transparency — solves both
+      problems at once: works identically regardless of the viewer's
+      browser theme, and doubles as a small terminal-window reference.
+      Colors are intentionally hardcoded (not theme-token-driven) since a
+      brand mark should read the same everywhere, unlike the rest of the
+      site.
+- [x] `components/ui/Mark.tsx` (new) — the same fixed mark as an inline
+      SVG (crisp at any size, no raster asset — keeps the site's
+      no-images invariant intact even for the logo itself), using the
+      real loaded Martian Mono font via `var(--font-mono)` rather than
+      duplicating font files.
+- [x] Wired into `components/Nav.tsx`: replaced the plain "JS" mobile
+      abbreviation with the actual mark icon; sits beside the full name at
+      `sm:` and up. Accessible name unaffected — the mark is
+      `aria-hidden`, existing `sr-only`/visible-text split still carries
+      "Jon Stjärnström" correctly at every breakpoint.
+- [x] `app/opengraph-image.tsx` rebuilt from scratch in the Console Status
+      palette: full terminal-window treatment (chrome dots, `$ whoami`
+      prompt, name in big Martian Mono, role/hook in Archivo, status line
+      in green) instead of the old violet/Geist design. Same
+      `#121815`/`#eafbf1`/`#3ddc84` fixed palette as the favicon/mark, so
+      favicon, tab, header, and social-share preview all now read as one
+      consistent brand identity.
+- [x] Verified every step: `tsc`, lint, full 16-test Playwright suite, and
+      production build all clean; visually confirmed the favicon over
+      white/paper/dark-gray/black backdrops, the OG image at full
+      1200×630, and the nav mark in light, dark, and mobile.
+
 ## Future ideas (saved, not built)
 
 - **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator
