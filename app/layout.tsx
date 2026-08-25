@@ -29,6 +29,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    // Static files at stable URLs (not the next/og file-convention
+    // routes) — Google's favicon-in-search requirements explicitly call
+    // for a stable, unchanging favicon URL, and the dynamic icon routes
+    // append a new cache-busting hash on every deploy.
+    icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title,
     description,

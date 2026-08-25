@@ -607,6 +607,40 @@ session.
       check), and production build all clean. Checked Hero in light,
       dark, and mobile.
 
+## Phase 17 — Stable favicon for Google search results (2026-08-25)
+
+Site got indexed by Google (confirmed via a real screenshot of the search
+result), but showed a generic globe icon instead of the favicon. Checked
+Google's actual documented favicon-in-search requirements
+(developers.google.com/search/docs/appearance/favicon-in-search) rather
+than guessing — found the real cause.
+
+- [x] **Root cause:** Google explicitly requires the favicon URL to be
+      *stable* ("don't change the URL frequently"). The favicon was
+      served via Next.js's `app/icon.tsx` file-convention route, which
+      appends a fresh cache-busting query hash on every single deploy
+      (`/icon?b30613e0d3b01759` → a different hash next deploy). Given how
+      many deploys happened in one day building this brand mark, Google
+      likely never got a URL that held still long enough to cache.
+- [x] Fix: rendered the current favicon/apple-touch-icon design once and
+      saved as real static files — `public/favicon.png` (64×64, bumped up
+      from 32×32 since Google recommends >48px for quality across
+      surfaces) and `public/apple-touch-icon.png` (180×180, unchanged).
+      Deleted `app/icon.tsx`/`app/apple-icon.tsx` (the hash-generating
+      dynamic routes) and pointed `app/layout.tsx`'s metadata `icons`
+      field at the static paths instead. Confirmed via the actual served
+      `<link>` tags: no query string, same URL every deploy from now on.
+      (Note: `/favicon.ico` as a fallback is explicitly *not* required
+      per Google's docs — the `<link rel="icon">` tag alone is
+      sufficient, provided it's stable and not blocked by robots.txt,
+      both of which are already true here.)
+- [x] This doesn't fix the search result instantly — Google's own docs
+      say re-crawling can take days to weeks, faster if Jon requests
+      indexing again via Search Console. But there's now a stable URL for
+      it to actually succeed at caching once it does crawl.
+- [x] Verified: `tsc`, lint, full 16-test suite, and production build all
+      clean.
+
 ## Future ideas (saved, not built)
 
 - **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator
