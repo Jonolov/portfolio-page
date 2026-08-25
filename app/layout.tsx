@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Martian_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { MotionConfig } from "motion/react";
 import { Nav } from "@/components/Nav";
 import { CommandPalette } from "@/components/command-palette/CommandPalette";
@@ -89,6 +90,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <CommandPalette />
           </CommandPaletteProvider>
         </MotionConfig>
+        <Analytics />
       </body>
     </html>
   );

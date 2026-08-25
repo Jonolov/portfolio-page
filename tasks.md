@@ -501,6 +501,29 @@ code (per the established pattern), then implemented what he picked.
 - [x] Verified: `tsc`, lint, full 16-test suite, and production build all
       clean after every change, including the two revert passes.
 
+## Phase 14 — SEO discovery + analytics (2026-08-25)
+
+- [x] Confirmed `robots.txt`/`sitemap.xml` are correctly live on the
+      production domain (`jonstjarnstrom.se`). The sitemap's single-URL
+      entry is correct, not a bug — this is genuinely a single-page site
+      (one `app/page.tsx`, everything else is an in-page anchor), so
+      there's only one real crawlable URL to list.
+- [x] Jon added the LinkedIn profile link, verified Google Search Console
+      ownership via a DNS TXT record at Loopia (same zone-editor page used
+      for the original domain setup), and requested indexing. Submitting
+      the sitemap and requesting indexing in Search Console is the
+      remaining/ongoing step — technical SEO can't force Google to crawl a
+      brand-new site any faster than that.
+- [x] Added Vercel Web Analytics: `@vercel/analytics` installed,
+      `<Analytics />` mounted in `app/layout.tsx`. Confirmed this session
+      has live Vercel API access (found the project, project ID
+      `prj_oHGeA5zRTVbs4VdFxJ6WgqIDDJ3D`, team
+      `team_7wfWXv34sGTRygx7OjVriFJu`) and can already query
+      `get_web_analytics` once Jon flips on the "Analytics" toggle in the
+      Vercel dashboard (not exposed via API — has to be a manual step on
+      his end). Once enabled, visitor/pageview questions can be answered
+      directly in conversation instead of him checking the dashboard.
+
 ## Future ideas (saved, not built)
 
 - **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator
