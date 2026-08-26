@@ -23,6 +23,13 @@ export interface SkillGroup {
   skills: string[];
 }
 
+export interface SideProject {
+  name: string;
+  description: string;
+  tech: string[];
+  url: string;
+}
+
 export interface Profile {
   name: string;
   roleLine: string;
