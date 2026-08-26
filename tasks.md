@@ -678,6 +678,27 @@ screenshots, not from the desktop-centric testing that had been done.
       screenshots (not just computed styles), plus `tsc`, lint, full
       16-test suite, and production build.
 
+## Phase 19 — README + GitHub repo polish (2026-08-26)
+
+The repo is public on purpose (part of the pitch), but the README was
+still the untouched `create-next-app` boilerplate — even referenced
+Geist, the font the redesign replaced. Given someone clicking through
+from LinkedIn/GitHub is exactly the audience spec.md targets, this was a
+real gap.
+
+- [x] Rewrote `README.md`: what the project is, a live screenshot
+      (`.github/readme/hero.png`, captured from the actual production
+      site post-redesign), the real stack, notable bits (⌘K palette,
+      accessibility posture, code-generated-not-uploaded visuals), actual
+      `pnpm` commands from `package.json`, and a project-structure map.
+      Deliberately didn't restate specific Lighthouse/performance numbers
+      in the README, since the last verified numbers (Phase 9) predate
+      the Console Status redesign and haven't been re-measured since —
+      didn't want to publish a stale claim.
+- [x] Fixed the GitHub repo's "homepage" link (`gh repo edit`) — was
+      still pointing at `jon-portfolio-page.vercel.app` instead of
+      `jonstjarnstrom.se`. Repo-settings change, not a tracked file.
+
 ## Future ideas (saved, not built)
 
 - **Ladder scrollbar** (2026-08-24): a custom scroll-progress indicator
