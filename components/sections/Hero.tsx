@@ -1,9 +1,9 @@
 "use client";
 
-import { profile } from "@/content/profile";
+import type { Profile } from "@/lib/types";
 import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
 
-export function Hero() {
+export function Hero({ profile }: { profile: Profile }) {
   const { setOpen } = useCommandPalette();
   const firstLetter = profile.name.slice(0, 1);
   const rest = profile.name.slice(1);

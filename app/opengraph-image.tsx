@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { profile } from "@/content/profile";
+import { getProfile } from "@/lib/cms";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -9,6 +9,7 @@ const PAPER = "#eafbf1";
 const GREEN = "#3ddc84";
 
 export default async function Image() {
+  const profile = await getProfile();
   const [mono, sans] = await Promise.all([
     fetch(
       "https://fonts.gstatic.com/s/martianmono/v6/2V08KIcADoYhV6w87xrTKjs4CYElh_VS9YA4TlTnQzaVMIE6j15dYY3qvM6W.ttf",
@@ -22,71 +23,69 @@ export default async function Image() {
   const rest = profile.name.slice(1);
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          backgroundColor: INK,
-          color: PAPER,
-          padding: "80px",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "row", gap: 0 }}>
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Martian Mono",
-              fontWeight: 800,
-              fontSize: 92,
-              lineHeight: 1.05,
-              paddingBottom: 8,
-              borderBottom: `10px solid ${GREEN}`,
-            }}
-          >
-            {firstLetter}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Martian Mono",
-              fontWeight: 800,
-              fontSize: 92,
-              lineHeight: 1.05,
-              paddingBottom: 18,
-            }}
-          >
-            {rest}
-          </div>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        backgroundColor: INK,
+        color: PAPER,
+        padding: "80px",
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "row", gap: 0 }}>
+        <div
+          style={{
+            display: "flex",
+            fontFamily: "Martian Mono",
+            fontWeight: 800,
+            fontSize: 92,
+            lineHeight: 1.05,
+            paddingBottom: 8,
+            borderBottom: `10px solid ${GREEN}`,
+          }}
+        >
+          {firstLetter}
         </div>
         <div
           style={{
             display: "flex",
-            fontFamily: "Archivo",
-            fontSize: 36,
-            color: "rgba(234,251,241,0.78)",
-            marginTop: 26,
+            fontFamily: "Martian Mono",
+            fontWeight: 800,
+            fontSize: 92,
+            lineHeight: 1.05,
+            paddingBottom: 18,
           }}
         >
-          {profile.roleLine}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontFamily: "Archivo",
-            fontSize: 27,
-            color: "rgba(234,251,241,0.55)",
-            marginTop: 20,
-            maxWidth: 940,
-          }}
-        >
-          {profile.heroHook}
+          {rest}
         </div>
       </div>
-    ),
+      <div
+        style={{
+          display: "flex",
+          fontFamily: "Archivo",
+          fontSize: 36,
+          color: "rgba(234,251,241,0.78)",
+          marginTop: 26,
+        }}
+      >
+        {profile.roleLine}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          fontFamily: "Archivo",
+          fontSize: 27,
+          color: "rgba(234,251,241,0.55)",
+          marginTop: 20,
+          maxWidth: 940,
+        }}
+      >
+        {profile.heroHook}
+      </div>
+    </div>,
     {
       ...size,
       fonts: [

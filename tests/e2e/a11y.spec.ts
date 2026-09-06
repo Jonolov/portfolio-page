@@ -17,7 +17,9 @@ test.describe("accessibility", () => {
   }) => {
     await page.goto("/");
     await page.keyboard.press("Tab");
-    await expect(page.getByRole("link", { name: "Skip to content" })).toBeFocused();
+    await expect(
+      page.getByRole("link", { name: "Skip to content" }),
+    ).toBeFocused();
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/#main$/);
   });
@@ -33,6 +35,7 @@ test.describe("accessibility", () => {
       "about",
       "experience",
       "skills",
+      "projects",
       "contact",
       "get in touch",
       "see experience",

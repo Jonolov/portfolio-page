@@ -1,13 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { earlierRoles, experience } from "@/content/experience";
+import type { CondensedRole, Role } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
 
-export function Experience() {
+export function Experience({
+  experience,
+  earlierRoles,
+}: {
+  experience: Role[];
+  earlierRoles: CondensedRole[];
+}) {
   const [showEarlier, setShowEarlier] = useState(false);
 
   return (
@@ -26,7 +32,10 @@ export function Experience() {
       <StaggerGroup>
         <ol className="flex flex-col">
           {experience.map((role) => (
-            <li key={role.company} className="border-b border-foreground/10 py-8 first:pt-0">
+            <li
+              key={role.company}
+              className="border-b border-foreground/10 py-8 first:pt-0"
+            >
               <StaggerItem>
                 <p className="font-mono text-xs text-accent">
                   {role.dates.start} → {role.dates.end}

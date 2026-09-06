@@ -1,10 +1,10 @@
-import { projects } from "@/content/projects";
+import type { SideProject } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
 
-export function Projects() {
+export function Projects({ projects }: { projects: SideProject[] }) {
   return (
     <section
       id="projects"

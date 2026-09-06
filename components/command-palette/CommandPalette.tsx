@@ -2,8 +2,7 @@
 
 import { Command } from "cmdk";
 import { useState } from "react";
-import { profile } from "@/content/profile";
-import { skills } from "@/content/skills";
+import type { Profile, SkillGroup } from "@/lib/types";
 import { useCommandPalette } from "./useCommandPalette";
 
 const navItems = [
@@ -14,14 +13,19 @@ const navItems = [
   { id: "contact", label: "Contact" },
 ];
 
-const stackSummary = skills
-  .map((group) => `${group.category}: ${group.skills.join(", ")}`)
-  .join("\n");
-
 type Page = "whoami" | "stack" | "contact";
 
-export function CommandPalette() {
+export function CommandPalette({
+  profile,
+  skillGroups,
+}: {
+  profile: Profile;
+  skillGroups: SkillGroup[];
+}) {
   const { open, setOpen } = useCommandPalette();
+  const stackSummary = skillGroups
+    .map((group) => `${group.category}: ${group.skills.join(", ")}`)
+    .join("\n");
   const [pages, setPages] = useState<Page[]>([]);
   const [search, setSearch] = useState("");
   const page = pages[pages.length - 1];
@@ -64,7 +68,9 @@ export function CommandPalette() {
         value={search}
         onValueChange={setSearch}
         placeholder={
-          page ? "Press backspace to go back" : "Jump to a section, or ask whoami / stack…"
+          page
+            ? "Press backspace to go back"
+            : "Jump to a section, or ask whoami / stack…"
         }
         className="w-full border-b border-foreground/10 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-foreground/60"
       />

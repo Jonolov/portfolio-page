@@ -1,10 +1,8 @@
-import { profile } from "@/content/profile";
+import type { Profile } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 
-export function Contact() {
-  const { contact } = profile;
-
+export function Contact({ contact }: { contact: Profile["contact"] }) {
   return (
     <section id="contact" aria-labelledby="contact-heading" className="w-full">
       <div className="mx-auto max-w-3xl px-6 pt-16 sm:pt-24">
@@ -54,7 +52,8 @@ export function Contact() {
                   </a>
                 </p>
                 <p className="text-band-foreground/70">
-                  {contact.company.toLowerCase()} · {contact.location.toLowerCase()}
+                  {contact.company.toLowerCase()} ·{" "}
+                  {contact.location.toLowerCase()}
                 </p>
                 <p>
                   <a

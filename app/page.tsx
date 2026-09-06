@@ -4,16 +4,32 @@ import { Experience } from "@/components/sections/Experience";
 import { Hero } from "@/components/sections/Hero";
 import { Projects } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
+import {
+  getEarlierRoles,
+  getExperience,
+  getProfile,
+  getSideProjects,
+  getSkillGroups,
+} from "@/lib/cms";
 
-export default function Home() {
+export default async function Home() {
+  const [profile, skillGroups, experience, earlierRoles, sideProjects] =
+    await Promise.all([
+      getProfile(),
+      getSkillGroups(),
+      getExperience(),
+      getEarlierRoles(),
+      getSideProjects(),
+    ]);
+
   return (
     <>
-      <Hero />
-      <About />
-      <Experience />
-      <Skills />
-      <Projects />
-      <Contact />
+      <Hero profile={profile} />
+      <About paragraphs={profile.about.paragraphs} />
+      <Experience experience={experience} earlierRoles={earlierRoles} />
+      <Skills groups={skillGroups} />
+      <Projects projects={sideProjects} />
+      <Contact contact={profile.contact} />
     </>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { profile } from "@/content/profile";
 import { Mark } from "@/components/ui/Mark";
 
 const navItems = [
@@ -20,7 +19,13 @@ const clockFormatter = new Intl.DateTimeFormat("sv-SE", {
   hour12: false,
 });
 
-export function Nav() {
+export function Nav({
+  available,
+  location,
+}: {
+  available: boolean;
+  location: string;
+}) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
 
@@ -84,13 +89,16 @@ export function Nav() {
               className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
               aria-hidden="true"
             />
-            status: {profile.contact.availableForConsulting ? "available" : "unavailable"}
+            status: {available ? "available" : "unavailable"}
           </span>
           <span className="hidden whitespace-nowrap text-foreground/60 lg:inline">
-            {profile.contact.location.toLowerCase()}, se
+            {location.toLowerCase()}, se
           </span>
           {time ? (
-            <span className="hidden whitespace-nowrap text-foreground/60 lg:inline" suppressHydrationWarning>
+            <span
+              className="hidden whitespace-nowrap text-foreground/60 lg:inline"
+              suppressHydrationWarning
+            >
               {time}
             </span>
           ) : null}

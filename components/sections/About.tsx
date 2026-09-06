@@ -1,8 +1,7 @@
-import { profile } from "@/content/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 
-export function About() {
+export function About({ paragraphs }: { paragraphs: string[] }) {
   return (
     <section
       id="about"
@@ -16,7 +15,7 @@ export function About() {
           title="how he works"
         />
         <div className="flex flex-col gap-4 text-base text-foreground/80 sm:text-lg">
-          {profile.about.paragraphs.map((paragraph) => (
+          {paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>

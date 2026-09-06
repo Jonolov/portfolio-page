@@ -5,7 +5,7 @@ import { MotionConfig } from "motion/react";
 import { Nav } from "@/components/Nav";
 import { CommandPalette } from "@/components/command-palette/CommandPalette";
 import { CommandPaletteProvider } from "@/components/command-palette/useCommandPalette";
-import { profile } from "@/content/profile";
+import { getProfile, getSkillGroups } from "@/lib/cms";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -19,60 +19,68 @@ const martianMono = Martian_Mono({
   subsets: ["latin"],
 });
 
-const title = `${profile.name} — Senior Frontend/Fullstack Developer`;
-const description = profile.heroHook;
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await getProfile();
+  const title = `${profile.name} — Senior Frontend/Fullstack Developer`;
+  const description = profile.heroHook;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title,
-  description,
-  alternates: {
-    canonical: "/",
-  },
-  icons: {
-    // Static files at stable URLs (not the next/og file-convention
-    // routes) — Google's favicon-in-search requirements explicitly call
-    // for a stable, unchanging favicon URL, and the dynamic icon routes
-    // append a new cache-busting hash on every deploy.
-    icon: "/favicon.png",
-    apple: "/apple-touch-icon.png",
-  },
-  openGraph: {
+  return {
+    metadataBase: new URL(SITE_URL),
     title,
     description,
-    url: "/",
-    siteName: profile.name,
-    type: "website",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-  },
-};
+    alternates: {
+      canonical: "/",
+    },
+    icons: {
+      // Static files at stable URLs (not the next/og file-convention
+      // routes) — Google's favicon-in-search requirements explicitly call
+      // for a stable, unchanging favicon URL, and the dynamic icon routes
+      // append a new cache-busting hash on every deploy.
+      icon: "/favicon.png",
+      apple: "/apple-touch-icon.png",
+    },
+    openGraph: {
+      title,
+      description,
+      url: "/",
+      siteName: profile.name,
+      type: "website",
+      locale: "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: profile.name,
-  jobTitle: profile.roleLine,
-  description: profile.heroHook,
-  url: SITE_URL,
-  email: profile.contact.email,
-  sameAs: [profile.contact.linkedin],
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: profile.contact.location,
-    addressCountry: "SE",
-  },
-  worksFor: {
-    "@type": "Organization",
-    name: profile.contact.company,
-  },
-};
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const [profile, skillGroups] = await Promise.all([
+    getProfile(),
+    getSkillGroups(),
+  ]);
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.name,
+    jobTitle: profile.roleLine,
+    description: profile.heroHook,
+    url: SITE_URL,
+    email: profile.contact.email,
+    sameAs: [profile.contact.linkedin],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: profile.contact.location,
+      addressCountry: "SE",
+    },
+    worksFor: {
+      "@type": "Organization",
+      name: profile.contact.company,
+    },
+  };
+
   return (
     <html
       lang="en"
@@ -91,11 +99,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <MotionConfig reducedMotion="user">
           <CommandPaletteProvider>
-            <Nav />
+            <Nav
+              available={profile.contact.availableForConsulting}
+              location={profile.contact.location}
+            />
             <main id="main" className="flex-1">
               {children}
             </main>
-            <CommandPalette />
+            <CommandPalette profile={profile} skillGroups={skillGroups} />
           </CommandPaletteProvider>
         </MotionConfig>
         <Analytics />

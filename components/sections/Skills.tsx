@@ -1,10 +1,10 @@
-import { skills } from "@/content/skills";
+import type { SkillGroup } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
 
-export function Skills() {
+export function Skills({ groups }: { groups: SkillGroup[] }) {
   return (
     <section
       id="skills"
@@ -20,7 +20,7 @@ export function Skills() {
       </RevealOnScroll>
       <StaggerGroup>
         <dl className="grid gap-8 sm:grid-cols-2">
-          {skills.map((group) => (
+          {groups.map((group) => (
             <StaggerItem key={group.category}>
               <dt className="font-mono text-xs text-foreground/60">
                 # {group.category.toLowerCase()}
