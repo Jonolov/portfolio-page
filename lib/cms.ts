@@ -114,17 +114,32 @@ function toProfile(raw: RawProfile): Profile {
   };
 }
 
+// The site shows the curated set — mark a skill "featured" in the CMS admin to
+// include it here. Category display order matches the old content/skills.ts;
+// anything unrecognised is appended alphabetically.
+const CATEGORY_ORDER = [
+  "frontend",
+  "backend",
+  "auth/identity",
+  "testing",
+  "cms/platforms",
+  "practice",
+];
+
 function toSkillGroups(raw: RawSkill[]): SkillGroup[] {
   const byCategory = new Map<string, RawSkill[]>();
   for (const skill of raw) {
+    if (!skill.featured) continue;
     const list = byCategory.get(skill.category) ?? [];
     list.push(skill);
     byCategory.set(skill.category, list);
   }
-  // Category order is alphabetical (matching the admin app's grouping); skills within a
-  // category follow their `position`.
+  const rank = (c: string) => {
+    const i = CATEGORY_ORDER.indexOf(c.toLowerCase());
+    return i === -1 ? CATEGORY_ORDER.length : i;
+  };
   return [...byCategory.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
+    .sort(([a], [b]) => rank(a) - rank(b) || a.localeCompare(b))
     .map(([category, skills]) => ({
       category,
       skills: skills
