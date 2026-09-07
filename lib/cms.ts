@@ -120,6 +120,7 @@ function toProfile(raw: RawProfile): Profile {
 const CATEGORY_ORDER = [
   "frontend",
   "backend",
+  "devops",
   "auth/identity",
   "testing",
   "cms/platforms",
