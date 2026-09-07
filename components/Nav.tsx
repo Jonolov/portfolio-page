@@ -86,7 +86,9 @@ export function Nav({
           </a>
           <span className="hidden items-center gap-1.5 whitespace-nowrap text-foreground/60 md:flex">
             <span
-              className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+              className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                available ? "bg-accent" : "bg-red-500"
+              }`}
               aria-hidden="true"
             />
             status: {available ? "available" : "unavailable"}
