@@ -19,15 +19,15 @@ import { projects as staticProjects } from "@/content/projects";
  * The `content/*.ts` files are kept as the fallback: if the API is unreachable at build time or
  * during revalidation, the site renders the last-known-good static content instead of breaking.
  *
- * Content is cached and revalidated hourly (ISR) — an edit in the admin app shows up on the
- * site within the hour, or immediately after a redeploy.
+ * Content is cached with a short ISR window — an edit in the admin app shows up on the
+ * site within a minute or so, or immediately after a redeploy.
  */
 
 const CMS_BASE = (
   process.env.CMS_API_URL ?? "https://portfolio-cms-api-one.vercel.app"
 ).replace(/\/$/, "");
 
-const REVALIDATE_SECONDS = 3600;
+const REVALIDATE_SECONDS = 60;
 
 async function fetchJson<T>(path: string): Promise<T> {
   const res = await fetch(`${CMS_BASE}${path}`, {
