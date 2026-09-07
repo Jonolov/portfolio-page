@@ -81,8 +81,7 @@ export function Nav({
             className="flex shrink-0 items-center gap-2 rounded font-semibold tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             <Mark className="h-5 w-5 shrink-0" />
-            <span className="hidden sm:inline">Jon Stjärnström</span>
-            <span className="sr-only sm:hidden">Jon Stjärnström</span>
+            <span className="sr-only">Jon Stjärnström — home</span>
           </a>
           <span className="hidden items-center gap-1.5 whitespace-nowrap text-foreground/60 md:flex">
             <span
