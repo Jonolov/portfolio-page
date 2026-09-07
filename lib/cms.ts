@@ -28,11 +28,17 @@ const CMS_BASE = (
 ).replace(/\/$/, "");
 
 const REVALIDATE_SECONDS = 60;
+const IS_DEV = process.env.NODE_ENV === "development";
 
 async function fetchJson<T>(path: string): Promise<T> {
-  const res = await fetch(`${CMS_BASE}${path}`, {
-    next: { revalidate: REVALIDATE_SECONDS, tags: ["cms"] },
-  });
+  // Dev: always fresh so admin edits show on the next refresh.
+  // Prod: ISR — cache for REVALIDATE_SECONDS.
+  const res = await fetch(
+    `${CMS_BASE}${path}`,
+    IS_DEV
+      ? { cache: "no-store" }
+      : { next: { revalidate: REVALIDATE_SECONDS, tags: ["cms"] } },
+  );
   if (!res.ok) {
     throw new Error(`CMS ${path} responded ${res.status}`);
   }
