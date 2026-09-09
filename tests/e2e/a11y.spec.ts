@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { openAskPanel } from "./helpers";
 
 test.describe("accessibility", () => {
   test("has no automatically detectable WCAG 2.1 AA violations", async ({
@@ -86,6 +87,38 @@ test.describe("accessibility", () => {
     await page.waitForTimeout(200);
     await page.keyboard.press("ControlOrMeta+k");
     await expect(page.locator("[cmdk-dialog]")).toBeVisible();
+
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+
+  test("ask panel has no WCAG violations with a conversation open", async ({
+    page,
+  }) => {
+    await page.route("**/api/chat", (route) =>
+      route.fulfill({
+        status: 200,
+        headers: {
+          "content-type": "text/event-stream",
+          "x-vercel-ai-ui-message-stream": "v1",
+        },
+        body:
+          'data: {"type":"text-start","id":"t1"}\n\n' +
+          'data: {"type":"text-delta","id":"t1","delta":"Jon has deep React experience."}\n\n' +
+          'data: {"type":"text-end","id":"t1"}\n\n' +
+          "data: [DONE]\n\n",
+      }),
+    );
+    await page.goto("/");
+    await openAskPanel(page);
+    const dialog = page.getByRole("dialog", { name: /ask/i });
+    await dialog.getByRole("textbox").fill("react?");
+    await page.keyboard.press("Enter");
+    await expect(
+      dialog.getByRole("log").getByText("Jon has deep React experience."),
+    ).toBeVisible();
 
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])

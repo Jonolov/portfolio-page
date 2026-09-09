@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { openAskPanel } from "./helpers";
 
 test.use({ contextOptions: { reducedMotion: "reduce" } });
 
@@ -49,6 +50,32 @@ test.describe("reduced motion", () => {
     const caret = page.locator("#contact .motion-safe\\:animate-caret");
     await caret.scrollIntoViewIfNeeded();
     await expect(caret).toHaveCSS("animation-name", "none");
+  });
+
+  test("ask panel streaming caret does not blink", async ({ page }) => {
+    await page.route("**/api/chat", (route) =>
+      route.fulfill({
+        status: 200,
+        headers: {
+          "content-type": "text/event-stream",
+          "x-vercel-ai-ui-message-stream": "v1",
+        },
+        body:
+          'data: {"type":"text-start","id":"t1"}\n\n' +
+          'data: {"type":"text-delta","id":"t1","delta":"Streaming."}\n\n' +
+          'data: {"type":"text-end","id":"t1"}\n\n' +
+          "data: [DONE]\n\n",
+      }),
+    );
+    await page.goto("/");
+    await openAskPanel(page);
+    const dialog = page.getByRole("dialog", { name: /ask/i });
+    await dialog.getByRole("textbox").fill("hi");
+    await page.keyboard.press("Enter");
+
+    const caret = dialog.locator(".motion-safe\\:animate-caret");
+    await expect(caret.first()).toBeVisible();
+    await expect(caret.first()).toHaveCSS("animation-name", "none");
   });
 
   test("command palette open/close transition has zero duration", async ({

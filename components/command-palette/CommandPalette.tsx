@@ -3,6 +3,7 @@
 import { Command } from "cmdk";
 import { useState } from "react";
 import type { Profile, SkillGroup } from "@/lib/types";
+import { ContactCard } from "@/components/ui/ContactCard";
 import { useCommandPalette } from "./useCommandPalette";
 
 const navItems = [
@@ -22,7 +23,7 @@ export function CommandPalette({
   profile: Profile;
   skillGroups: SkillGroup[];
 }) {
-  const { open, setOpen } = useCommandPalette();
+  const { open, setOpen, openAsk } = useCommandPalette();
   const stackSummary = skillGroups
     .map((group) => `${group.category}: ${group.skills.join(", ")}`)
     .join("\n");
@@ -30,12 +31,20 @@ export function CommandPalette({
   const [search, setSearch] = useState("");
   const page = pages[pages.length - 1];
 
+  function resetPalette() {
+    setPages([]);
+    setSearch("");
+  }
+
   function handleOpenChange(nextOpen: boolean) {
     setOpen(nextOpen);
-    if (!nextOpen) {
-      setPages([]);
-      setSearch("");
-    }
+    if (!nextOpen) resetPalette();
+  }
+
+  // `openAsk` closes the palette from outside handleOpenChange, so reset here too.
+  function goToAsk(seed?: string) {
+    resetPalette();
+    openAsk(seed);
   }
 
   function goToSection(id: string) {
@@ -76,7 +85,17 @@ export function CommandPalette({
       />
       <Command.List className="max-h-80 overflow-y-auto p-2">
         <Command.Empty className="px-2 py-6 text-center text-sm text-foreground/70">
-          No results found.
+          {search ? (
+            <button
+              type="button"
+              onClick={() => goToAsk(search)}
+              className="mx-auto block rounded-lg px-3 py-2 text-accent underline underline-offset-4"
+            >
+              Ask AI: “{search}”
+            </button>
+          ) : (
+            "No results found."
+          )}
         </Command.Empty>
 
         {!page && (
@@ -99,6 +118,12 @@ export function CommandPalette({
               heading="Ask"
               className="mt-2 px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-foreground/60 [&_[cmdk-group-items]]:mt-1"
             >
+              <Command.Item
+                onSelect={() => goToAsk()}
+                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-accent/10 data-[selected=true]:text-accent"
+              >
+                Ask about Jon&apos;s experience →
+              </Command.Item>
               <Command.Item
                 onSelect={() => setPages((prev) => [...prev, "whoami"])}
                 className="cursor-pointer rounded-lg px-3 py-2 font-mono text-sm text-foreground/90 data-[selected=true]:bg-accent/10 data-[selected=true]:text-accent"
@@ -153,30 +178,8 @@ export function CommandPalette({
 
         {page === "contact" && (
           <div className="px-1 py-1">
-            <div className="px-3 py-3 text-sm text-foreground/80">
-              {profile.contact.availableForConsulting ? (
-                <p className="mb-2 inline-flex items-center gap-2 font-medium">
-                  <span
-                    className="h-2 w-2 rounded-full bg-accent"
-                    aria-hidden="true"
-                  />
-                  {profile.contact.statusLine}
-                </p>
-              ) : null}
-              <a
-                href={`mailto:${profile.contact.email}`}
-                className="block font-mono text-accent underline underline-offset-4"
-              >
-                {profile.contact.email}
-              </a>
-              <a
-                href={profile.contact.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 block underline underline-offset-4"
-              >
-                LinkedIn<span className="sr-only"> (opens in a new tab)</span>
-              </a>
+            <div className="px-3 py-3">
+              <ContactCard contact={profile.contact} />
             </div>
             <Command.Item
               onSelect={() => setPages((prev) => prev.slice(0, -1))}
