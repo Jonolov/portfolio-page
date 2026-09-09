@@ -2,6 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { useEffect, useId, useRef } from "react";
+import { ContactCard } from "@/components/ui/ContactCard";
 import type { Profile } from "@/lib/types";
 import { useCommandPalette } from "./useCommandPalette";
 
@@ -87,22 +88,66 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
             ))}
           </div>
         ) : (
-          messages.map((m) => (
-            <div key={m.id}>
-              <p className="mb-1 font-mono text-xs text-foreground/50">
-                {m.role === "user" ? "you" : "jon-bot"}
-              </p>
-              {m.parts.map((part, i) =>
-                part.type === "text" ? (
-                  <p key={i} className="whitespace-pre-wrap">
-                    {part.text}
-                  </p>
-                ) : null,
-              )}
-            </div>
-          ))
+          messages.map((m, mi) => {
+            const isLast = mi === messages.length - 1;
+            const lastTextIndex = m.parts.reduce(
+              (acc, p, idx) => (p.type === "text" ? idx : acc),
+              -1,
+            );
+            return (
+              <div key={m.id}>
+                <p className="mb-1 font-mono text-xs text-foreground/70">
+                  {m.role === "user" ? "you" : "jon-bot"}
+                </p>
+                {m.parts.map((part, i) => {
+                  if (part.type === "text") {
+                    return (
+                      <p key={i} className="whitespace-pre-wrap">
+                        {part.text}
+                        {isLast && m.role === "assistant" && i === lastTextIndex ? (
+                          <span
+                            className="ml-0.5 inline-block motion-safe:animate-caret"
+                            aria-hidden="true"
+                          >
+                            ▍
+                          </span>
+                        ) : null}
+                      </p>
+                    );
+                  }
+                  if (part.type === "tool-showContactCard") {
+                    return (
+                      <div key={i} className="mt-2">
+                        <ContactCard contact={contact} />
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            );
+          })
         )}
+        {status === "submitted" ? (
+          <div>
+            <p className="mb-1 font-mono text-xs text-foreground/70">jon-bot</p>
+            <p aria-hidden="true">
+              <span className="inline-block motion-safe:animate-caret">▍</span>
+            </p>
+          </div>
+        ) : null}
       </div>
+
+      <p className="sr-only" aria-live="polite">
+        {status === "ready" &&
+        messages.length > 0 &&
+        messages[messages.length - 1]?.role === "assistant"
+          ? messages[messages.length - 1].parts
+              .filter((p) => p.type === "text")
+              .map((p) => (p as { text: string }).text)
+              .join(" ")
+          : ""}
+      </p>
 
       {status === "error" ? (
         <p role="alert" className="px-4 pb-2 text-sm text-foreground/70">
@@ -133,7 +178,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
               e.currentTarget.form?.requestSubmit();
             }
           }}
-          className="flex-1 resize-none rounded-lg border border-foreground/10 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-foreground/50"
+          className="flex-1 resize-none rounded-lg border border-foreground/10 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-foreground/70"
         />
         <button
           type="submit"

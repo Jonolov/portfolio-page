@@ -93,6 +93,41 @@ test.describe("accessibility", () => {
     expect(results.violations).toEqual([]);
   });
 
+  test("ask panel has no WCAG violations with a conversation open", async ({
+    page,
+  }) => {
+    await page.route("**/api/chat", (route) =>
+      route.fulfill({
+        status: 200,
+        headers: {
+          "content-type": "text/event-stream",
+          "x-vercel-ai-ui-message-stream": "v1",
+        },
+        body:
+          'data: {"type":"text-start","id":"t1"}\n\n' +
+          'data: {"type":"text-delta","id":"t1","delta":"Jon has deep React experience."}\n\n' +
+          'data: {"type":"text-end","id":"t1"}\n\n' +
+          "data: [DONE]\n\n",
+      }),
+    );
+    await page.goto("/");
+    await page.waitForTimeout(200);
+    await page.keyboard.press("ControlOrMeta+k");
+    await page.getByRole("option", { name: /ask about jon/i }).click();
+    const dialog = page.getByRole("dialog", { name: /ask/i });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("textbox").fill("react?");
+    await page.keyboard.press("Enter");
+    await expect(
+      dialog.getByRole("log").getByText("Jon has deep React experience."),
+    ).toBeVisible();
+
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+
   test("experience toggle exposes aria-expanded state", async ({ page }) => {
     await page.goto("/");
     const toggle = page.locator('button[aria-controls="earlier-roles"]');
