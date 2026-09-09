@@ -32,7 +32,9 @@ const showContactCard = tool({
       .string()
       .describe("Why the visitor might want to contact Jon, in a few words"),
   }),
-  // no execute — the panel renders the card client-side from the tool part
+  // The panel renders the card client-side from this tool part; execute just
+  // resolves the call so the conversation history stays valid on the next turn.
+  execute: async () => "The visitor has been shown Jon's contact card.",
 });
 
 export async function POST(req: Request): Promise<Response> {
