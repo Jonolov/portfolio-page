@@ -3,6 +3,7 @@ import { Archivo, Martian_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { MotionConfig } from "motion/react";
 import { Nav } from "@/components/Nav";
+import { AskLauncher } from "@/components/command-palette/AskLauncher";
 import { AskPanel } from "@/components/command-palette/AskPanel";
 import { CommandPalette } from "@/components/command-palette/CommandPalette";
 import { CommandPaletteProvider } from "@/components/command-palette/useCommandPalette";
@@ -109,6 +110,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             </main>
             <CommandPalette profile={profile} skillGroups={skillGroups} />
             <AskPanel contact={profile.contact} />
+            <AskLauncher />
           </CommandPaletteProvider>
         </MotionConfig>
         <Analytics />

@@ -31,6 +31,28 @@ async function stubChat(page: Page, body: string, status = 200) {
 
 const openPanel = openAskPanel;
 
+test.describe("ask launcher", () => {
+  test("is visible from the top and opens the panel; hides while it's open", async ({
+    page,
+  }) => {
+    await stubChat(page, "");
+    await page.goto("/");
+
+    const launcher = page.getByRole("button", { name: /ask jon-bot/i });
+    await expect(launcher).toBeVisible();
+
+    await launcher.click();
+    const dialog = page.getByRole("dialog", { name: /ask/i });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("textbox")).toBeFocused();
+    await expect(launcher).toBeHidden();
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(launcher).toBeVisible();
+  });
+});
+
 test.describe("ask panel — plumbing", () => {
   test("opens from the palette Ask item with focus in the textarea", async ({
     page,
