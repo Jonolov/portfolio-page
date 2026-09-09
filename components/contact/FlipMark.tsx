@@ -94,11 +94,12 @@ export default function FlipMark() {
         0.35,
       );
 
-      // 3. Contact copy rises in.
+      // 3. Contact copy rises in. Opacity only (not autoAlpha) so it stays
+      //    in the accessibility tree before it animates.
       tl.from(
         reveal,
         {
-          autoAlpha: 0,
+          opacity: 0,
           y: 14,
           stagger: 0.08,
           duration: 0.5,
