@@ -14,10 +14,6 @@ export function AskLauncher() {
       className="fixed bottom-4 right-4 z-30 flex items-center gap-2 rounded-full border border-foreground/15 bg-background/80 px-4 py-2.5 font-mono text-xs text-foreground/80 shadow-lg backdrop-blur hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-safe:transition-colors sm:bottom-6 sm:right-6"
     >
       <span className="text-accent">$</span> ask jon-bot
-      <span
-        className="inline-block h-[1em] w-[0.45em] translate-y-[0.1em] bg-accent motion-safe:animate-caret"
-        aria-hidden="true"
-      />
     </button>
   );
 }

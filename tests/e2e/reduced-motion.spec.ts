@@ -52,15 +52,6 @@ test.describe("reduced motion", () => {
     await expect(caret).toHaveCSS("animation-name", "none");
   });
 
-  test("ask launcher caret does not blink", async ({ page }) => {
-    await page.goto("/");
-    const caret = page
-      .getByRole("button", { name: /ask jon-bot/i })
-      .locator(".motion-safe\\:animate-caret");
-    await expect(caret).toBeVisible();
-    await expect(caret).toHaveCSS("animation-name", "none");
-  });
-
   test("ask panel streaming caret does not blink", async ({ page }) => {
     await page.route("**/api/chat", (route) =>
       route.fulfill({
