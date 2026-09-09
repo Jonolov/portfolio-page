@@ -79,7 +79,7 @@ export async function POST(req: Request): Promise<Response> {
     tools: { showContactCard },
     stopWhen: isStepCount(3),
     temperature: 0.3,
-    maxOutputTokens: 600,
+    maxOutputTokens: 350,
   });
 
   return result.toUIMessageStreamResponse();
