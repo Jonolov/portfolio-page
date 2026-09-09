@@ -137,6 +137,15 @@ export default function FlipMark() {
         onEnter: () => tl.play(),
         onLeaveBack: () => tl.reverse(),
       });
+
+      // Re-dock when layout changes while the reader hasn't reached contact.
+      const onRefresh = () => {
+        if (tl.progress() === 0 && !tl.isActive()) {
+          gsap.set(root, { ...dock(), autoAlpha: 0 });
+        }
+      };
+      ScrollTrigger.addEventListener("refreshInit", onRefresh);
+      return () => ScrollTrigger.removeEventListener("refreshInit", onRefresh);
     },
     { scope: rootRef },
   );

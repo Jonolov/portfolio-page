@@ -126,6 +126,22 @@ test.describe("accessibility", () => {
     expect(results.violations).toEqual([]);
   });
 
+  test("contact sign-off has no WCAG violations", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("#contact").scrollIntoViewIfNeeded();
+    await expect(page.locator("#contact")).toBeVisible();
+    // wait out the whole timeline (fly 0.8s + shatter + reveal) so axe
+    // doesn't measure contrast on mid-fade text
+    await expect(
+      page.locator("#contact [data-contact-reveal]").last(),
+    ).toHaveCSS("opacity", "1");
+
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+
   test("experience toggle exposes aria-expanded state", async ({ page }) => {
     await page.goto("/");
     const toggle = page.locator('button[aria-controls="earlier-roles"]');

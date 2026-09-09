@@ -73,7 +73,7 @@ export function Nav({
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3.5 font-mono text-xs sm:px-6">
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           <a
