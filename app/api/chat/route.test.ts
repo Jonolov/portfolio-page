@@ -25,11 +25,13 @@ vi.mock("@/lib/cms", () => ({
   getSideProjects: vi.fn(async () => []),
 }));
 
-const streamText = vi.fn((..._args: unknown[]) => ({
+const streamText = vi.fn<
+  (opts: { system: string }) => { toUIMessageStreamResponse: () => Response }
+>(() => ({
   toUIMessageStreamResponse: () => new Response("ok", { status: 200 }),
 }));
 vi.mock("ai", () => ({
-  streamText: (...args: unknown[]) => streamText(...args),
+  streamText: (opts: { system: string }) => streamText(opts),
   tool: (def: unknown) => def,
   isStepCount: (n: number) => n,
   convertToModelMessages: async (m: unknown) => m,
