@@ -10,6 +10,11 @@ import {
   type ScrollSessionData,
   type TranscriptLine,
 } from "@/lib/session-transcript";
+import {
+  BLOCK_MARK_COLS,
+  BLOCK_MARK_ROWS,
+  blockMarkCells,
+} from "./block-mark";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
@@ -30,6 +35,7 @@ function toFrames(lines: TranscriptLine[]) {
 export default function ScrollSession(props: ScrollSessionData) {
   const scopeRef = useRef<HTMLDivElement>(null);
   const frames = toFrames(buildTranscript(props));
+  const markCells = blockMarkCells();
 
   useGSAP(
     () => {
@@ -118,18 +124,53 @@ export default function ScrollSession(props: ScrollSessionData) {
           }
         });
 
-        // Terminal clears before the mark's finale (Task 5).
-        tl.addLabel("clear").to(
-          [
-            ...cmdTexts.slice(0, -1),
-            ...prompts.slice(0, -1),
-            ...outputs,
-          ],
-          { opacity: 0, y: -16, stagger: 0.02, duration: 0.4 },
-          "mark+=0.5",
-        );
+        // Terminal clears, then the mark assembles as the finale.
+        const markWrap = scope.querySelector<HTMLElement>("[data-session-mark]");
+        const markGrid = scope.querySelector<HTMLElement>("[data-mark-grid]");
+        const markCellEls = gsap.utils.toArray<HTMLElement>("[data-mark-cell]");
 
-        tl.addLabel("end", "+=0.4");
+        // Static baseline shows the mark in flow; for the scrub, overlay it.
+        gsap.set(markWrap, { position: "absolute", inset: 0 });
+
+        tl.addLabel("clear", "mark+=0.6")
+          .to(
+            [
+              ...cmdTexts.slice(0, -1),
+              ...prompts.slice(0, -1),
+              ...outputs,
+              scrollbackEl,
+            ],
+            { opacity: 0, duration: 0.4 },
+            "clear",
+          )
+          .addLabel("assemble", "clear+=0.15")
+          .from(
+            markCellEls,
+            {
+              opacity: 0,
+              x: () => gsap.utils.random(-140, 140),
+              y: () => gsap.utils.random(-90, 90),
+              rotation: () => gsap.utils.random(-120, 120),
+              stagger: { each: 0.03, from: "random" },
+              duration: 0.9,
+              ease: "power3.out",
+            },
+            "assemble",
+          );
+
+        // A scanline sweeps across the assembled mark once.
+        const scan = scope.querySelector<HTMLElement>("[data-scanline]");
+        if (scan && markGrid) {
+          tl.set(scan, { opacity: 1, y: -4 }, "assemble+=0.5")
+            .to(scan, {
+              y: markGrid.offsetHeight + 4,
+              duration: 0.3,
+              ease: "none",
+            })
+            .to(scan, { opacity: 0, duration: 0.08 });
+        }
+
+        tl.addLabel("end", "+=0.5");
 
         document.fonts?.ready.then(() => ScrollTrigger.refresh());
 
@@ -164,7 +205,7 @@ export default function ScrollSession(props: ScrollSessionData) {
             <span className="h-2.5 w-2.5 rounded-full bg-foreground/20" />
             <span className="ml-2">~/session</span>
           </div>
-          <div className="overflow-hidden">
+          <div className="relative min-h-[17rem] overflow-hidden">
             <div
               data-session-scrollback
               className="flex flex-col gap-1 px-5 py-6 leading-relaxed sm:px-6"
@@ -192,7 +233,39 @@ export default function ScrollSession(props: ScrollSessionData) {
                   ))}
                 </div>
               ))}
-              <div data-session-mark className="pt-4" aria-hidden="true" />
+            </div>
+            <div
+              data-session-mark
+              className="grid place-items-center px-5 py-6 sm:px-6"
+              aria-label={`${props.name} — brand mark`}
+              role="img"
+            >
+              <div
+                data-mark-grid
+                className="relative grid gap-0.5"
+                style={{
+                  gridTemplateColumns: `repeat(${BLOCK_MARK_COLS}, 0.85em)`,
+                  gridTemplateRows: `repeat(${BLOCK_MARK_ROWS}, 0.85em)`,
+                }}
+              >
+                {markCells.map((cell, i) => (
+                  <span
+                    key={i}
+                    data-mark-cell
+                    aria-hidden="true"
+                    className={cell.accent ? "bg-accent" : "bg-foreground"}
+                    style={{
+                      gridRow: cell.row + 1,
+                      gridColumn: cell.col + 1,
+                    }}
+                  />
+                ))}
+                <span
+                  data-scanline
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-accent opacity-0"
+                />
+              </div>
             </div>
           </div>
           <p className="border-t border-foreground/15 px-4 py-2.5 text-xs text-foreground/60">

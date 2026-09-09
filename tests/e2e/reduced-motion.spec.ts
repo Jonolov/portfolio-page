@@ -97,6 +97,7 @@ test.describe("reduced motion", () => {
     await expect(
       section.getByText("render --mark", { exact: false }).first(),
     ).toBeVisible();
+    await expect(section.locator("[data-session-mark]")).toBeVisible();
   });
 
   test("command palette open/close transition has zero duration", async ({
