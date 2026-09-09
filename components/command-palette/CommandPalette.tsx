@@ -31,12 +31,20 @@ export function CommandPalette({
   const [search, setSearch] = useState("");
   const page = pages[pages.length - 1];
 
+  function resetPalette() {
+    setPages([]);
+    setSearch("");
+  }
+
   function handleOpenChange(nextOpen: boolean) {
     setOpen(nextOpen);
-    if (!nextOpen) {
-      setPages([]);
-      setSearch("");
-    }
+    if (!nextOpen) resetPalette();
+  }
+
+  // `openAsk` closes the palette from outside handleOpenChange, so reset here too.
+  function goToAsk(seed?: string) {
+    resetPalette();
+    openAsk(seed);
   }
 
   function goToSection(id: string) {
@@ -80,7 +88,7 @@ export function CommandPalette({
           {search ? (
             <button
               type="button"
-              onClick={() => openAsk(search)}
+              onClick={() => goToAsk(search)}
               className="mx-auto block rounded-lg px-3 py-2 text-accent underline underline-offset-4"
             >
               Ask AI: “{search}”
@@ -111,7 +119,7 @@ export function CommandPalette({
               className="mt-2 px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-foreground/60 [&_[cmdk-group-items]]:mt-1"
             >
               <Command.Item
-                onSelect={() => openAsk()}
+                onSelect={() => goToAsk()}
                 className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-accent/10 data-[selected=true]:text-accent"
               >
                 Ask about Jon&apos;s experience →

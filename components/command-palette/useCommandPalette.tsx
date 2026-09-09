@@ -25,19 +25,13 @@ const CommandPaletteContext = createContext<CommandPaletteContextValue | null>(
 
 export function CommandPaletteProvider({ children }: { children: ReactNode }) {
   const [open, setOpenState] = useState(false);
-  const [askOpen, setAskOpen] = useState(false);
+  const [askOpen, setAskOpenState] = useState(false);
   const [askSeed, setAskSeed] = useState("");
+  // Kept in sync *synchronously* by every mutator below, not via an effect —
+  // the global keydown handler reads them and can fire before React flushes.
   const openRef = useRef(open);
   const askOpenRef = useRef(askOpen);
   const previouslyFocused = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    openRef.current = open;
-  }, [open]);
-
-  useEffect(() => {
-    askOpenRef.current = askOpen;
-  }, [askOpen]);
 
   const restoreFocus = useCallback(() => {
     const target = previouslyFocused.current;
@@ -56,6 +50,7 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
       if (!next && openRef.current) {
         restoreFocus();
       }
+      openRef.current = next;
       setOpenState(next);
     },
     [restoreFocus],
@@ -64,13 +59,16 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
   const openAsk = useCallback((seed = "") => {
     // The palette's own open already captured previouslyFocused; keep it
     // pointing at the pre-palette element so closeAsk can restore it.
+    openRef.current = false;
+    askOpenRef.current = true;
     setAskSeed(seed);
     setOpenState(false);
-    setAskOpen(true);
+    setAskOpenState(true);
   }, []);
 
   const closeAsk = useCallback(() => {
-    setAskOpen(false);
+    askOpenRef.current = false;
+    setAskOpenState(false);
     setAskSeed("");
     restoreFocus();
   }, [restoreFocus]);
@@ -80,9 +78,7 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
       if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
         if (askOpenRef.current) {
-          setAskOpen(false);
-          setAskSeed("");
-          restoreFocus();
+          closeAsk();
           return;
         }
         setOpen(!openRef.current);
@@ -90,7 +86,7 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [setOpen, restoreFocus]);
+  }, [setOpen, closeAsk]);
 
   return (
     <CommandPaletteContext.Provider

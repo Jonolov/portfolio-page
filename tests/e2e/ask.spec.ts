@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { openAskPanel, openPalette } from "./helpers";
 
 // Build a UI-message SSE stream body the way toUIMessageStreamResponse does.
 function uiStream(chunks: object[]): string {
@@ -28,11 +29,7 @@ async function stubChat(page: Page, body: string, status = 200) {
   );
 }
 
-async function openPanel(page: Page) {
-  await page.keyboard.press("ControlOrMeta+k");
-  await page.getByRole("option", { name: /ask about jon/i }).click();
-  await expect(page.getByRole("dialog", { name: /ask/i })).toBeVisible();
-}
+const openPanel = openAskPanel;
 
 test.describe("ask panel — plumbing", () => {
   test("opens from the palette Ask item with focus in the textarea", async ({
@@ -40,7 +37,6 @@ test.describe("ask panel — plumbing", () => {
   }) => {
     await stubChat(page, "");
     await page.goto("/");
-    await page.waitForTimeout(200);
     await openPanel(page);
 
     const dialog = page.getByRole("dialog", { name: /ask/i });
@@ -52,7 +48,6 @@ test.describe("ask panel — plumbing", () => {
   }) => {
     await stubChat(page, "");
     await page.goto("/");
-    await page.waitForTimeout(200);
     await page.getByRole("link", { name: "About" }).focus();
     await openPanel(page);
 
@@ -74,8 +69,7 @@ test.describe("ask panel — plumbing", () => {
       });
     });
     await page.goto("/");
-    await page.waitForTimeout(200);
-    await page.keyboard.press("ControlOrMeta+k");
+    await openPalette(page);
     await page.locator("[cmdk-input]").fill("does jon know rust");
     await page.getByRole("button", { name: /ask ai/i }).click();
 
@@ -88,7 +82,6 @@ test.describe("ask panel — conversation", () => {
   test("renders a streamed assistant answer", async ({ page }) => {
     await stubChat(page, TEXT_ANSWER);
     await page.goto("/");
-    await page.waitForTimeout(200);
     await openPanel(page);
 
     const dialog = page.getByRole("dialog", { name: /ask/i });
@@ -115,7 +108,6 @@ test.describe("ask panel — conversation", () => {
       ]),
     );
     await page.goto("/");
-    await page.waitForTimeout(200);
     await openPanel(page);
 
     const dialog = page.getByRole("dialog", { name: /ask/i });
@@ -130,7 +122,6 @@ test.describe("ask panel — conversation", () => {
   }) => {
     await stubChat(page, TEXT_ANSWER);
     await page.goto("/");
-    await page.waitForTimeout(200);
     await openPanel(page);
 
     const dialog = page.getByRole("dialog", { name: /ask/i });
@@ -159,7 +150,6 @@ test.describe("ask panel — conversation", () => {
       }),
     );
     await page.goto("/");
-    await page.waitForTimeout(200);
     await openPanel(page);
 
     const dialog = page.getByRole("dialog", { name: /ask/i });

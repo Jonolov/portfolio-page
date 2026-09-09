@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { openAskPanel } from "./helpers";
 
 test.describe("accessibility", () => {
   test("has no automatically detectable WCAG 2.1 AA violations", async ({
@@ -111,11 +112,8 @@ test.describe("accessibility", () => {
       }),
     );
     await page.goto("/");
-    await page.waitForTimeout(200);
-    await page.keyboard.press("ControlOrMeta+k");
-    await page.getByRole("option", { name: /ask about jon/i }).click();
+    await openAskPanel(page);
     const dialog = page.getByRole("dialog", { name: /ask/i });
-    await expect(dialog).toBeVisible();
     await dialog.getByRole("textbox").fill("react?");
     await page.keyboard.press("Enter");
     await expect(

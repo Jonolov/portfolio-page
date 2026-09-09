@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { openAskPanel } from "./helpers";
 
 test.use({ contextOptions: { reducedMotion: "reduce" } });
 
@@ -67,9 +68,7 @@ test.describe("reduced motion", () => {
       }),
     );
     await page.goto("/");
-    await page.waitForTimeout(200);
-    await page.keyboard.press("ControlOrMeta+k");
-    await page.getByRole("option", { name: /ask about jon/i }).click();
+    await openAskPanel(page);
     const dialog = page.getByRole("dialog", { name: /ask/i });
     await dialog.getByRole("textbox").fill("hi");
     await page.keyboard.press("Enter");
