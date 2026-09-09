@@ -126,6 +126,20 @@ test.describe("accessibility", () => {
     expect(results.violations).toEqual([]);
   });
 
+  test("scroll session has no WCAG violations with the section in view", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.locator("#session").scrollIntoViewIfNeeded();
+    await expect(page.locator("#session")).toBeVisible();
+    await page.waitForTimeout(300); // let SplitText settle
+
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+
   test("experience toggle exposes aria-expanded state", async ({ page }) => {
     await page.goto("/");
     const toggle = page.locator('button[aria-controls="earlier-roles"]');
