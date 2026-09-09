@@ -29,4 +29,25 @@ test.describe("scroll session", () => {
       page.getByRole("link", { name: profile.contact.email }),
     ).toBeInViewport();
   });
+
+  test("pins the terminal window while scrolling through it", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    // Scroll well into the pinned range.
+    await page
+      .locator("#session")
+      .evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.mouse.wheel(0, 300);
+    await page.waitForTimeout(400);
+    const win = page.locator("[data-session-window]");
+    const y1 = (await win.boundingBox())?.y ?? 0;
+
+    await page.mouse.wheel(0, 400);
+    await page.waitForTimeout(400);
+    const y2 = (await win.boundingBox())?.y ?? 0;
+
+    // Pinned: the window barely moves despite a 400px scroll.
+    expect(Math.abs(y1 - y2)).toBeLessThan(80);
+  });
 });

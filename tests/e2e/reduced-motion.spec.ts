@@ -78,6 +78,27 @@ test.describe("reduced motion", () => {
     await expect(caret.first()).toHaveCSS("animation-name", "none");
   });
 
+  test("scroll session is not pinned and shows the whole transcript at once", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const section = page.locator("#session");
+    await section.scrollIntoViewIfNeeded();
+
+    await expect(page.locator("[data-session-window]")).not.toHaveCSS(
+      "position",
+      "fixed",
+    );
+
+    const viewport = page.viewportSize();
+    const box = await section.boundingBox();
+    expect(box?.height ?? 0).toBeLessThan((viewport?.height ?? 0) * 1.4);
+
+    await expect(
+      section.getByText("render --mark", { exact: false }).first(),
+    ).toBeVisible();
+  });
+
   test("command palette open/close transition has zero duration", async ({
     page,
   }) => {

@@ -1,14 +1,80 @@
 "use client";
 
 import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { useGSAP } from "@gsap/react";
 import {
   buildTranscript,
   type ScrollSessionData,
 } from "@/lib/session-transcript";
 
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
+
 export default function ScrollSession(props: ScrollSessionData) {
   const scopeRef = useRef<HTMLDivElement>(null);
   const lines = buildTranscript(props);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const scope = scopeRef.current!;
+        const win = scope.querySelector<HTMLElement>("[data-session-window]")!;
+
+        // The scope provides the scroll distance itself (tall + relative), so
+        // ScrollTrigger pins with pinSpacing:false — no spacer growth to be
+        // eaten by the layout's flex column.
+        gsap.set(scope, { position: "relative", height: "300vh" });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: scope,
+            start: "top top",
+            end: "bottom bottom",
+            pin: win,
+            pinSpacing: false,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            scrub: 1,
+            snap: {
+              snapTo: "labels",
+              duration: { min: 0.1, max: 0.3 },
+              ease: "power1.inOut",
+            },
+          },
+        });
+
+        // Placeholder choreography — replaced in Task 4.
+        tl.addLabel("whoami")
+          .from("[data-line='command']", {
+            opacity: 0,
+            y: 6,
+            stagger: 0.1,
+            duration: 1,
+          })
+          .addLabel("ls")
+          .from("[data-line='output']", {
+            opacity: 0,
+            y: 6,
+            stagger: 0.05,
+            duration: 1,
+          })
+          .addLabel("cat")
+          .addLabel("mark")
+          .addLabel("end");
+
+        // next/font + the dynamic import settle after this effect runs;
+        // re-measure once fonts are ready so start/end aren't computed at 0.
+        document.fonts?.ready.then(() => ScrollTrigger.refresh());
+      });
+
+      return () => mm.revert();
+    },
+    { scope: scopeRef },
+  );
 
   return (
     <section
