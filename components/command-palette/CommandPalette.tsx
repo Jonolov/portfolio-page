@@ -23,7 +23,7 @@ export function CommandPalette({
   profile: Profile;
   skillGroups: SkillGroup[];
 }) {
-  const { open, setOpen } = useCommandPalette();
+  const { open, setOpen, openAsk } = useCommandPalette();
   const stackSummary = skillGroups
     .map((group) => `${group.category}: ${group.skills.join(", ")}`)
     .join("\n");
@@ -77,7 +77,17 @@ export function CommandPalette({
       />
       <Command.List className="max-h-80 overflow-y-auto p-2">
         <Command.Empty className="px-2 py-6 text-center text-sm text-foreground/70">
-          No results found.
+          {search ? (
+            <button
+              type="button"
+              onClick={() => openAsk(search)}
+              className="mx-auto block rounded-lg px-3 py-2 text-accent underline underline-offset-4"
+            >
+              Ask AI: “{search}”
+            </button>
+          ) : (
+            "No results found."
+          )}
         </Command.Empty>
 
         {!page && (
@@ -100,6 +110,12 @@ export function CommandPalette({
               heading="Ask"
               className="mt-2 px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-foreground/60 [&_[cmdk-group-items]]:mt-1"
             >
+              <Command.Item
+                onSelect={() => openAsk()}
+                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-accent/10 data-[selected=true]:text-accent"
+              >
+                Ask about Jon&apos;s experience →
+              </Command.Item>
               <Command.Item
                 onSelect={() => setPages((prev) => [...prev, "whoami"])}
                 className="cursor-pointer rounded-lg px-3 py-2 font-mono text-sm text-foreground/90 data-[selected=true]:bg-accent/10 data-[selected=true]:text-accent"
