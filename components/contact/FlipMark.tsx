@@ -94,6 +94,29 @@ export default function FlipMark() {
         0.35,
       );
 
+      // Banded ground: the mark flies over the light page in page colours,
+      // then colour-flips to the band palette as it lands on the dark section.
+      if (banded) {
+        gsap.set(glyphs, {
+          backgroundColor: (_i, el: HTMLElement) =>
+            el.dataset.accent === "true"
+              ? "var(--accent)"
+              : "var(--foreground)",
+        });
+        tl.to(
+          glyphs,
+          {
+            backgroundColor: (_i, el: HTMLElement) =>
+              el.dataset.accent === "true"
+                ? "var(--band-accent)"
+                : "var(--band-foreground)",
+            duration: 0.4,
+            stagger: { each: 0.01, from: "random" },
+          },
+          0.55,
+        );
+      }
+
       // 3. Contact copy rises in. Opacity only (not autoAlpha) so it stays
       //    in the accessibility tree before it animates.
       tl.from(
