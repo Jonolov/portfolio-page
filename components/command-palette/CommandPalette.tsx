@@ -3,6 +3,7 @@
 import { Command } from "cmdk";
 import { useState } from "react";
 import type { Profile, SkillGroup } from "@/lib/types";
+import { ContactCard } from "@/components/ui/ContactCard";
 import { useCommandPalette } from "./useCommandPalette";
 
 const navItems = [
@@ -153,30 +154,8 @@ export function CommandPalette({
 
         {page === "contact" && (
           <div className="px-1 py-1">
-            <div className="px-3 py-3 text-sm text-foreground/80">
-              {profile.contact.availableForConsulting ? (
-                <p className="mb-2 inline-flex items-center gap-2 font-medium">
-                  <span
-                    className="h-2 w-2 rounded-full bg-accent"
-                    aria-hidden="true"
-                  />
-                  {profile.contact.statusLine}
-                </p>
-              ) : null}
-              <a
-                href={`mailto:${profile.contact.email}`}
-                className="block font-mono text-accent underline underline-offset-4"
-              >
-                {profile.contact.email}
-              </a>
-              <a
-                href={profile.contact.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 block underline underline-offset-4"
-              >
-                LinkedIn<span className="sr-only"> (opens in a new tab)</span>
-              </a>
+            <div className="px-3 py-3">
+              <ContactCard contact={profile.contact} />
             </div>
             <Command.Item
               onSelect={() => setPages((prev) => prev.slice(0, -1))}
