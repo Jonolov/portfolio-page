@@ -5,10 +5,6 @@ import { Experience } from "@/components/sections/Experience";
 import { Hero } from "@/components/sections/Hero";
 import { Projects } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
-
-const ScrollSession = dynamic(
-  () => import("@/components/sections/ScrollSession"),
-);
 import {
   getEarlierRoles,
   getExperience,
@@ -16,6 +12,20 @@ import {
   getSideProjects,
   getSkillGroups,
 } from "@/lib/cms";
+
+const ScrollSession = dynamic(
+  () => import("@/components/sections/ScrollSession"),
+);
+
+function uniqueByLower(values: string[]): string[] {
+  const seen = new Set<string>();
+  return values.filter((v) => {
+    const key = v.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
 
 export default async function Home() {
   const [profile, skillGroups, experience, earlierRoles, sideProjects] =
@@ -37,7 +47,10 @@ export default async function Home() {
       <ScrollSession
         name={profile.name}
         roleLine={profile.roleLine}
-        companies={experience.slice(0, 4).map((r) => r.company)}
+        companies={uniqueByLower([
+          ...experience.map((r) => r.company),
+          ...earlierRoles.map((r) => r.company),
+        ]).slice(0, 9)}
         skills={skillGroups.flatMap((g) => g.skills.slice(0, 2)).slice(0, 8)}
       />
       <Contact contact={profile.contact} />

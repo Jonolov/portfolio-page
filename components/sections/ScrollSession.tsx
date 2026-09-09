@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import {
   buildTranscript,
@@ -16,7 +15,7 @@ import {
   blockMarkCells,
 } from "./block-mark";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const FRAME_LABELS = ["whoami", "ls", "cat", "mark"];
 
@@ -44,45 +43,41 @@ export default function ScrollSession(props: ScrollSessionData) {
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const scope = scopeRef.current!;
         const win = scope.querySelector<HTMLElement>("[data-session-window]")!;
+        const clips = gsap.utils.toArray<HTMLElement>("[data-cmd-clip]");
         const cmdTexts = gsap.utils.toArray<HTMLElement>("[data-cmd-text]");
         const outputs = gsap.utils.toArray<HTMLElement>("[data-line='output']");
         const prompts = gsap.utils.toArray<HTMLElement>("[data-prompt]");
+        const cursors = gsap.utils.toArray<HTMLElement>("[data-cursor]");
 
         // The scope provides the scroll distance itself (tall + relative), so
         // ScrollTrigger pins with pinSpacing:false — no spacer growth to be
         // eaten by the layout's flex column.
-        gsap.set(scope, { position: "relative", height: "220vh" });
+        gsap.set(scope, { position: "relative", height: "280vh" });
 
-        const splits = cmdTexts.map((el) =>
-          SplitText.create(el, {
-            type: "chars",
-            charsClass: "session-char",
-            aria: "none", // the line has a visually-hidden accessible copy
-          }),
-        );
-
-        // Start state: only the first prompt shows; everything else is hidden.
+        // Start state: only the first prompt shows; commands are clipped to
+        // zero width (typed open later), outputs hidden.
         gsap.set(prompts.slice(1), { opacity: 0 });
-        gsap.set(
-          splits.flatMap((s) => s.chars),
-          { opacity: 0 },
-        );
+        gsap.set(cursors, { opacity: 0 });
+        gsap.set(clips, { width: 0 });
         gsap.set(outputs, { opacity: 0, y: 8 });
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
-            trigger: scope,
-            start: "top 68px", // clear the sticky nav
-            end: "bottom bottom",
+            trigger: win,
+            start: "center center", // pin the window centred in the viewport
+            end: () => "+=" + Math.round(window.innerHeight * 2),
             pin: win,
             pinSpacing: false,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             scrub: 1,
             snap: {
-              snapTo: "labels",
-              duration: { min: 0.1, max: 0.3 },
+              // rough stops: the four command frames, then the finished
+              // transcript, then the assembled mark.
+              snapTo: [0, 0.18, 0.36, 0.55, 0.72, 1],
+              duration: { min: 0.1, max: 0.35 },
+              delay: 0.08,
               ease: "power1.inOut",
             },
           },
@@ -92,57 +87,46 @@ export default function ScrollSession(props: ScrollSessionData) {
           "[data-session-scrollback]",
         );
 
-        frames.forEach((_, fi) => {
-          const chars = splits[fi]?.chars ?? [];
-          const outs = outputs.filter(
-            (o) => Number(o.dataset.frame) === fi,
-          );
+        frames.forEach((frame, fi) => {
+          const outs = outputs.filter((o) => Number(o.dataset.frame) === fi);
+          const label = FRAME_LABELS[fi] ?? `f${fi}`;
+          tl.addLabel(label);
 
-          tl.addLabel(FRAME_LABELS[fi] ?? `f${fi}`);
           if (fi > 0) {
-            tl.to(prompts[fi], { opacity: 1, duration: 0.15 });
+            tl.to(prompts[fi], { opacity: 1, duration: 0.08 });
           }
-          tl.to(chars, {
-            opacity: 1,
-            stagger: 0.6 / Math.max(chars.length, 1),
-            duration: 0.6,
+          // Type it: the clip widens character-by-character (steps()), the
+          // block cursor rides its trailing edge.
+          tl.set(cursors[fi], { opacity: 1 });
+          tl.to(clips[fi], {
+            width: () => cmdTexts[fi].offsetWidth + 2,
+            duration: 0.7,
+            ease: `steps(${Math.max(frame.command.length, 1)})`,
           });
+
           if (outs.length) {
-            tl.to(
-              outs,
-              { opacity: 1, y: 0, stagger: 0.12, duration: 0.5 },
-              ">-0.05",
-            );
+            tl.set(cursors[fi], { opacity: 0 });
+            tl.to(outs, { opacity: 1, y: 0, stagger: 0.12, duration: 0.4 }, ">");
           }
           // Nudge earlier history up, like a real terminal.
           if (fi > 0 && scrollbackEl) {
-            tl.to(
-              scrollbackEl,
-              { y: `-=${1.6 * fi}rem`, duration: 0.3 },
-              FRAME_LABELS[fi],
-            );
+            tl.to(scrollbackEl, { y: `-=${1.6 * fi}rem`, duration: 0.3 }, label);
           }
         });
 
+        // Hold on the finished transcript for a beat before clearing.
+        tl.addLabel("typed", "+=0.6");
+
         // Terminal clears, then the mark assembles as the finale.
         const markWrap = scope.querySelector<HTMLElement>("[data-session-mark]");
-        const markGrid = scope.querySelector<HTMLElement>("[data-mark-grid]");
         const markCellEls = gsap.utils.toArray<HTMLElement>("[data-mark-cell]");
 
         // Static baseline shows the mark in flow; for the scrub, overlay it.
         gsap.set(markWrap, { position: "absolute", inset: 0 });
 
-        tl.addLabel("clear", "mark+=0.6")
-          .to(
-            [
-              ...cmdTexts.slice(0, -1),
-              ...prompts.slice(0, -1),
-              ...outputs,
-              scrollbackEl,
-            ],
-            { opacity: 0, duration: 0.4 },
-            "clear",
-          )
+        tl.addLabel("clear", "typed")
+          .set(cursors, { opacity: 0 }, "clear")
+          .to(scrollbackEl, { opacity: 0, duration: 0.4 }, "clear")
           .addLabel("assemble", "clear+=0.15")
           .from(
             markCellEls,
@@ -158,23 +142,9 @@ export default function ScrollSession(props: ScrollSessionData) {
             "assemble",
           );
 
-        // A scanline sweeps across the assembled mark once.
-        const scan = scope.querySelector<HTMLElement>("[data-scanline]");
-        if (scan && markGrid) {
-          tl.set(scan, { opacity: 1, y: -4 }, "assemble+=0.5")
-            .to(scan, {
-              y: markGrid.offsetHeight + 4,
-              duration: 0.3,
-              ease: "none",
-            })
-            .to(scan, { opacity: 0, duration: 0.08 });
-        }
-
-        tl.addLabel("end", "+=0.5");
+        tl.addLabel("end", "+=0.6");
 
         document.fonts?.ready.then(() => ScrollTrigger.refresh());
-
-        return () => splits.forEach((s) => s.revert());
       });
 
       return () => mm.revert();
@@ -212,12 +182,29 @@ export default function ScrollSession(props: ScrollSessionData) {
             >
               {frames.map((frame, fi) => (
                 <div key={fi} className="flex flex-col gap-1">
-                  <p data-line="command" className="text-foreground/80">
-                    <span aria-hidden="true">
+                  <p
+                    data-line="command"
+                    className="flex items-baseline text-foreground/80"
+                  >
+                    <span aria-hidden="true" className="flex items-baseline">
                       <span data-prompt className="text-accent">
                         $&nbsp;
                       </span>
-                      <span data-cmd-text>{frame.command}</span>
+                      <span
+                        data-cmd-clip
+                        className="inline-block overflow-hidden align-bottom"
+                      >
+                        <span
+                          data-cmd-text
+                          className="inline-block whitespace-nowrap"
+                        >
+                          {frame.command}
+                        </span>
+                      </span>
+                      <span
+                        data-cursor
+                        className="ml-0.5 inline-block h-[1.05em] w-[0.5em] shrink-0 translate-y-[0.15em] bg-accent opacity-0"
+                      />
                     </span>
                     <span className="sr-only">{`$ ${frame.command}`}</span>
                   </p>
@@ -260,11 +247,6 @@ export default function ScrollSession(props: ScrollSessionData) {
                     }}
                   />
                 ))}
-                <span
-                  data-scanline
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-accent opacity-0"
-                />
               </div>
             </div>
           </div>
