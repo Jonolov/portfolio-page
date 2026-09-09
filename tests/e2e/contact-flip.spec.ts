@@ -18,7 +18,9 @@ test.describe("contact flip", () => {
     await expect(mail).toBeInViewport();
 
     await expect(page.getByRole("link", { name: /linkedin/i })).toBeVisible();
-    await expect(contact.locator("[data-contact-mark]")).toBeVisible();
+    // the static mark is the SSR / fallback image — always in the DOM
+    // (the animated path visually swaps it for the flown overlay)
+    await expect(contact.locator("[data-contact-mark]")).toBeAttached();
   });
 
   test("the FlipMark overlay is idle at the top of the page", async ({
@@ -37,5 +39,28 @@ test.describe("contact flip", () => {
     await expect(
       page.getByRole("link", { name: profile.contact.email }),
     ).toBeInViewport();
+  });
+
+  test("the mark flies to centre when contact enters, docks away on scroll up", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const overlay = page.locator("[data-flip-mark]");
+    await expect(overlay).toBeHidden();
+
+    await page.locator("#contact").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000); // fly-out is ~0.8s
+    await expect(overlay).toBeVisible();
+
+    const box = await overlay.boundingBox();
+    const vp = page.viewportSize()!;
+    expect(box?.width ?? 0).toBeGreaterThan(vp.width * 0.1);
+    expect(
+      Math.abs(box!.x + box!.width / 2 - vp.width / 2),
+    ).toBeLessThan(vp.width * 0.15);
+
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(1000);
+    await expect(overlay).toBeHidden();
   });
 });
