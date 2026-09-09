@@ -31,9 +31,8 @@ export default function FlipMark() {
       const staticMark = document.querySelector<HTMLElement>(
         "[data-contact-mark]",
       );
-      if (!root || !contactEl || !navMark) return;
+      if (!root || !contactEl || !navMark || !staticMark) return;
 
-      const dimTargets = [navMark, staticMark].filter(Boolean) as HTMLElement[];
       const glyphs = gsap.utils.toArray<HTMLElement>(
         root.querySelectorAll("[data-flip-cell]"),
       );
@@ -41,8 +40,19 @@ export default function FlipMark() {
         contactEl.querySelectorAll("[data-contact-reveal]"),
       );
 
-      // Transform the CSS-centred overlay to sit exactly over the nav mark,
-      // then animate it home on the contact hand-off.
+      // Anchor the overlay in the document, exactly over the static J, so it
+      // scrolls with the contact section once it has landed.
+      const anchor = () => {
+        gsap.set(root, { x: 0, y: 0, scale: 1, clearProps: "left,top" });
+        const s = staticMark.getBoundingClientRect();
+        gsap.set(root, {
+          position: "absolute",
+          left: s.left + window.scrollX,
+          top: s.top + window.scrollY,
+        });
+      };
+
+      // Offset needed to sit the overlay over the nav mark instead.
       const dock = () => {
         gsap.set(root, { x: 0, y: 0, scale: 1 });
         const me = root.getBoundingClientRect();
@@ -54,6 +64,10 @@ export default function FlipMark() {
         };
       };
 
+      anchor();
+      // The static J is only the no-JS / reduced-motion image — hide it now
+      // for the animated path so it never flashes before the fly-in.
+      gsap.set(staticMark, { autoAlpha: 0 });
       gsap.set(root, {
         ...dock(),
         transformOrigin: "center center",
@@ -64,22 +78,23 @@ export default function FlipMark() {
         paused: true,
         onStart: () => gsap.set(root, { autoAlpha: 1 }),
         onReverseComplete: () => {
+          anchor();
           gsap.set(root, { ...dock(), autoAlpha: 0 });
-          gsap.set(dimTargets, { clearProps: "opacity,visibility" });
+          gsap.set(navMark, { clearProps: "opacity,visibility" });
         },
       });
 
-      // 1. Fly the mark from the nav to centre.
+      // 1. Fly the mark from the nav down onto the static J's spot; the nav
+      //    mark dims as it leaves.
       tl.to(root, {
         x: 0,
         y: 0,
         scale: 1,
         duration: 0.8,
         ease: "power3.inOut",
-      }).to(dimTargets, { autoAlpha: 0, duration: 0.3 }, 0.05);
+      }).to(navMark, { autoAlpha: 0, duration: 0.3 }, 0.05);
 
-      // 2. Shatter → reassemble: the glyphs scatter in from random offsets
-      //    and settle as the mark lands.
+      // 2. Shatter → reassemble as it lands.
       tl.from(
         glyphs,
         {
@@ -99,9 +114,7 @@ export default function FlipMark() {
       if (banded) {
         gsap.set(glyphs, {
           backgroundColor: (_i, el: HTMLElement) =>
-            el.dataset.accent === "true"
-              ? "var(--accent)"
-              : "var(--foreground)",
+            el.dataset.accent === "true" ? "var(--accent)" : "var(--foreground)",
         });
         tl.to(
           glyphs,
@@ -138,9 +151,10 @@ export default function FlipMark() {
         onLeaveBack: () => tl.reverse(),
       });
 
-      // Re-dock when layout changes while the reader hasn't reached contact.
+      // Re-anchor + re-dock when layout changes before the reader arrives.
       const onRefresh = () => {
         if (tl.progress() === 0 && !tl.isActive()) {
+          anchor();
           gsap.set(root, { ...dock(), autoAlpha: 0 });
         }
       };
@@ -152,37 +166,33 @@ export default function FlipMark() {
 
   return (
     <div
+      ref={rootRef}
+      data-flip-mark
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[45] grid place-items-center"
+      className="invisible pointer-events-none absolute left-0 top-0 z-[45] grid"
+      style={{
+        gridTemplateColumns: `repeat(${BLOCK_MARK_COLS}, ${MARK_CELL})`,
+        gridTemplateRows: `repeat(${BLOCK_MARK_ROWS}, ${MARK_CELL})`,
+        gap: MARK_GAP,
+      }}
     >
-      <div
-        ref={rootRef}
-        data-flip-mark
-        className="invisible grid"
-        style={{
-          gridTemplateColumns: `repeat(${BLOCK_MARK_COLS}, ${MARK_CELL})`,
-          gridTemplateRows: `repeat(${BLOCK_MARK_ROWS}, ${MARK_CELL})`,
-          gap: MARK_GAP,
-        }}
-      >
-        {cells.map((cell, i) => (
-          <span
-            key={i}
-            data-flip-cell
-            data-accent={cell.accent}
-            style={{ gridRow: cell.row + 1, gridColumn: cell.col + 1 }}
-            className={
-              cell.accent
-                ? banded
-                  ? "bg-band-accent"
-                  : "bg-accent"
-                : banded
-                  ? "bg-band-foreground"
-                  : "bg-foreground"
-            }
-          />
-        ))}
-      </div>
+      {cells.map((cell, i) => (
+        <span
+          key={i}
+          data-flip-cell
+          data-accent={cell.accent}
+          style={{ gridRow: cell.row + 1, gridColumn: cell.col + 1 }}
+          className={
+            cell.accent
+              ? banded
+                ? "bg-band-accent"
+                : "bg-accent"
+              : banded
+                ? "bg-band-foreground"
+                : "bg-foreground"
+          }
+        />
+      ))}
     </div>
   );
 }
