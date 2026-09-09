@@ -2,6 +2,8 @@ import type { Profile } from "@/lib/types";
 import {
   BLOCK_MARK_COLS,
   BLOCK_MARK_ROWS,
+  MARK_CELL,
+  MARK_GAP,
   blockMarkCells,
 } from "@/components/contact/block-mark";
 import { CONTACT_GROUND } from "@/components/contact/ground";
@@ -18,8 +20,8 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
       data-contact
       className={
         banded
-          ? "w-full bg-band-background py-24 text-band-foreground sm:py-32"
-          : "w-full py-24 sm:py-32"
+          ? "flex min-h-screen w-full flex-col justify-center bg-band-background py-24 text-band-foreground"
+          : "flex min-h-screen w-full flex-col justify-center py-24"
       }
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
@@ -35,16 +37,16 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
           contact — get in touch
         </h2>
 
-        {/* Static centred J — the accessible / no-JS / reduced-motion image.
+        {/* Static J — the accessible / no-JS / reduced-motion image.
             FlipMark overlays this exactly when it animates. */}
         <div
           data-contact-mark
           aria-hidden="true"
-          className="mt-14 grid"
+          className="my-16 grid"
           style={{
-            gridTemplateColumns: `repeat(${BLOCK_MARK_COLS}, 1.1rem)`,
-            gridTemplateRows: `repeat(${BLOCK_MARK_ROWS}, 1.1rem)`,
-            gap: "0.15rem",
+            gridTemplateColumns: `repeat(${BLOCK_MARK_COLS}, ${MARK_CELL})`,
+            gridTemplateRows: `repeat(${BLOCK_MARK_ROWS}, ${MARK_CELL})`,
+            gap: MARK_GAP,
           }}
         >
           {cells.map((cell, i) => (
@@ -64,7 +66,7 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
           ))}
         </div>
 
-        <div className="mt-14 flex flex-col items-center gap-3 font-mono text-sm">
+        <div className="flex flex-col items-center gap-3 font-mono text-sm">
           {contact.availableForConsulting ? (
             <p
               data-contact-reveal

@@ -7,6 +7,8 @@ import { useGSAP } from "@gsap/react";
 import {
   BLOCK_MARK_COLS,
   BLOCK_MARK_ROWS,
+  MARK_CELL,
+  MARK_GAP,
   blockMarkCells,
 } from "@/components/contact/block-mark";
 import { CONTACT_GROUND } from "@/components/contact/ground";
@@ -32,9 +34,15 @@ export default function FlipMark() {
       if (!root || !contactEl || !navMark) return;
 
       const dimTargets = [navMark, staticMark].filter(Boolean) as HTMLElement[];
+      const glyphs = gsap.utils.toArray<HTMLElement>(
+        root.querySelectorAll("[data-flip-cell]"),
+      );
+      const reveal = gsap.utils.toArray<HTMLElement>(
+        contactEl.querySelectorAll("[data-contact-reveal]"),
+      );
 
-      // The overlay is CSS-centred/large. Transform it to sit exactly over the
-      // nav mark, then animate it home on the contact hand-off.
+      // Transform the CSS-centred overlay to sit exactly over the nav mark,
+      // then animate it home on the contact hand-off.
       const dock = () => {
         gsap.set(root, { x: 0, y: 0, scale: 1 });
         const me = root.getBoundingClientRect();
@@ -61,6 +69,7 @@ export default function FlipMark() {
         },
       });
 
+      // 1. Fly the mark from the nav to centre.
       tl.to(root, {
         x: 0,
         y: 0,
@@ -69,9 +78,38 @@ export default function FlipMark() {
         ease: "power3.inOut",
       }).to(dimTargets, { autoAlpha: 0, duration: 0.3 }, 0.05);
 
+      // 2. Shatter → reassemble: the glyphs scatter in from random offsets
+      //    and settle as the mark lands.
+      tl.from(
+        glyphs,
+        {
+          x: () => gsap.utils.random(-180, 180),
+          y: () => gsap.utils.random(-140, 140),
+          rotation: () => gsap.utils.random(-160, 160),
+          autoAlpha: 0,
+          stagger: { each: 0.02, from: "random" },
+          duration: 0.7,
+          ease: "power3.out",
+        },
+        0.35,
+      );
+
+      // 3. Contact copy rises in.
+      tl.from(
+        reveal,
+        {
+          autoAlpha: 0,
+          y: 14,
+          stagger: 0.08,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+        ">-0.1",
+      );
+
       ScrollTrigger.create({
         trigger: contactEl,
-        start: "top 65%",
+        start: "top 30%",
         onEnter: () => tl.play(),
         onLeaveBack: () => tl.reverse(),
       });
@@ -89,9 +127,9 @@ export default function FlipMark() {
         data-flip-mark
         className="invisible grid"
         style={{
-          gridTemplateColumns: `repeat(${BLOCK_MARK_COLS}, min(9vw, 3.5rem))`,
-          gridTemplateRows: `repeat(${BLOCK_MARK_ROWS}, min(9vw, 3.5rem))`,
-          gap: "min(1.2vw, 0.4rem)",
+          gridTemplateColumns: `repeat(${BLOCK_MARK_COLS}, ${MARK_CELL})`,
+          gridTemplateRows: `repeat(${BLOCK_MARK_ROWS}, ${MARK_CELL})`,
+          gap: MARK_GAP,
         }}
       >
         {cells.map((cell, i) => (

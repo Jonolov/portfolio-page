@@ -30,3 +30,7 @@ export function blockMarkCells(): MarkCell[] {
 
 export const BLOCK_MARK_COLS = GRID[0].length;
 export const BLOCK_MARK_ROWS = GRID.length;
+
+// Shared so the static mark and the flown FlipMark land at the same size.
+export const MARK_CELL = "clamp(1.1rem, 4.2vw, 1.9rem)";
+export const MARK_GAP = "0.2rem";
