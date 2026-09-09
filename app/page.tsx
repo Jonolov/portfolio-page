@@ -38,7 +38,7 @@ export default async function Home() {
         name={profile.name}
         roleLine={profile.roleLine}
         companies={experience.slice(0, 4).map((r) => r.company)}
-        skills={skillGroups.flatMap((g) => g.skills).slice(0, 8)}
+        skills={skillGroups.flatMap((g) => g.skills.slice(0, 2)).slice(0, 8)}
       />
       <Contact contact={profile.contact} />
     </>

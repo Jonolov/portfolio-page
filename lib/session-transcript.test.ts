@@ -23,6 +23,14 @@ describe("buildTranscript", () => {
     expect(lines[1].text).toContain("Senior Frontend/Fullstack Developer");
   });
 
+  it("trims a trailing tech list from the role line in the whoami output", () => {
+    const lines = buildTranscript({
+      ...base,
+      roleLine: "Senior Developer — React, Node.js, TypeScript",
+    });
+    expect(lines[1].text).toBe("Jon Stjärnström, Senior Developer");
+  });
+
   it("lists every company as its own output line under `ls ~/work`", () => {
     const lines = buildTranscript(base);
     const lsIndex = lines.findIndex(
