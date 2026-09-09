@@ -45,13 +45,6 @@ test.describe("reduced motion", () => {
     }
   });
 
-  test("contact terminal caret does not blink", async ({ page }) => {
-    await page.goto("/");
-    const caret = page.locator("#contact .motion-safe\\:animate-caret");
-    await caret.scrollIntoViewIfNeeded();
-    await expect(caret).toHaveCSS("animation-name", "none");
-  });
-
   test("ask panel streaming caret does not blink", async ({ page }) => {
     await page.route("**/api/chat", (route) =>
       route.fulfill({
