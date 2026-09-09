@@ -125,6 +125,31 @@ test.describe("ask panel — conversation", () => {
     await expect(dialog.locator('a[href^="mailto:"]')).toBeVisible();
   });
 
+  test("clears the conversation when the panel is closed and reopened", async ({
+    page,
+  }) => {
+    await stubChat(page, TEXT_ANSWER);
+    await page.goto("/");
+    await page.waitForTimeout(200);
+    await openPanel(page);
+
+    const dialog = page.getByRole("dialog", { name: /ask/i });
+    await dialog.getByRole("textbox").fill("react?");
+    await page.keyboard.press("Enter");
+    await expect(
+      dialog.getByRole("log").getByText("Jon has deep React experience."),
+    ).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await openPanel(page);
+
+    await expect(
+      dialog.getByRole("log").getByText("Jon has deep React experience."),
+    ).toBeHidden();
+    await expect(dialog.getByText(/Ask about Jon/i)).toBeVisible();
+  });
+
   test("shows a friendly line when rate-limited", async ({ page }) => {
     await page.route("**/api/chat", (route) =>
       route.fulfill({

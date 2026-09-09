@@ -19,7 +19,8 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
   const seededRef = useRef(false);
   const headingId = useId();
 
-  const { messages, sendMessage, status, error } = useChat();
+  const { messages, sendMessage, status, error, setMessages, stop, clearError } =
+    useChat();
 
   useEffect(() => {
     const el = dialogRef.current;
@@ -31,6 +32,16 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
       el.close();
     }
   }, [askOpen]);
+
+  // The panel is stateless — drop the conversation whenever it closes.
+  // (Esc closes the native dialog directly, so this can't hang off el.open.)
+  useEffect(() => {
+    if (!askOpen) {
+      void stop();
+      setMessages([]);
+      clearError();
+    }
+  }, [askOpen, stop, setMessages, clearError]);
 
   useEffect(() => {
     if (askOpen && askSeed && !seededRef.current) {
