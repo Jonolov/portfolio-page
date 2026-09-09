@@ -1,3 +1,4 @@
+import { anthropic } from "@ai-sdk/anthropic";
 import {
   convertToModelMessages,
   isStepCount,
@@ -21,7 +22,7 @@ import { buildSystemPrompt } from "@/lib/chat/system-prompt";
 
 export const maxDuration = 30;
 
-const MODEL = "anthropic/claude-haiku-4.5";
+const MODEL = anthropic("claude-haiku-4-5");
 
 const showContactCard = tool({
   description:

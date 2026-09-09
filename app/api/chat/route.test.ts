@@ -25,6 +25,10 @@ vi.mock("@/lib/cms", () => ({
   getSideProjects: vi.fn(async () => []),
 }));
 
+vi.mock("@ai-sdk/anthropic", () => ({
+  anthropic: (id: string) => ({ id }),
+}));
+
 const streamText = vi.fn<
   (opts: { system: string }) => { toUIMessageStreamResponse: () => Response }
 >(() => ({

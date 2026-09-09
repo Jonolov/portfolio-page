@@ -4,6 +4,14 @@
 **Status:** Approved for planning
 **Branch:** `feat/ask-panel`
 
+> **Update 2026-09-09 (during implementation):** switched from the Vercel AI
+> Gateway (BYOK) to the AI SDK's **direct Anthropic provider**
+> (`@ai-sdk/anthropic`, `ANTHROPIC_API_KEY`). The Gateway gated every
+> request behind a card on file *and* paid credits even for BYOK, which
+> isn't worth it for a personal site. Spend is capped by `maxOutputTokens`
+> plus the rate limiter, and a limit set in the Anthropic Console. BotID
+> and everything else are unchanged.
+
 ## Context
 
 The portfolio site (`jonstjarnstrom.se`) is a consulting lead-gen tool, public on
