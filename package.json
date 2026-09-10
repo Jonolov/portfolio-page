@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.49",
