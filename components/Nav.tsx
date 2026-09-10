@@ -1,24 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BlockMark } from "@/components/ui/BlockMark";
-import { NAV_MARK_CELL, NAV_MARK_GAP } from "@/components/ui/block-mark";
+import { Mark } from "@/components/ui/Mark";
 
 const navItems = [
-  { href: "#about", label: "about", id: "about" },
-  { href: "#experience", label: "experience", id: "experience" },
-  { href: "#skills", label: "skills", id: "skills" },
-  { href: "#projects", label: "projects", id: "projects" },
-  { href: "#contact", label: "contact", id: "contact" },
+  { href: "#about", label: "About", id: "about" },
+  { href: "#experience", label: "Experience", id: "experience" },
+  { href: "#skills", label: "Skills", id: "skills" },
+  { href: "#projects", label: "Projects", id: "projects" },
+  { href: "#contact", label: "Contact", id: "contact" },
 ];
-
-const clockFormatter = new Intl.DateTimeFormat("sv-SE", {
-  timeZone: "Europe/Stockholm",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: false,
-});
 
 export function Nav({
   available,
@@ -28,7 +19,6 @@ export function Nav({
   location: string;
 }) {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [time, setTime] = useState<string | null>(null);
 
   useEffect(() => {
     const sectionIds = navItems.map((item) => item.id);
@@ -38,19 +28,15 @@ export function Nav({
       const atBottom =
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 2;
-
       if (atBottom) {
         setActiveId(sectionIds[sectionIds.length - 1]);
         return;
       }
-
       let current: string | null = null;
       for (const id of sectionIds) {
         const el = document.getElementById(id);
         if (!el) continue;
-        if (el.getBoundingClientRect().top <= activationLine) {
-          current = id;
-        }
+        if (el.getBoundingClientRect().top <= activationLine) current = id;
       }
       setActiveId(current);
     }
@@ -64,56 +50,28 @@ export function Nav({
     };
   }, []);
 
-  useEffect(() => {
-    function tick() {
-      setTime(clockFormatter.format(new Date()));
-    }
-    tick();
-    const id = window.setInterval(tick, 1000);
-    return () => window.clearInterval(id);
-  }, []);
-
   return (
-    <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background">
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-2.5 px-4 py-3 font-mono text-xs sm:flex-row sm:justify-between sm:gap-4 sm:px-6 sm:py-3.5">
-        <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+    <header className="sticky top-0 z-40 border-b border-field-fg/15 bg-field text-field-fg">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2.5 px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6">
+        <div className="flex items-center justify-between gap-4 sm:justify-start">
           <a
             href="#hero"
-            className="flex shrink-0 items-center gap-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
+            className="flex shrink-0 items-center gap-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-field-fg"
           >
-            <BlockMark
-              data-nav-mark
-              animated
-              cell={NAV_MARK_CELL}
-              gap={NAV_MARK_GAP}
-              className="shrink-0"
-              cellClassName="bg-foreground"
-              accentClassName="bg-accent"
-            />
+            <Mark className="bg-paper text-field" />
             <span className="sr-only">Jon Stjärnström — home</span>
           </a>
-          <span className="hidden items-center gap-1.5 whitespace-nowrap text-foreground/60 md:flex">
-            <span
-              className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                available ? "bg-accent" : "bg-red-500"
-              }`}
-              aria-hidden="true"
-            />
-            status: {available ? "available" : "unavailable"}
-          </span>
-          <span className="hidden whitespace-nowrap text-foreground/60 lg:inline">
-            {location.toLowerCase()}, se
-          </span>
-          {time ? (
-            <span
-              className="hidden whitespace-nowrap text-foreground/60 lg:inline"
-              suppressHydrationWarning
-            >
-              {time}
+          {available ? (
+            <span className="inline-flex items-center gap-2 rounded-full bg-cyan px-3 py-1 text-xs font-semibold text-cyan-fg">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-fg" aria-hidden="true" />
+              Available for work
             </span>
           ) : null}
+          <span className="hidden whitespace-nowrap text-field-fg/70 lg:inline">
+            {location}, Sweden
+          </span>
         </div>
-        <ul className="flex justify-between gap-x-2 text-[11px] sm:shrink-0 sm:justify-start sm:gap-5 sm:text-xs">
+        <ul className="flex justify-between gap-x-2 sm:shrink-0 sm:justify-start sm:gap-5">
           {navItems.map((item) => {
             const isActive = activeId === item.id;
             return (
@@ -121,10 +79,10 @@ export function Nav({
                 <a
                   href={item.href}
                   aria-current={isActive ? "location" : undefined}
-                  className={`rounded transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground ${
+                  className={`rounded transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg ${
                     isActive
-                      ? "font-medium text-accent"
-                      : "text-foreground/70 hover:text-accent"
+                      ? "font-semibold text-cyan"
+                      : "text-field-fg/80 hover:text-cyan"
                   }`}
                 >
                   {item.label}
