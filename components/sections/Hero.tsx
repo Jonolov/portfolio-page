@@ -19,9 +19,13 @@ export function Hero({ profile }: { profile: Profile }) {
     >
       <ShardField
         shards={[
-          { x: "87%", y: "6rem", size: 48, color: "bg-pink", radius: 14 },
-          { x: "72%", y: "50%", size: 28, color: "bg-cyan" },
-          { x: "84%", y: "78%", size: 36, color: "bg-paper", radius: 10 },
+          { x: "83%", y: "3.5rem", size: 52, color: "bg-pink", radius: 16 },
+          { x: "62%", y: "16%", size: 14, color: "bg-paper", radius: 4 },
+          { x: "93%", y: "26%", size: 12, color: "bg-js-green" },
+          { x: "70%", y: "46%", size: 24, color: "bg-cyan" },
+          { x: "90%", y: "58%", size: 34, color: "bg-paper", radius: 10 },
+          { x: "78%", y: "80%", size: 18, color: "bg-cyan", radius: 6 },
+          { x: "88%", y: "90%", size: 26, color: "bg-pink", radius: 8 },
         ]}
       />
 

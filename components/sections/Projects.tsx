@@ -4,7 +4,6 @@ import { useRef } from "react";
 import type { SideProject } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
-import { ShardField } from "@/components/motion/ShardField";
 import { ProjectsReel } from "@/components/motion/ProjectsReel";
 import { useReveal } from "@/lib/gsap";
 
@@ -16,13 +15,9 @@ export function Projects({ projects }: { projects: SideProject[] }) {
     <section
       id="projects"
       aria-labelledby="projects-heading"
-      className="relative isolate overflow-hidden bg-pink px-6 py-24 text-pink-fg sm:px-16 sm:py-28"
+      className="bg-pink px-6 py-24 text-pink-fg sm:px-16 sm:py-28"
     >
-      <ShardField
-        shards={[{ x: "89%", y: "3rem", size: 30, color: "bg-field", radius: 8 }]}
-      />
-
-      <div ref={ref} className="relative z-10 mx-auto max-w-6xl">
+      <div ref={ref} className="mx-auto max-w-6xl">
         <div data-reveal>
           <SectionHeading
             id="projects-heading"

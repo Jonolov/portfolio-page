@@ -7,11 +7,13 @@ import { useGSAP } from "@gsap/react";
 import { Mark } from "@/components/ui/Mark";
 import { NO_PREFERENCE, REDUCED } from "@/lib/gsap";
 
+// Positioned as a fraction of the (bounded, centred) mark box so they orbit
+// the "JS" at every width instead of crowding it on desktop.
 const SHARDS = [
-  { x: "calc(50% - 90px)", y: "16px", size: 36, color: "bg-js-green", radius: 9 },
-  { x: "calc(50% + 60px)", y: "16px", size: 28, color: "bg-cyan", radius: 0 },
-  { x: "calc(50% + 40px)", y: "112px", size: 32, color: "bg-pink", radius: 8 },
-  { x: "calc(50% - 70px)", y: "112px", size: 24, color: "bg-js-green", radius: 0 },
+  { left: "4%", top: "2%", size: 22, color: "bg-js-green", radius: 6 },
+  { left: "87%", top: "-8%", size: 28, color: "bg-cyan", radius: 0 },
+  { left: "93%", top: "70%", size: 16, color: "bg-pink", radius: 5 },
+  { left: "-2%", top: "62%", size: 24, color: "bg-js-green", radius: 0 },
 ];
 
 /**
@@ -78,15 +80,15 @@ export function ContactMark() {
     <div
       ref={ref}
       aria-hidden="true"
-      className="relative my-14 flex h-52 items-center justify-center"
+      className="relative my-16 mx-auto flex h-40 w-full max-w-md items-center justify-center sm:h-52"
     >
       {SHARDS.map((s, i) => (
         <span
           key={i}
           data-shard
           style={{
-            left: s.x,
-            top: s.y,
+            left: s.left,
+            top: s.top,
             width: s.size,
             height: s.size,
             borderRadius: s.radius,
@@ -95,7 +97,10 @@ export function ContactMark() {
         />
       ))}
       <span data-contact-mark>
-        <Mark size="lg" className="!text-[clamp(5rem,20vw,10rem)] text-js-green" />
+        <Mark
+          size="lg"
+          className="!text-[clamp(4.5rem,16vw,9rem)] text-js-green"
+        />
       </span>
     </div>
   );
