@@ -74,7 +74,7 @@ export function Nav({
 
   return (
     <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3.5 font-mono text-xs sm:gap-4 sm:px-6">
+      <div className="mx-auto flex max-w-5xl flex-col gap-2.5 px-4 py-3 font-mono text-xs sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-3.5">
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           <a
             href="#hero"
@@ -106,7 +106,7 @@ export function Nav({
             </span>
           ) : null}
         </div>
-        <ul className="flex shrink-0 gap-2.5 sm:gap-5">
+        <ul className="flex justify-between gap-x-2 text-[11px] sm:shrink-0 sm:justify-start sm:gap-5 sm:text-xs">
           {navItems.map((item) => {
             const isActive = activeId === item.id;
             return (

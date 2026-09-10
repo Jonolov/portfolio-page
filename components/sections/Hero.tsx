@@ -14,7 +14,7 @@ export function Hero({ profile }: { profile: Profile }) {
       aria-labelledby="hero-heading"
       className="mx-auto flex w-full max-w-5xl flex-col justify-center px-4 py-16 sm:px-6 sm:py-24"
     >
-      <p className="font-mono text-xs uppercase tracking-wide text-accent">
+      <p className="font-mono text-xs uppercase tracking-wide text-balance text-accent">
         {profile.contact.location.toLowerCase()}, se ·{" "}
         {profile.contact.company.toLowerCase()}
       </p>
@@ -41,7 +41,7 @@ export function Hero({ profile }: { profile: Profile }) {
       <p className="mt-4 max-w-2xl text-base text-foreground/70 sm:text-lg">
         {profile.heroHook}
       </p>
-      <div className="mt-10 flex flex-wrap items-center gap-3">
+      <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
         <a
           href="#contact"
           className="rounded border border-foreground bg-foreground px-5 py-3 font-mono text-sm font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
@@ -58,7 +58,7 @@ export function Hero({ profile }: { profile: Profile }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-10 flex w-fit items-center gap-2 rounded font-mono text-sm text-foreground/65 transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+        className="mt-8 flex w-fit items-center gap-2 rounded font-mono text-sm text-foreground/65 transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:mt-10"
       >
         [ <kbd>⌘k</kbd> ] jump around the site
       </button>

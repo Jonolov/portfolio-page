@@ -89,7 +89,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${martianMono.variable} h-full antialiased`}
+      className={`${archivo.variable} ${martianMono.variable} h-full scroll-pt-20 antialiased sm:scroll-pt-16`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <script
