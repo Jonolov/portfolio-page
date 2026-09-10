@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Mark } from "@/components/ui/Mark";
+import { BlockMark } from "@/components/ui/BlockMark";
+import { NAV_MARK_CELL, NAV_MARK_GAP } from "@/components/ui/block-mark";
 
 const navItems = [
   { href: "#about", label: "about", id: "about" },
@@ -73,14 +74,22 @@ export function Nav({
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3.5 font-mono text-xs sm:px-6">
+    <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-2.5 px-4 py-3 font-mono text-xs sm:flex-row sm:justify-between sm:gap-4 sm:px-6 sm:py-3.5">
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
           <a
             href="#hero"
-            className="flex shrink-0 items-center gap-2 rounded font-semibold tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="flex shrink-0 items-center gap-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
           >
-            <Mark className="h-5 w-5 shrink-0" />
+            <BlockMark
+              data-nav-mark
+              animated
+              cell={NAV_MARK_CELL}
+              gap={NAV_MARK_GAP}
+              className="shrink-0"
+              cellClassName="bg-foreground"
+              accentClassName="bg-accent"
+            />
             <span className="sr-only">Jon Stjärnström — home</span>
           </a>
           <span className="hidden items-center gap-1.5 whitespace-nowrap text-foreground/60 md:flex">
@@ -104,7 +113,7 @@ export function Nav({
             </span>
           ) : null}
         </div>
-        <ul className="flex gap-3 sm:gap-5">
+        <ul className="flex justify-between gap-x-2 text-[11px] sm:shrink-0 sm:justify-start sm:gap-5 sm:text-xs">
           {navItems.map((item) => {
             const isActive = activeId === item.id;
             return (

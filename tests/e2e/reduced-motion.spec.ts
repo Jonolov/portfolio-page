@@ -45,11 +45,24 @@ test.describe("reduced motion", () => {
     }
   });
 
-  test("contact terminal caret does not blink", async ({ page }) => {
+  test("contact flip: no overlay, static J shown, nav mark stays", async ({
+    page,
+  }) => {
     await page.goto("/");
-    const caret = page.locator("#contact .motion-safe\\:animate-caret");
-    await caret.scrollIntoViewIfNeeded();
-    await expect(caret).toHaveCSS("animation-name", "none");
+    await page.locator("#contact").scrollIntoViewIfNeeded();
+    await expect(page.locator("[data-flip-mark]")).toBeHidden();
+    await expect(page.locator("#contact [data-contact-mark]")).toBeVisible();
+    await expect(page.locator("[data-nav-mark]")).toBeVisible();
+
+    // The nav mark's assemble-on-load stagger must not leave cells hidden.
+    await expect(page.locator("[data-nav-mark] > span").first()).toHaveCSS(
+      "opacity",
+      "1",
+    );
+
+    const vp = page.viewportSize()!;
+    const box = await page.locator("#contact").boundingBox();
+    expect(box?.height ?? 0).toBeLessThan(vp.height * 1.6);
   });
 
   test("ask panel streaming caret does not blink", async ({ page }) => {

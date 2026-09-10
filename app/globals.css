@@ -31,7 +31,16 @@
   }
 }
 
+/* The contact-flip overlay scatters glyphs off-frame during its animation;
+   clip so that never adds a horizontal scrollbar. `body` is the containing
+   block for that absolutely-positioned overlay. */
+html {
+  overflow-x: clip;
+}
+
 body {
+  position: relative;
+  overflow-x: clip;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
@@ -44,5 +53,22 @@ body {
 @keyframes caret-blink {
   50% {
     opacity: 0;
+  }
+}
+
+/* Nav brand: the block "J" scatters into place on load — each cell flies
+   in from a per-cell random offset (--bx/--by/--br, set inline) in a
+   random order. `both` holds each cell hidden through its delay; without
+   the animation (reduced motion, no CSS animation support) the cells are
+   just visible. */
+@utility animate-block-in {
+  animation: block-in 0.34s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@keyframes block-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--bx, 0), var(--by, 0)) rotate(var(--br, 0))
+      scale(0.4);
   }
 }

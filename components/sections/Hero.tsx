@@ -5,8 +5,8 @@ import { useCommandPalette } from "@/components/command-palette/useCommandPalett
 
 export function Hero({ profile }: { profile: Profile }) {
   const { setOpen } = useCommandPalette();
-  const firstLetter = profile.name.slice(0, 1);
-  const rest = profile.name.slice(1);
+  // Underline each initial — "J" and "S" — echoing the JS brand mark.
+  const nameWords = profile.name.split(" ");
 
   return (
     <section
@@ -14,7 +14,7 @@ export function Hero({ profile }: { profile: Profile }) {
       aria-labelledby="hero-heading"
       className="mx-auto flex w-full max-w-5xl flex-col justify-center px-4 py-16 sm:px-6 sm:py-24"
     >
-      <p className="font-mono text-xs uppercase tracking-wide text-accent">
+      <p className="font-mono text-xs uppercase tracking-wide text-balance text-accent">
         {profile.contact.location.toLowerCase()}, se ·{" "}
         {profile.contact.company.toLowerCase()}
       </p>
@@ -23,13 +23,15 @@ export function Hero({ profile }: { profile: Profile }) {
         aria-label={profile.name}
         className="mt-5 font-mono text-[clamp(2.1rem,7.5vw,5.25rem)] font-bold leading-[1.35] tracking-tight"
       >
-        <span
-          aria-hidden="true"
-          className="border-b-[0.12em] border-accent pb-[0.06em]"
-        >
-          {firstLetter}
-        </span>
-        <span aria-hidden="true">{rest}</span>
+        {nameWords.map((word, i) => (
+          <span key={i} aria-hidden="true">
+            {i > 0 ? " " : null}
+            <span className="border-b-[0.14em] border-accent pb-[0.03em]">
+              {word.slice(0, 1)}
+            </span>
+            {word.slice(1)}
+          </span>
+        ))}
       </h1>
       <p className="mt-6 max-w-xl text-lg text-foreground/70 sm:text-xl">
         {profile.roleLine}
@@ -41,7 +43,7 @@ export function Hero({ profile }: { profile: Profile }) {
       <p className="mt-4 max-w-2xl text-base text-foreground/70 sm:text-lg">
         {profile.heroHook}
       </p>
-      <div className="mt-10 flex flex-wrap items-center gap-3">
+      <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
         <a
           href="#contact"
           className="rounded border border-foreground bg-foreground px-5 py-3 font-mono text-sm font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
@@ -58,7 +60,7 @@ export function Hero({ profile }: { profile: Profile }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-10 flex w-fit items-center gap-2 rounded font-mono text-sm text-foreground/65 transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+        className="mt-8 flex w-fit items-center gap-2 rounded font-mono text-sm text-foreground/65 transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:mt-10"
       >
         [ <kbd>⌘k</kbd> ] jump around the site
       </button>

@@ -1,76 +1,76 @@
 import type { Profile } from "@/lib/types";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
+import { BlockMark } from "@/components/ui/BlockMark";
+import { MARK_CELL, MARK_GAP } from "@/components/ui/block-mark";
 
+// The closing view is a full-bleed dark band — "day becomes night" — so
+// every colour here is from the inverted `band-*` palette.
 export function Contact({ contact }: { contact: Profile["contact"] }) {
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="w-full">
-      <div className="mx-auto max-w-3xl px-6 pt-16 sm:pt-24">
-        <RevealOnScroll>
-          <SectionHeading
-            id="contact-heading"
-            eyebrow="contact"
-            title="get in touch"
-          />
-        </RevealOnScroll>
-      </div>
-      <RevealOnScroll>
-        <div className="mt-2 w-full bg-band-background py-16 text-band-foreground sm:py-20">
-          <div className="mx-auto max-w-3xl px-6">
-            <div className="border border-band-foreground/15 bg-band-foreground/5">
-              <div
-                className="flex items-center gap-1.5 border-b border-band-foreground/15 px-4 py-2.5"
-                aria-hidden="true"
-              >
-                <span className="h-2.5 w-2.5 rounded-full bg-band-foreground/20" />
-                <span className="h-2.5 w-2.5 rounded-full bg-band-foreground/20" />
-                <span className="h-2.5 w-2.5 rounded-full bg-band-foreground/20" />
-              </div>
-              <div className="px-5 py-6 font-mono text-sm leading-loose sm:px-6 sm:py-8">
-                <p className="text-band-foreground/70">
-                  <span className="text-band-accent">$ </span>
-                  contact --jon
-                  <span
-                    className="ml-0.5 inline-block h-[1em] w-[0.5em] translate-y-[0.15em] bg-band-accent motion-safe:animate-caret"
-                    aria-hidden="true"
-                  />
-                </p>
-                {contact.availableForConsulting ? (
-                  <p className="text-band-foreground/70">
-                    status:{" "}
-                    <span className="text-band-accent">
-                      {contact.statusLine}
-                    </span>
-                  </p>
-                ) : null}
-                <p>
-                  <a
-                    href={`mailto:${contact.email}`}
-                    className="rounded text-lg font-bold break-words text-band-accent underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-band-foreground sm:text-xl"
-                  >
-                    {contact.email}
-                  </a>
-                </p>
-                <p className="text-band-foreground/70">
-                  {contact.company.toLowerCase()} ·{" "}
-                  {contact.location.toLowerCase()}
-                </p>
-                <p>
-                  <a
-                    href={contact.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded text-band-foreground/70 underline-offset-4 hover:text-band-accent hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-band-foreground"
-                  >
-                    linkedin
-                    <span className="sr-only"> (opens in a new tab)</span> ↗
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
+    <section
+      id="contact"
+      aria-labelledby="contact-heading"
+      data-contact
+      className="flex min-h-screen w-full flex-col justify-center bg-band-background py-24 text-band-foreground"
+    >
+      <div className="mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
+        <h2
+          id="contact-heading"
+          className="font-mono text-xs uppercase tracking-wide text-band-foreground/60"
+        >
+          <span className="text-band-accent">{"// "}</span>
+          contact — get in touch
+        </h2>
+
+        {/* Static J — the accessible / no-JS / reduced-motion image.
+            FlipMark overlays this exactly when it animates. */}
+        <BlockMark
+          data-contact-mark
+          cell={MARK_CELL}
+          gap={MARK_GAP}
+          className="my-16"
+          cellClassName="bg-band-foreground"
+          accentClassName="bg-band-accent"
+        />
+
+        <div className="flex w-full max-w-md flex-col items-center gap-3 font-mono text-sm">
+          {contact.availableForConsulting ? (
+            <p
+              data-contact-reveal
+              className="max-w-full text-balance text-band-foreground/70"
+            >
+              status:{" "}
+              <span className="text-band-accent">{contact.statusLine}</span>
+            </p>
+          ) : null}
+
+          <p data-contact-reveal className="max-w-full">
+            <a
+              href={`mailto:${contact.email}`}
+              className="rounded text-sm font-bold text-band-accent [overflow-wrap:anywhere] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-band-foreground sm:text-lg"
+            >
+              {contact.email}
+            </a>
+          </p>
+
+          <p
+            data-contact-reveal
+            className="max-w-full text-balance text-band-foreground/70"
+          >
+            {contact.company.toLowerCase()} · {contact.location.toLowerCase()}
+          </p>
+
+          <p data-contact-reveal>
+            <a
+              href={contact.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded text-band-foreground/70 underline-offset-4 hover:text-band-accent hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-band-foreground"
+            >
+              linkedin<span className="sr-only"> (opens in a new tab)</span> ↗
+            </a>
+          </p>
         </div>
-      </RevealOnScroll>
+      </div>
     </section>
   );
 }

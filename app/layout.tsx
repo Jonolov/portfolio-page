@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Martian_Mono } from "next/font/google";
+import dynamic from "next/dynamic";
 import { Analytics } from "@vercel/analytics/next";
 import { MotionConfig } from "motion/react";
 import { Nav } from "@/components/Nav";
@@ -10,6 +11,8 @@ import { CommandPaletteProvider } from "@/components/command-palette/useCommandP
 import { getProfile, getSkillGroups } from "@/lib/cms";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
+
+const FlipMark = dynamic(() => import("@/components/contact/FlipMark"));
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -86,7 +89,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${martianMono.variable} h-full antialiased`}
+      className={`${archivo.variable} ${martianMono.variable} h-full scroll-pt-20 antialiased sm:scroll-pt-16`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <script
@@ -111,6 +114,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             <CommandPalette profile={profile} skillGroups={skillGroups} />
             <AskPanel contact={profile.contact} />
             <AskLauncher />
+            <FlipMark />
           </CommandPaletteProvider>
         </MotionConfig>
         <Analytics />
