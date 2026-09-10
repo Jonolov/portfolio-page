@@ -1,17 +1,18 @@
-// The brand "J" as a block glyph: the letter, then the green underline
-// bar. "#" = letter cell, "=" = accent (green) cell. Rendered by
+// The brand "JS" as a block glyph — Jon Stjärnström, and JavaScript.
+// The two letters, a blank row, then the green underline bar spanning
+// both. "#" = letter cell, "=" = accent (green) cell. Rendered by
 // <BlockMark> in the nav and the contact sign-off, and by <FlipMark>
 // as it flies between the two.
 const GRID = [
-  ".####",
-  "...#.",
-  "...#.",
-  "...#.",
-  "#..#.",
-  "#..#.",
-  ".##..",
-  ".....", // breathing room between the letter and the bar, like the SVG
-  "=====",
+  ".####..###",
+  "...#..#...",
+  "...#..#...",
+  "...#...##.",
+  "#..#.....#",
+  "#..#.....#",
+  ".##...###.",
+  "..........", // breathing room between the letters and the bar
+  "==========",
 ];
 
 export interface MarkCell {
@@ -35,10 +36,11 @@ export const BLOCK_MARK_COLS = GRID[0].length;
 export const BLOCK_MARK_ROWS = GRID.length;
 
 // Shared so the static mark and the flown FlipMark land at the same size.
-export const MARK_CELL = "clamp(1.1rem, 4.2vw, 1.9rem)";
+// 10 columns wide now, so the cell is smaller than the old 5-wide "J".
+export const MARK_CELL = "clamp(0.9rem, 3vw, 1.6rem)";
 export const MARK_GAP = "0.2rem";
 
 // The small nav brand. Near-zero gap so the strokes read as solid at this
 // size instead of turning into a dotted texture.
-export const NAV_MARK_CELL = "4px";
+export const NAV_MARK_CELL = "3.5px";
 export const NAV_MARK_GAP = "0.5px";
