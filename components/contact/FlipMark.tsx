@@ -11,11 +11,8 @@ import {
   MARK_GAP,
   blockMarkCells,
 } from "@/components/ui/block-mark";
-import { CONTACT_GROUND } from "@/components/contact/ground";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-const banded = CONTACT_GROUND === "banded";
 
 export default function FlipMark() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -112,26 +109,24 @@ export default function FlipMark() {
         0.35,
       );
 
-      // Banded ground: the mark flies over the light page in page colours,
-      // then colour-flips to the band palette as it lands on the dark section.
-      if (banded) {
-        gsap.set(glyphs, {
+      // The mark flies over the light page in page colours, then colour-
+      // flips to the band palette as it lands on the dark contact section.
+      gsap.set(glyphs, {
+        backgroundColor: (_i, el: HTMLElement) =>
+          el.dataset.accent === "true" ? "var(--accent)" : "var(--foreground)",
+      });
+      tl.to(
+        glyphs,
+        {
           backgroundColor: (_i, el: HTMLElement) =>
-            el.dataset.accent === "true" ? "var(--accent)" : "var(--foreground)",
-        });
-        tl.to(
-          glyphs,
-          {
-            backgroundColor: (_i, el: HTMLElement) =>
-              el.dataset.accent === "true"
-                ? "var(--band-accent)"
-                : "var(--band-foreground)",
-            duration: 0.4,
-            stagger: { each: 0.01, from: "random" },
-          },
-          0.55,
-        );
-      }
+            el.dataset.accent === "true"
+              ? "var(--band-accent)"
+              : "var(--band-foreground)",
+          duration: 0.4,
+          stagger: { each: 0.01, from: "random" },
+        },
+        0.55,
+      );
 
       // 3. Contact copy rises in. Opacity only (not autoAlpha) so it stays
       //    in the accessibility tree before it animates.
@@ -185,15 +180,7 @@ export default function FlipMark() {
           data-flip-cell
           data-accent={cell.accent}
           style={{ gridRow: cell.row + 1, gridColumn: cell.col + 1 }}
-          className={
-            cell.accent
-              ? banded
-                ? "bg-band-accent"
-                : "bg-accent"
-              : banded
-                ? "bg-band-foreground"
-                : "bg-foreground"
-          }
+          className={cell.accent ? "bg-band-accent" : "bg-band-foreground"}
         />
       ))}
     </div>
