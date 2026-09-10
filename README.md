@@ -62,7 +62,6 @@ fonts.
 - **`components/motion/`**
   - `KineticName` — settles the hero name's characters in on load (SplitText).
   - `MagneticButton` — pulls its child toward the pointer; fine-pointer only.
-  - `ScrollMarquee` — full-bleed ticker; scroll velocity scales and flips it.
   - `ShardField` — decorative squares: idle drift, pointer parallax, and
     draggable/inertia (Draggable + InertiaPlugin).
   - `ProjectsReel` — horizontal draggable card reel for 2+ projects; CSS
