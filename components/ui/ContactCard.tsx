@@ -6,7 +6,7 @@ export function ContactCard({ contact }: { contact: Profile["contact"] }) {
       {contact.availableForConsulting ? (
         <p className="mb-2 inline-flex items-center gap-2 font-medium">
           <span
-            className="h-2 w-2 rounded-full bg-js-green"
+            className="h-2 w-2 rounded-full bg-cyan"
             aria-hidden="true"
           />
           {contact.statusLine}
@@ -14,7 +14,7 @@ export function ContactCard({ contact }: { contact: Profile["contact"] }) {
       ) : null}
       <a
         href={`mailto:${contact.email}`}
-        className="block font-display text-field underline underline-offset-4"
+        className="block font-display text-cyan underline underline-offset-4"
       >
         {contact.email}
       </a>

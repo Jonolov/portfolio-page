@@ -11,7 +11,7 @@ export function AskLauncher() {
       hidden={askOpen || paletteOpen}
       onClick={() => openAsk()}
       aria-label="Ask jon-bot about Jon's work"
-      className="group fixed bottom-4 right-4 z-30 flex items-center gap-2 rounded-full bg-ink px-4 py-3 text-xs font-medium text-ink-fg shadow-lg hover:bg-field focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground motion-safe:transition-colors sm:bottom-6 sm:right-6"
+      className="group fixed bottom-4 right-4 z-30 flex items-center gap-2 rounded-full bg-ink px-4 py-3 text-xs font-medium text-ink-fg shadow-lg hover:bg-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground motion-safe:transition-colors sm:bottom-6 sm:right-6"
     >
       <svg
         aria-hidden="true"

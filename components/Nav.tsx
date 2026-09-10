@@ -51,23 +51,23 @@ export function Nav({
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-field-fg/15 bg-field text-field-fg">
+    <header className="sticky top-0 z-40 border-b border-paper-fg/12 bg-paper text-paper-fg">
       <div className="mx-auto flex max-w-6xl flex-col gap-2.5 px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6">
         <div className="flex items-center justify-between gap-4 sm:justify-start">
           <a
             href="#hero"
-            className="flex shrink-0 items-center gap-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-field-fg"
+            className="flex shrink-0 items-center gap-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper-fg"
           >
-            <Mark decorative className="bg-paper text-field" />
+            <Mark decorative className="bg-cyan text-cyan-fg" />
             <span className="sr-only">Jon Stjärnström — home</span>
           </a>
           {available ? (
-            <span className="inline-flex items-center gap-2 rounded-full bg-cyan px-3 py-1 text-xs font-semibold text-cyan-fg">
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-fg" aria-hidden="true" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-paper-fg/20 px-3 py-1 text-xs font-semibold text-paper-fg">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan" aria-hidden="true" />
               Available for work
             </span>
           ) : null}
-          <span className="hidden whitespace-nowrap text-field-fg/80 lg:inline">
+          <span className="hidden whitespace-nowrap text-stone lg:inline">
             {location}, Sweden
           </span>
         </div>
@@ -79,10 +79,10 @@ export function Nav({
                 <a
                   href={item.href}
                   aria-current={isActive ? "location" : undefined}
-                  className={`rounded transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg ${
+                  className={`rounded transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper-fg ${
                     isActive
                       ? "font-semibold text-cyan"
-                      : "text-field-fg/80 hover:text-cyan"
+                      : "text-stone hover:text-cyan"
                   }`}
                 >
                   {item.label}

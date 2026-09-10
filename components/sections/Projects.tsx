@@ -36,11 +36,11 @@ export function Projects({ projects }: { projects: SideProject[] }) {
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block w-full max-w-xl shrink-0 snap-start rounded-2xl border-2 border-field bg-paper p-8 text-paper-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
+                className="group block w-full max-w-xl shrink-0 snap-start rounded-2xl border-2 border-cyan bg-paper p-8 text-paper-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper-fg"
               >
                 <h3 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
                   {project.name}
-                  <span className="ml-1.5 inline-block text-field transition-transform group-hover:translate-x-0.5">
+                  <span className="ml-1.5 inline-block text-cyan transition-transform group-hover:translate-x-0.5">
                     ↗
                   </span>
                   <span className="sr-only"> (opens in a new tab)</span>

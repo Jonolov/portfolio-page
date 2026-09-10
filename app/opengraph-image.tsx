@@ -4,9 +4,9 @@ import { getProfile } from "@/lib/cms";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const INK = "#0b120e";
-const GREEN = "#3ddc84";
-const PAPER = "#eafbf1";
+const INK = "#1a1712";
+const GREEN = "#d9825c";
+const PAPER = "#f3efe7";
 
 export default async function Image() {
   const profile = await getProfile();
@@ -51,7 +51,7 @@ export default async function Image() {
           display: "flex",
           fontFamily: "Archivo",
           fontSize: 36,
-          color: "rgba(234,251,241,0.78)",
+          color: "rgba(243,239,231,0.78)",
           marginTop: 26,
         }}
       >
@@ -62,7 +62,7 @@ export default async function Image() {
           display: "flex",
           fontFamily: "Archivo",
           fontSize: 27,
-          color: "rgba(234,251,241,0.55)",
+          color: "rgba(243,239,231,0.55)",
           marginTop: 20,
           maxWidth: 940,
         }}

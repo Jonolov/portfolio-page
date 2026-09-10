@@ -78,7 +78,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
             type="button"
             onClick={closeAsk}
             aria-label="Close"
-            className="rounded px-2 text-foreground/60 hover:text-field"
+            className="rounded px-2 text-foreground/70 hover:text-cyan"
           >
             ✕
           </button>
@@ -90,7 +90,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
         >
           {messages.length === 0 ? (
             <div className="space-y-2">
-              <p className="text-foreground/60">
+              <p className="text-foreground/70">
                 Ask about Jon&apos;s experience.
               </p>
               {SUGGESTIONS.map((s) => (
@@ -98,7 +98,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
                   key={s}
                   type="button"
                   onClick={() => submit(s)}
-                  className="block w-full rounded-lg border border-foreground/10 px-3 py-2 text-left hover:border-field/40 hover:text-field"
+                  className="block w-full rounded-lg border border-foreground/10 px-3 py-2 text-left hover:border-cyan/40 hover:text-cyan"
                 >
                   {s}
                 </button>
@@ -208,7 +208,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
           <button
             type="submit"
             disabled={busy}
-            className="rounded-lg bg-js-green px-3 py-2 text-xs font-medium text-ink disabled:opacity-50"
+            className="rounded-lg bg-cyan px-3 py-2 text-xs font-medium text-cyan-fg disabled:opacity-50"
           >
             Send
           </button>

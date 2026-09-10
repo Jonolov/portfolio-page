@@ -23,7 +23,7 @@ export function Skills({ groups }: { groups: SkillGroup[] }) {
             index="03"
             kicker="Skills"
             title="Grouped by area"
-            accentClassName="text-field"
+            accentClassName="text-cyan"
           />
         </div>
         <dl className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">

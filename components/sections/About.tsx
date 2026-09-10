@@ -24,7 +24,7 @@ export function About({ paragraphs }: { paragraphs: string[] }) {
             index="01"
             kicker="About"
             title="How he works"
-            accentClassName="text-field"
+            accentClassName="text-cyan"
           />
         </div>
         <div data-reveal className="flex flex-col gap-5 text-lg leading-relaxed text-paper-fg/80">

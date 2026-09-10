@@ -81,7 +81,7 @@ export function CommandPalette({
             ? "Press backspace to go back"
             : "Jump to a section, or ask whoami / stack…"
         }
-        className="w-full border-b border-foreground/10 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-foreground/60"
+        className="w-full border-b border-foreground/10 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-foreground/70"
       />
       <Command.List className="max-h-80 overflow-y-auto p-2">
         <Command.Empty className="px-2 py-6 text-center text-sm text-foreground/70">
@@ -89,7 +89,7 @@ export function CommandPalette({
             <button
               type="button"
               onClick={() => goToAsk(search)}
-              className="mx-auto block rounded-lg px-3 py-2 text-field underline underline-offset-4"
+              className="mx-auto block rounded-lg px-3 py-2 text-cyan underline underline-offset-4"
             >
               Ask AI: “{search}”
             </button>
@@ -102,13 +102,13 @@ export function CommandPalette({
           <>
             <Command.Group
               heading="Navigate"
-              className="px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-foreground/60 [&_[cmdk-group-items]]:mt-1"
+              className="px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-foreground/70 [&_[cmdk-group-items]]:mt-1"
             >
               {navItems.map((item) => (
                 <Command.Item
                   key={item.id}
                   onSelect={() => goToSection(item.id)}
-                  className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-field/10 data-[selected=true]:text-field"
+                  className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-cyan/10 data-[selected=true]:text-cyan"
                 >
                   {item.label}
                 </Command.Item>
@@ -116,29 +116,29 @@ export function CommandPalette({
             </Command.Group>
             <Command.Group
               heading="Ask"
-              className="mt-2 px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-foreground/60 [&_[cmdk-group-items]]:mt-1"
+              className="mt-2 px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-foreground/70 [&_[cmdk-group-items]]:mt-1"
             >
               <Command.Item
                 onSelect={() => goToAsk()}
-                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-field/10 data-[selected=true]:text-field"
+                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-cyan/10 data-[selected=true]:text-cyan"
               >
                 Ask about Jon&apos;s experience →
               </Command.Item>
               <Command.Item
                 onSelect={() => setPages((prev) => [...prev, "whoami"])}
-                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-field/10 data-[selected=true]:text-field"
+                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-cyan/10 data-[selected=true]:text-cyan"
               >
                 whoami
               </Command.Item>
               <Command.Item
                 onSelect={() => setPages((prev) => [...prev, "stack"])}
-                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-field/10 data-[selected=true]:text-field"
+                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-cyan/10 data-[selected=true]:text-cyan"
               >
                 stack
               </Command.Item>
               <Command.Item
                 onSelect={() => setPages((prev) => [...prev, "contact"])}
-                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-field/10 data-[selected=true]:text-field"
+                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/90 data-[selected=true]:bg-cyan/10 data-[selected=true]:text-cyan"
               >
                 contact
               </Command.Item>
@@ -155,7 +155,7 @@ export function CommandPalette({
             </p>
             <Command.Item
               onSelect={() => setPages((prev) => prev.slice(0, -1))}
-              className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/60 data-[selected=true]:bg-field/10 data-[selected=true]:text-field"
+              className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/70 data-[selected=true]:bg-cyan/10 data-[selected=true]:text-cyan"
             >
               ← Back
             </Command.Item>
@@ -169,7 +169,7 @@ export function CommandPalette({
             </p>
             <Command.Item
               onSelect={() => setPages((prev) => prev.slice(0, -1))}
-              className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/60 data-[selected=true]:bg-field/10 data-[selected=true]:text-field"
+              className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/70 data-[selected=true]:bg-cyan/10 data-[selected=true]:text-cyan"
             >
               ← Back
             </Command.Item>
@@ -183,7 +183,7 @@ export function CommandPalette({
             </div>
             <Command.Item
               onSelect={() => setPages((prev) => prev.slice(0, -1))}
-              className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/60 data-[selected=true]:bg-field/10 data-[selected=true]:text-field"
+              className="cursor-pointer rounded-lg px-3 py-2 text-sm text-foreground/70 data-[selected=true]:bg-cyan/10 data-[selected=true]:text-cyan"
             >
               ← Back
             </Command.Item>
