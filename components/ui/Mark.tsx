@@ -6,7 +6,7 @@ type MarkProps = {
 
 /**
  * The "JS" brand lockup — Jon Stjärnström / JavaScript. Plain text in a
- * rounded box (replaces the old block-glyph <BlockMark>). Decorative for
+ * rounded box (replaces the old block-glyph mark). Decorative for
  * sighted users; carries the name for assistive tech.
  */
 export function Mark({ className = "", size = "nav" }: MarkProps) {
