@@ -8,9 +8,10 @@ import { NO_PREFERENCE } from "@/lib/gsap";
 import { shouldReel } from "./reel";
 
 /**
- * Projects card row. One card → plain, centred, no drag. Two or more →
- * horizontal Draggable with inertia; CSS scroll-snap is the no-JS /
- * reduced-motion fallback, so keyboard scroll always works.
+ * Projects card row. One card → a plain row, no drag. Two or more → the row
+ * becomes drag-scrollable (Draggable drives native `scrollLeft`, so it composes
+ * with `overflow-x-auto`, scroll-snap and keyboard scrolling); CSS scroll-snap
+ * is the no-JS / reduced-motion fallback, so keyboard scroll always works.
  */
 export function ProjectsReel({ children }: { children: ReactNode }) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -23,12 +24,8 @@ export function ProjectsReel({ children }: { children: ReactNode }) {
       const mm = gsap.matchMedia();
       mm.add(NO_PREFERENCE, () => {
         const [drag] = Draggable.create(track, {
-          type: "x",
+          type: "scrollLeft",
           inertia: true,
-          bounds: {
-            minX: -(track.scrollWidth - track.clientWidth),
-            maxX: 0,
-          },
           edgeResistance: 0.85,
         });
         return () => drag.kill();
@@ -51,7 +48,7 @@ export function ProjectsReel({ children }: { children: ReactNode }) {
         {children}
       </div>
       {reel ? (
-        <p data-reel-hint aria-hidden="true" className="mt-4 text-sm font-medium text-pink-fg/70">
+        <p data-reel-hint aria-hidden="true" className="mt-4 text-sm font-medium text-pink-fg">
           drag the reel →
         </p>
       ) : null}

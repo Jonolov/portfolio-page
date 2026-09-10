@@ -35,7 +35,7 @@ export function ContactMark() {
       const mm = gsap.matchMedia();
 
       mm.add(REDUCED, () => {
-        gsap.set([mark, ...shards], { clearProps: "all", opacity: 1 });
+        gsap.set([mark, ...shards], { clearProps: "all" });
       });
 
       mm.add(NO_PREFERENCE, () => {

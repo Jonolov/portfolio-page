@@ -13,7 +13,6 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      data-contact
       className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-ink px-6 py-28 text-ink-fg"
     >
       <div

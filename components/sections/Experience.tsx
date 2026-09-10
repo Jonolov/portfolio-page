@@ -30,13 +30,13 @@ export function Experience({
     <section
       id="experience"
       aria-labelledby="experience-heading"
-      className="relative overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-28"
+      className="relative isolate overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-28"
     >
       <ShardField
         shards={[{ x: "90%", y: "3rem", size: 24, color: "bg-cyan" }]}
       />
 
-      <div ref={ref} className="mx-auto max-w-6xl">
+      <div ref={ref} className="relative z-10 mx-auto max-w-6xl">
         <div data-reveal>
           <SectionHeading
             id="experience-heading"

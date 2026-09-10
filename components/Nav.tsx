@@ -58,7 +58,7 @@ export function Nav({
             href="#hero"
             className="flex shrink-0 items-center gap-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-field-fg"
           >
-            <Mark className="bg-paper text-field" />
+            <Mark decorative className="bg-paper text-field" />
             <span className="sr-only">Jon Stjärnström — home</span>
           </a>
           {available ? (

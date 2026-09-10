@@ -15,7 +15,7 @@ export function Hero({ profile }: { profile: Profile }) {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="relative overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-32"
+      className="relative isolate overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-32"
     >
       <ShardField
         shards={[
@@ -25,7 +25,7 @@ export function Hero({ profile }: { profile: Profile }) {
         ]}
       />
 
-      <div className="mx-auto max-w-6xl">
+      <div className="relative z-10 mx-auto max-w-6xl">
         <p className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-cyan">
           Stockholm · Consulting · Open
         </p>
@@ -39,7 +39,7 @@ export function Hero({ profile }: { profile: Profile }) {
             <span aria-hidden="true">
               {first}
               <br />
-              <span className="text-[#ff9ec7]">{last.slice(0, 6)}</span>
+              <span className="text-pink-soft">{last.slice(0, 6)}</span>
               <span className="[-webkit-text-stroke:2px_var(--field-fg)] [color:transparent]">
                 {last.slice(6)}
               </span>

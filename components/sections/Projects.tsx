@@ -16,13 +16,13 @@ export function Projects({ projects }: { projects: SideProject[] }) {
     <section
       id="projects"
       aria-labelledby="projects-heading"
-      className="relative overflow-hidden bg-pink px-6 py-24 text-pink-fg sm:px-16 sm:py-28"
+      className="relative isolate overflow-hidden bg-pink px-6 py-24 text-pink-fg sm:px-16 sm:py-28"
     >
       <ShardField
         shards={[{ x: "89%", y: "3rem", size: 30, color: "bg-field", radius: 8 }]}
       />
 
-      <div ref={ref} className="mx-auto max-w-6xl">
+      <div ref={ref} className="relative z-10 mx-auto max-w-6xl">
         <div data-reveal>
           <SectionHeading
             id="projects-heading"

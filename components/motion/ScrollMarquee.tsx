@@ -21,14 +21,36 @@ export function ScrollMarquee({ items }: { items: string[] }) {
       const mm = gsap.matchMedia();
 
       mm.add(NO_PREFERENCE, () => {
-        const half = track.scrollWidth / 2;
-        const tween = gsap.to(track, {
-          x: -half,
-          duration: 18,
-          ease: "none",
-          repeat: -1,
-          modifiers: { x: (x) => `${parseFloat(x) % half}px` },
-        });
+        let half = 0;
+        let tween!: gsap.core.Tween;
+        let cancelled = false;
+
+        // `next/font` swaps Familjen Grotesk in after hydration, which changes
+        // `track.scrollWidth`. Rebuild the loop once the real width is known so
+        // the `-half` endpoint and the wrap modifier never go stale.
+        const build = () => {
+          half = track.scrollWidth / 2;
+          tween?.kill();
+          gsap.set(track, { x: 0 });
+          tween = gsap.to(track, {
+            x: -half,
+            duration: 18,
+            ease: "none",
+            repeat: -1,
+            modifiers: { x: (x) => `${parseFloat(x) % half}px` },
+          });
+          // Seed a hair into the cycle: scrolling up in the first seconds walks
+          // timeScale negative, which would otherwise park the tween at 0 (the
+          // seam).
+          tween.progress(0.001);
+        };
+        build();
+
+        const rebuild = () => {
+          if (!cancelled) build();
+        };
+        void document.fonts.ready.then(rebuild);
+        ScrollTrigger.addEventListener("refresh", rebuild);
 
         const st = ScrollTrigger.create({
           trigger: document.documentElement,
@@ -46,7 +68,9 @@ export function ScrollMarquee({ items }: { items: string[] }) {
         });
 
         return () => {
-          tween.kill();
+          cancelled = true;
+          ScrollTrigger.removeEventListener("refresh", rebuild);
+          tween?.kill();
           st.kill();
         };
       });

@@ -13,6 +13,7 @@
   --cyan-fg: #0b3d24;
   --pink: #ff5da2;
   --pink-fg: #3a0a1f;
+  --pink-soft: #ff9ec7;
   --js-green: #3ddc84;
 
   /* page defaults, consumed by the skip link / overlays / <body> */
@@ -31,6 +32,7 @@
   --color-cyan-fg: var(--cyan-fg);
   --color-pink: var(--pink);
   --color-pink-fg: var(--pink-fg);
+  --color-pink-soft: var(--pink-soft);
   --color-js-green: var(--js-green);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -38,9 +40,9 @@
   --font-display: var(--font-familjen);
 }
 
-/* The contact-flip overlay scatters glyphs off-frame during its animation;
+/* The shard fields / decorative overlays can extend past the viewport edge;
    clip so that never adds a horizontal scrollbar. `body` is the containing
-   block for that absolutely-positioned overlay. */
+   block for those absolutely-positioned overlays. */
 html {
   overflow-x: clip;
 }
