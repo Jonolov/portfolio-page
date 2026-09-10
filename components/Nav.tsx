@@ -67,7 +67,7 @@ export function Nav({
               Available for work
             </span>
           ) : null}
-          <span className="hidden whitespace-nowrap text-field-fg/70 lg:inline">
+          <span className="hidden whitespace-nowrap text-field-fg/80 lg:inline">
             {location}, Sweden
           </span>
         </div>
