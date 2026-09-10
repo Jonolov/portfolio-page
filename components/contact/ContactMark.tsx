@@ -8,12 +8,14 @@ import { Mark } from "@/components/ui/Mark";
 import { NO_PREFERENCE, REDUCED } from "@/lib/gsap";
 
 // Positioned as a fraction of the (bounded, centred) mark box so they orbit
-// the "JS" at every width instead of crowding it on desktop.
+// the "JS" at every width instead of crowding it on desktop. Kept inside
+// [0,100%] and the container is overflow-clip — a shard that pokes past the
+// box plus a GSAP transform reads as page overflow on iOS Safari.
 const SHARDS = [
-  { left: "4%", top: "2%", size: 22, color: "bg-js-green", radius: 6 },
-  { left: "87%", top: "-8%", size: 28, color: "bg-ink-fg", radius: 0 },
-  { left: "93%", top: "70%", size: 16, color: "bg-js-green", radius: 5 },
-  { left: "-2%", top: "62%", size: 24, color: "bg-ink-fg", radius: 0 },
+  { left: "3%", top: "5%", size: 22, color: "bg-js-green", radius: 6 },
+  { left: "82%", top: "1%", size: 26, color: "bg-ink-fg", radius: 0 },
+  { left: "86%", top: "68%", size: 15, color: "bg-js-green", radius: 5 },
+  { left: "2%", top: "62%", size: 22, color: "bg-ink-fg", radius: 0 },
 ];
 
 /**
@@ -48,8 +50,10 @@ export function ContactMark() {
         tl.from(mark, { scale: 0.4, rotate: -12, opacity: 0, duration: 0.6 }).from(
           shards,
           {
-            x: () => gsap.utils.random(-160, 160),
-            y: () => gsap.utils.random(-140, 140),
+            // Kept modest so a shard never travels far past the mark box —
+            // see the SHARDS note (iOS Safari + transforms + overflow).
+            x: () => gsap.utils.random(-90, 90),
+            y: () => gsap.utils.random(-70, 70),
             rotate: () => gsap.utils.random(-140, 140),
             opacity: 0,
             stagger: { each: 0.04, from: "random" },

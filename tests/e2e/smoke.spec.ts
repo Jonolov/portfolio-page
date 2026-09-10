@@ -73,6 +73,24 @@ test.describe("smoke", () => {
     );
   });
 
+  test("no horizontal overflow at narrow widths", async ({ page }) => {
+    for (const width of [320, 360, 390, 414]) {
+      await page.setViewportSize({ width, height: 780 });
+      await page.goto("/");
+      // walk the whole page so every section (and its decorative layers) lays out
+      for (const id of ["hero", "experience", "projects", "contact"]) {
+        await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+        await page.waitForTimeout(300);
+      }
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+      expect(overflow, `horizontal overflow at ${width}px`).toBe(0);
+    }
+  });
+
   test("experience 'show earlier roles' toggle works", async ({ page }) => {
     await page.goto("/");
     const earlierRoles = page.locator("#earlier-roles");

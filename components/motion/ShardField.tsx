@@ -110,7 +110,10 @@ export function ShardField({ shards }: { shards: Shard[] }) {
     <div
       ref={ref}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10"
+      // overflow-clip on the field itself, not just the section: iOS Safari
+      // can let a GSAP-transformed (composited) child escape an ancestor's
+      // overflow:hidden, which showed up as a horizontal scrollbar on phones.
+      className="pointer-events-none absolute inset-0 -z-10 overflow-clip"
     >
       {shards.map((s, i) => (
         <span key={i} className="absolute" style={{ left: s.x, top: s.y }}>
