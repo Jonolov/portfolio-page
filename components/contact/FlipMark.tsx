@@ -94,12 +94,15 @@ export default function FlipMark() {
         ease: "power3.inOut",
       }).to(navMark, { autoAlpha: 0, duration: 0.3 }, 0.05);
 
-      // 2. Shatter → reassemble as it lands.
+      // 2. Shatter → reassemble as it lands. Scatter distance is capped to
+      //    the viewport so glyphs never fly absurdly far on small screens.
+      const spreadX = Math.min(180, window.innerWidth * 0.32);
+      const spreadY = Math.min(140, window.innerHeight * 0.18);
       tl.from(
         glyphs,
         {
-          x: () => gsap.utils.random(-180, 180),
-          y: () => gsap.utils.random(-140, 140),
+          x: () => gsap.utils.random(-spreadX, spreadX),
+          y: () => gsap.utils.random(-spreadY, spreadY),
           rotation: () => gsap.utils.random(-160, 160),
           autoAlpha: 0,
           stagger: { each: 0.02, from: "random" },

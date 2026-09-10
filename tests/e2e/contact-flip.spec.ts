@@ -41,6 +41,20 @@ test.describe("contact flip", () => {
     ).toBeInViewport();
   });
 
+  test("no horizontal overflow on a narrow viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 720 });
+    await page.goto("/");
+    await page.locator("#contact").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1600); // let the fly-out + shatter run
+
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(1);
+  });
+
   test("the mark flies to centre when contact enters, docks away on scroll up", async ({
     page,
   }) => {
