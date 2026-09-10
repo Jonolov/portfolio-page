@@ -67,14 +67,14 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
       className="fixed left-1/2 top-24 m-0 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 rounded-2xl border border-foreground/10 bg-background p-0 text-foreground shadow-2xl backdrop:bg-foreground/20 backdrop:backdrop-blur-sm"
     >
       <div className="flex items-center justify-between border-b border-foreground/10 px-4 py-3">
-        <h2 id={headingId} className="font-mono text-xs text-foreground/70">
+        <h2 id={headingId} className="font-display text-xs text-foreground/70">
           ~/ask
         </h2>
         <button
           type="button"
           onClick={closeAsk}
           aria-label="Close"
-          className="rounded px-2 text-foreground/60 hover:text-accent"
+          className="rounded px-2 text-foreground/60 hover:text-js-green"
         >
           ✕
         </button>
@@ -92,7 +92,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
                 key={s}
                 type="button"
                 onClick={() => submit(s)}
-                className="block w-full rounded-lg border border-foreground/10 px-3 py-2 text-left hover:border-accent/40 hover:text-accent"
+                className="block w-full rounded-lg border border-foreground/10 px-3 py-2 text-left hover:border-js-green/40 hover:text-js-green"
               >
                 {s}
               </button>
@@ -107,7 +107,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
             );
             return (
               <div key={m.id}>
-                <p className="mb-1 font-mono text-xs text-foreground/70">
+                <p className="mb-1 text-xs text-foreground/70">
                   {m.role === "user" ? "you" : "jon-bot"}
                 </p>
                 {m.parts.map((part, i) => {
@@ -141,7 +141,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
         )}
         {status === "submitted" ? (
           <div>
-            <p className="mb-1 font-mono text-xs text-foreground/70">jon-bot</p>
+            <p className="mb-1 text-xs text-foreground/70">jon-bot</p>
             <p aria-hidden="true">
               <span className="inline-block motion-safe:animate-caret">▍</span>
             </p>
@@ -194,7 +194,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
         <button
           type="submit"
           disabled={busy}
-          className="rounded-lg bg-accent px-3 py-2 text-xs font-medium text-background disabled:opacity-50"
+          className="rounded-lg bg-js-green px-3 py-2 text-xs font-medium text-ink disabled:opacity-50"
         >
           Send
         </button>

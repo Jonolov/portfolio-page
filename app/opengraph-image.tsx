@@ -4,23 +4,20 @@ import { getProfile } from "@/lib/cms";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const INK = "#121815";
-const PAPER = "#eafbf1";
+const INK = "#0b120e";
 const GREEN = "#3ddc84";
+const PAPER = "#eafbf1";
 
 export default async function Image() {
   const profile = await getProfile();
-  const [mono, sans] = await Promise.all([
+  const [display, sans] = await Promise.all([
     fetch(
-      "https://fonts.gstatic.com/s/martianmono/v6/2V08KIcADoYhV6w87xrTKjs4CYElh_VS9YA4TlTnQzaVMIE6j15dYY3qvM6W.ttf",
+      "https://fonts.gstatic.com/s/familjengrotesk/v11/Qw3LZR9ZHiDnImG6-NEMQ41wby8WRnYsfkunR_eGfMFubizt.ttf",
     ).then((res) => res.arrayBuffer()),
     fetch(
       "https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTBjNp8A.ttf",
     ).then((res) => res.arrayBuffer()),
   ]);
-
-  const firstLetter = profile.name.slice(0, 1);
-  const rest = profile.name.slice(1);
 
   return new ImageResponse(
     <div
@@ -35,32 +32,19 @@ export default async function Image() {
         padding: "80px",
       }}
     >
-      <div style={{ display: "flex", flexDirection: "row", gap: 0 }}>
-        <div
-          style={{
-            display: "flex",
-            fontFamily: "Martian Mono",
-            fontWeight: 800,
-            fontSize: 92,
-            lineHeight: 1.05,
-            paddingBottom: 8,
-            borderBottom: `10px solid ${GREEN}`,
-          }}
-        >
-          {firstLetter}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontFamily: "Martian Mono",
-            fontWeight: 800,
-            fontSize: 92,
-            lineHeight: 1.05,
-            paddingBottom: 18,
-          }}
-        >
-          {rest}
-        </div>
+      <div
+        style={{
+          display: "flex",
+          fontFamily: "Familjen Grotesk",
+          fontWeight: 700,
+          textTransform: "uppercase",
+          fontSize: 104,
+          lineHeight: 0.92,
+          letterSpacing: -3,
+          color: GREEN,
+        }}
+      >
+        {profile.name}
       </div>
       <div
         style={{
@@ -89,7 +73,12 @@ export default async function Image() {
     {
       ...size,
       fonts: [
-        { name: "Martian Mono", data: mono, weight: 800, style: "normal" },
+        {
+          name: "Familjen Grotesk",
+          data: display,
+          weight: 700,
+          style: "normal",
+        },
         { name: "Archivo", data: sans, weight: 500, style: "normal" },
       ],
     },
