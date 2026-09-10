@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { openAskPanel, openPalette } from "./helpers";
+import { openAskPanel } from "./helpers";
 
 // Build a UI-message SSE stream body the way toUIMessageStreamResponse does.
 function uiStream(chunks: object[]): string {
@@ -54,49 +54,17 @@ test.describe("ask launcher", () => {
 });
 
 test.describe("ask panel — plumbing", () => {
-  test("opens from the palette Ask item with focus in the textarea", async ({
+  test("Escape closes the panel and restores focus to the launcher", async ({
     page,
   }) => {
     await stubChat(page, "");
     await page.goto("/");
-    await openPanel(page);
-
-    const dialog = page.getByRole("dialog", { name: /ask/i });
-    await expect(dialog.getByRole("textbox")).toBeFocused();
-  });
-
-  test("Escape closes the panel and restores focus to the trigger", async ({
-    page,
-  }) => {
-    await stubChat(page, "");
-    await page.goto("/");
-    await page.getByRole("link", { name: "About" }).focus();
+    const launcher = page.getByRole("button", { name: /ask jon-bot/i });
     await openPanel(page);
 
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog", { name: /ask/i })).toBeHidden();
-    await expect(page.getByRole("link", { name: "About" })).toBeFocused();
-  });
-
-  test("a non-matching palette search offers 'Ask AI' and seeds the panel", async ({
-    page,
-  }) => {
-    let sentBody = "";
-    await page.route("**/api/chat", (route) => {
-      sentBody = route.request().postData() ?? "";
-      return route.fulfill({
-        status: 200,
-        headers: { "content-type": "text/event-stream" },
-        body: "",
-      });
-    });
-    await page.goto("/");
-    await openPalette(page);
-    await page.locator("[cmdk-input]").fill("does jon know rust");
-    await page.getByRole("button", { name: /ask ai/i }).click();
-
-    await expect(page.getByRole("dialog", { name: /ask/i })).toBeVisible();
-    await expect.poll(() => sentBody).toContain("does jon know rust");
+    await expect(launcher).toBeFocused();
   });
 });
 

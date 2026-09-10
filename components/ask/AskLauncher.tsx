@@ -1,14 +1,14 @@
 "use client";
 
-import { useCommandPalette } from "./useCommandPalette";
+import { useAskPanel } from "./useAskPanel";
 
 export function AskLauncher() {
-  const { openAsk, askOpen, open: paletteOpen } = useCommandPalette();
+  const { openAsk, askOpen } = useAskPanel();
 
   return (
     <button
       type="button"
-      hidden={askOpen || paletteOpen}
+      hidden={askOpen}
       onClick={() => openAsk()}
       aria-label="Ask jon-bot about Jon's work"
       className="group fixed bottom-4 right-4 z-30 grid h-14 w-14 place-items-center rounded-full bg-ink text-ink-fg shadow-lg hover:bg-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground motion-safe:transition-colors sm:bottom-6 sm:right-6"

@@ -57,48 +57,6 @@ test.describe("accessibility", () => {
     await expect(page.locator(":focus")).toBeVisible();
   });
 
-  test("command palette opens via keyboard, traps focus, and restores it on close", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    await page.waitForTimeout(200); // let the global keydown listener attach
-
-    await page.getByRole("link", { name: "About" }).focus();
-    await page.keyboard.press("ControlOrMeta+k");
-
-    const dialog = page.locator("[cmdk-dialog]");
-    await expect(dialog).toBeVisible();
-    await expect(page.locator("[cmdk-input]")).toBeFocused();
-
-    // focus should stay inside the dialog while tabbing
-    for (let i = 0; i < 8; i++) {
-      await page.keyboard.press("Tab");
-      const withinDialog = await page.evaluate(() => {
-        const el = document.querySelector("[cmdk-dialog]");
-        return el ? el.contains(document.activeElement) : false;
-      });
-      expect(withinDialog).toBe(true);
-    }
-
-    await page.keyboard.press("Escape");
-    await expect(dialog).toBeHidden();
-    await expect(page.getByRole("link", { name: "About" })).toBeFocused();
-  });
-
-  test("command palette has no WCAG violations while open", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    await page.waitForTimeout(200);
-    await page.keyboard.press("ControlOrMeta+k");
-    await expect(page.locator("[cmdk-dialog]")).toBeVisible();
-
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-      .analyze();
-    expect(results.violations).toEqual([]);
-  });
-
   test("ask panel has no WCAG violations with a conversation open", async ({
     page,
   }) => {

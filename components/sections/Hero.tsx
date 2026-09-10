@@ -1,13 +1,11 @@
 "use client";
 
 import type { Profile } from "@/lib/types";
-import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
 import { KineticName } from "@/components/motion/KineticName";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { ShardField } from "@/components/motion/ShardField";
 
 export function Hero({ profile }: { profile: Profile }) {
-  const { setOpen } = useCommandPalette();
   const [first, ...restWords] = profile.name.split(" ");
   const last = restWords.join(" ");
 
@@ -78,15 +76,6 @@ export function Hero({ profile }: { profile: Profile }) {
             </a>
           </MagneticButton>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="mt-8 w-fit rounded text-sm text-field-fg/85 transition-colors hover:text-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
-        >
-          Press <kbd className="rounded border border-field-fg/40 px-1.5 py-0.5">⌘K</kbd> to
-          jump around the site
-        </button>
       </div>
     </section>
   );

@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { useEffect, useId, useRef } from "react";
 import { ContactCard } from "@/components/ui/ContactCard";
 import type { Profile } from "@/lib/types";
-import { useCommandPalette } from "./useCommandPalette";
+import { useAskPanel } from "./useAskPanel";
 
 const SUGGESTIONS = [
   "Is Jon available for contract work?",
@@ -13,10 +13,9 @@ const SUGGESTIONS = [
 ];
 
 export function AskPanel({ contact }: { contact: Profile["contact"] }) {
-  const { askOpen, askSeed, closeAsk } = useCommandPalette();
+  const { askOpen, closeAsk } = useAskPanel();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const seededRef = useRef(false);
   const headingId = useId();
 
   const { messages, sendMessage, status, error, setMessages, stop, clearError } =
@@ -42,14 +41,6 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
       clearError();
     }
   }, [askOpen, stop, setMessages, clearError]);
-
-  useEffect(() => {
-    if (askOpen && askSeed && !seededRef.current) {
-      seededRef.current = true;
-      sendMessage({ text: askSeed });
-    }
-    if (!askOpen) seededRef.current = false;
-  }, [askOpen, askSeed, sendMessage]);
 
   const busy = status === "submitted" || status === "streaming";
 

@@ -3,11 +3,10 @@ import { Archivo, Familjen_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { GsapBootstrap } from "@/components/motion/GsapBootstrap";
 import { Nav } from "@/components/Nav";
-import { AskLauncher } from "@/components/command-palette/AskLauncher";
-import { AskPanel } from "@/components/command-palette/AskPanel";
-import { CommandPalette } from "@/components/command-palette/CommandPalette";
-import { CommandPaletteProvider } from "@/components/command-palette/useCommandPalette";
-import { getProfile, getSkillGroups } from "@/lib/cms";
+import { AskLauncher } from "@/components/ask/AskLauncher";
+import { AskPanel } from "@/components/ask/AskPanel";
+import { AskPanelProvider } from "@/components/ask/useAskPanel";
+import { getProfile } from "@/lib/cms";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -58,10 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const [profile, skillGroups] = await Promise.all([
-    getProfile(),
-    getSkillGroups(),
-  ]);
+  const profile = await getProfile();
 
   const personJsonLd = {
     "@context": "https://schema.org",
@@ -100,7 +96,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <CommandPaletteProvider>
+        <AskPanelProvider>
           <Nav
             available={profile.contact.availableForConsulting}
             location={profile.contact.location}
@@ -108,10 +104,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <main id="main" className="flex-1">
             {children}
           </main>
-          <CommandPalette profile={profile} skillGroups={skillGroups} />
           <AskPanel contact={profile.contact} />
           <AskLauncher />
-        </CommandPaletteProvider>
+        </AskPanelProvider>
         <Analytics />
       </body>
     </html>

@@ -83,15 +83,4 @@ test.describe("reduced motion", () => {
     const box = await page.locator("#contact").boundingBox();
     expect(box?.height ?? 0).toBeLessThan(vp.height * 1.6);
   });
-
-  test("command palette open/close transition has zero duration", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    await page.waitForTimeout(200);
-    await page.keyboard.press("ControlOrMeta+k");
-    const dialog = page.locator("[cmdk-dialog]");
-    await expect(dialog).toBeVisible();
-    await expect(dialog).toHaveCSS("transition-duration", "0s");
-  });
 });
