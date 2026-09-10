@@ -28,6 +28,13 @@ test.describe("smoke", () => {
       page.locator("#skills").getByRole("heading", { level: 2 }),
     ).toBeVisible();
 
+    await expect(page.locator("#projects")).toBeAttached();
+    await expect(
+      page.locator("#projects").getByRole("link", { name: /Synthesizer/ }),
+    ).toBeVisible();
+    // one project today → no reel affordance
+    await expect(page.locator("#projects [data-reel-hint]")).toHaveCount(0);
+
     await expect(page.locator("#contact")).toBeAttached();
     await expect(
       page.getByRole("link", { name: profile.contact.email }),
