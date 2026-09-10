@@ -13,7 +13,7 @@ const STYLES: Record<string, string> = {
   "cyan-dark": "bg-cyan font-semibold text-cyan-fg",
   "cyan-light": "bg-cyan font-semibold text-cyan-fg",
   "pink-dark": "bg-pink font-semibold text-pink-fg",
-  "pink-light": "border border-pink text-pink",
+  "pink-light": "bg-pink font-semibold text-pink-fg",
 };
 
 export function Tag({
