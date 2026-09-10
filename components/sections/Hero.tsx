@@ -5,8 +5,8 @@ import { useCommandPalette } from "@/components/command-palette/useCommandPalett
 
 export function Hero({ profile }: { profile: Profile }) {
   const { setOpen } = useCommandPalette();
-  const firstLetter = profile.name.slice(0, 1);
-  const rest = profile.name.slice(1);
+  // Underline each initial — "J" and "S" — echoing the JS brand mark.
+  const nameWords = profile.name.split(" ");
 
   return (
     <section
@@ -23,13 +23,15 @@ export function Hero({ profile }: { profile: Profile }) {
         aria-label={profile.name}
         className="mt-5 font-mono text-[clamp(2.1rem,7.5vw,5.25rem)] font-bold leading-[1.35] tracking-tight"
       >
-        <span
-          aria-hidden="true"
-          className="border-b-[0.12em] border-accent pb-[0.06em]"
-        >
-          {firstLetter}
-        </span>
-        <span aria-hidden="true">{rest}</span>
+        {nameWords.map((word, i) => (
+          <span key={i} aria-hidden="true">
+            {i > 0 ? " " : null}
+            <span className="border-b-[0.14em] border-accent pb-[0.03em]">
+              {word.slice(0, 1)}
+            </span>
+            {word.slice(1)}
+          </span>
+        ))}
       </h1>
       <p className="mt-6 max-w-xl text-lg text-foreground/70 sm:text-xl">
         {profile.roleLine}
