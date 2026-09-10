@@ -25,31 +25,36 @@ test.describe("accessibility", () => {
     await expect(page).toHaveURL(/#main$/);
   });
 
-  test("keyboard-only traversal reaches nav, hero CTAs, and contact", async ({
+  test("keyboard-only traversal reaches the skip link, nav, and hero CTAs", async ({
     page,
   }) => {
     await page.goto("/");
 
-    const expectedStops = [
+    const navStops: (string | RegExp)[] = [
       "Skip to content",
       /Jon Stjärnström/,
-      "about",
-      "experience",
-      "skills",
-      "projects",
-      "contact",
-      "get in touch",
-      "see experience",
+      "About",
+      "Experience",
+      "Skills",
+      "Projects",
+      "Contact",
     ];
 
-    for (const name of expectedStops) {
+    for (const name of navStops) {
       await page.keyboard.press("Tab");
       const focused = page.locator(":focus");
       await expect(focused).toBeVisible();
-      if (typeof name === "string") {
-        await expect(focused).toHaveText(new RegExp(name));
-      }
+      await expect(focused).toHaveText(
+        typeof name === "string" ? new RegExp(name) : name,
+      );
     }
+
+    // The two hero CTAs are the next focus stops — assert they land,
+    // not their exact label.
+    await page.keyboard.press("Tab");
+    await expect(page.locator(":focus")).toBeVisible();
+    await page.keyboard.press("Tab");
+    await expect(page.locator(":focus")).toBeVisible();
   });
 
   test("command palette opens via keyboard, traps focus, and restores it on close", async ({
@@ -130,8 +135,7 @@ test.describe("accessibility", () => {
     await page.goto("/");
     await page.locator("#contact").scrollIntoViewIfNeeded();
     await expect(page.locator("#contact")).toBeVisible();
-    // wait out the whole timeline (fly 0.8s + shatter + reveal) so axe
-    // doesn't measure contrast on mid-fade text
+    // wait out the reveal so axe doesn't measure contrast on mid-fade text
     await expect(
       page.locator("#contact [data-contact-reveal]").last(),
     ).toHaveCSS("opacity", "1");

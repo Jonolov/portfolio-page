@@ -28,6 +28,13 @@ test.describe("smoke", () => {
       page.locator("#skills").getByRole("heading", { level: 2 }),
     ).toBeVisible();
 
+    await expect(page.locator("#projects")).toBeAttached();
+    await expect(
+      page.locator("#projects").getByRole("link", { name: /Synthesizer/ }),
+    ).toBeVisible();
+    // one project today → no reel affordance
+    await expect(page.locator("#projects [data-reel-hint]")).toHaveCount(0);
+
     await expect(page.locator("#contact")).toBeAttached();
     await expect(
       page.getByRole("link", { name: profile.contact.email }),
@@ -38,7 +45,7 @@ test.describe("smoke", () => {
     page,
   }) => {
     await page.goto("/");
-    await page.getByRole("link", { name: "contact", exact: true }).click();
+    await page.getByRole("link", { name: "Contact", exact: true }).click();
     await expect(
       page.getByRole("link", { name: profile.contact.email }),
     ).toBeInViewport();
@@ -64,6 +71,37 @@ test.describe("smoke", () => {
       "href",
       `mailto:${profile.contact.email}`,
     );
+  });
+
+  test("no horizontal overflow at narrow widths", async ({ page }) => {
+    const hOverflow = () =>
+      page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+
+    for (const width of [320, 360, 390, 414]) {
+      await page.setViewportSize({ width, height: 780 });
+      await page.goto("/");
+      // walk the whole page so every section (and its decorative layers) lays out
+      for (const id of ["hero", "experience", "projects", "contact"]) {
+        await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+        await page.waitForTimeout(300);
+      }
+      expect(await hOverflow(), `page overflow at ${width}px`).toBe(0);
+
+      // …and with the Ask panel open
+      await page.locator("#hero").scrollIntoViewIfNeeded();
+      await page
+        .getByRole("button", { name: /ask jon-bot/i })
+        .click();
+      await expect(page.locator("dialog[open]")).toBeVisible();
+      expect(
+        await hOverflow(),
+        `overflow with Ask panel open at ${width}px`,
+      ).toBe(0);
+    }
   });
 
   test("experience 'show earlier roles' toggle works", async ({ page }) => {

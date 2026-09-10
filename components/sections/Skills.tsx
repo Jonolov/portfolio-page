@@ -1,39 +1,48 @@
+"use client";
+
+import { useRef } from "react";
 import type { SkillGroup } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
-import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
-import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
+import { useReveal } from "@/lib/gsap";
 
 export function Skills({ groups }: { groups: SkillGroup[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useReveal(ref);
+
   return (
     <section
       id="skills"
       aria-labelledby="skills-heading"
-      className="mx-auto max-w-3xl px-6 py-16 sm:py-24"
+      className="bg-paper px-6 py-24 text-paper-fg sm:px-16 sm:py-28"
     >
-      <RevealOnScroll>
-        <SectionHeading
-          id="skills-heading"
-          eyebrow="skills"
-          title="grouped by area"
-        />
-      </RevealOnScroll>
-      <StaggerGroup>
-        <dl className="grid gap-8 sm:grid-cols-2">
+      <div ref={ref} className="mx-auto max-w-6xl">
+        <div data-reveal>
+          <SectionHeading
+            id="skills-heading"
+            index="03"
+            kicker="Skills"
+            title="Grouped by area"
+            accentClassName="text-cyan"
+          />
+        </div>
+        <dl className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {groups.map((group) => (
-            <StaggerItem key={group.category}>
-              <dt className="font-mono text-xs text-foreground/60">
-                # {group.category.toLowerCase()}
+            <div data-reveal key={group.category}>
+              <dt className="mb-3 font-display text-base font-semibold">
+                {group.category}
               </dt>
-              <dd className="mt-3 flex flex-wrap gap-2">
+              <dd className="flex flex-wrap gap-2">
                 {group.skills.map((skill) => (
-                  <Tag key={skill}>{skill}</Tag>
+                  <Tag key={skill} tone="dark">
+                    {skill}
+                  </Tag>
                 ))}
               </dd>
-            </StaggerItem>
+            </div>
           ))}
         </dl>
-      </StaggerGroup>
+      </div>
     </section>
   );
 }

@@ -1,18 +1,34 @@
-interface SectionHeadingProps {
+type SectionHeadingProps = {
   id: string;
-  eyebrow: string;
+  /** Two-digit section number, e.g. "01". */
+  index: string;
+  /** Short section name next to the number, e.g. "About". */
+  kicker: string;
+  /** The full heading line. */
   title: string;
-}
+  /** Accent colour class for the number label. */
+  accentClassName?: string;
+};
 
-export function SectionHeading({ id, eyebrow, title }: SectionHeadingProps) {
+export function SectionHeading({
+  id,
+  index,
+  kicker,
+  title,
+  accentClassName = "text-cyan",
+}: SectionHeadingProps) {
   return (
-    <div className="mb-10 border-t border-foreground/10 pt-4">
+    <div className="mb-12">
+      <p
+        className={`mb-4 inline-block -rotate-2 font-display text-sm font-semibold tracking-wide ${accentClassName}`}
+      >
+        {index} — {kicker}
+      </p>
       <h2
         id={id}
-        className="font-mono text-xs uppercase tracking-wide text-foreground/60"
+        className="font-display text-[clamp(2.4rem,6vw,4rem)] font-bold uppercase leading-[0.95] tracking-tight"
       >
-        <span className="text-accent">{"// "}</span>
-        {eyebrow} — {title}
+        {title}
       </h2>
     </div>
   );

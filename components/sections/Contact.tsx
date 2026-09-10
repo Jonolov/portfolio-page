@@ -1,62 +1,55 @@
-import type { Profile } from "@/lib/types";
-import { BlockMark } from "@/components/ui/BlockMark";
-import { MARK_CELL, MARK_GAP } from "@/components/ui/block-mark";
+"use client";
 
-// The closing view is a full-bleed dark band — "day becomes night" — so
-// every colour here is from the inverted `band-*` palette.
+import { useRef } from "react";
+import type { Profile } from "@/lib/types";
+import { useReveal } from "@/lib/gsap";
+import { ContactMark } from "@/components/contact/ContactMark";
+
 export function Contact({ contact }: { contact: Profile["contact"] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useReveal(ref, { selector: "[data-contact-reveal]" });
+
   return (
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      data-contact
-      className="flex min-h-screen w-full flex-col justify-center bg-band-background py-24 text-band-foreground"
+      className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-ink px-6 py-28 text-ink-fg"
     >
-      <div className="mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
+      <div
+        ref={ref}
+        className="mx-auto flex max-w-3xl flex-col items-center text-center"
+      >
         <h2
           id="contact-heading"
-          className="font-mono text-xs uppercase tracking-wide text-band-foreground/60"
+          className="text-sm font-semibold uppercase tracking-[0.12em] text-ink-fg/70"
         >
-          <span className="text-band-accent">{"// "}</span>
-          contact — get in touch
+          <span className="text-js-green">05 — </span>Contact
         </h2>
 
-        {/* Static J — the accessible / no-JS / reduced-motion image.
-            FlipMark overlays this exactly when it animates. */}
-        <BlockMark
-          data-contact-mark
-          cell={MARK_CELL}
-          gap={MARK_GAP}
-          className="my-16"
-          cellClassName="bg-band-foreground"
-          accentClassName="bg-band-accent"
-        />
+        <ContactMark />
 
-        <div className="flex w-full max-w-md flex-col items-center gap-3 font-mono text-sm">
+        <p className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+          Let&apos;s build something.
+        </p>
+
+        <div className="mt-8 flex w-full max-w-md flex-col items-center gap-3.5 text-sm">
           {contact.availableForConsulting ? (
-            <p
-              data-contact-reveal
-              className="max-w-full text-balance text-band-foreground/70"
-            >
-              status:{" "}
-              <span className="text-band-accent">{contact.statusLine}</span>
+            <p data-contact-reveal className="text-ink-fg/70">
+              <span className="text-js-green">●</span> {contact.statusLine}
             </p>
           ) : null}
 
-          <p data-contact-reveal className="max-w-full">
+          <p data-contact-reveal>
             <a
               href={`mailto:${contact.email}`}
-              className="rounded text-sm font-bold text-band-accent [overflow-wrap:anywhere] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-band-foreground sm:text-lg"
+              className="rounded font-display text-lg font-bold text-js-green [overflow-wrap:anywhere] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-fg sm:text-2xl"
             >
               {contact.email}
             </a>
           </p>
 
-          <p
-            data-contact-reveal
-            className="max-w-full text-balance text-band-foreground/70"
-          >
-            {contact.company.toLowerCase()} · {contact.location.toLowerCase()}
+          <p data-contact-reveal className="text-ink-fg/70">
+            {contact.company} · {contact.location}
           </p>
 
           <p data-contact-reveal>
@@ -64,9 +57,9 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
               href={contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded text-band-foreground/70 underline-offset-4 hover:text-band-accent hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-band-foreground"
+              className="rounded text-ink-fg/70 underline underline-offset-4 hover:text-js-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-fg"
             >
-              linkedin<span className="sr-only"> (opens in a new tab)</span> ↗
+              LinkedIn<span className="sr-only"> (opens in a new tab)</span> ↗
             </a>
           </p>
         </div>

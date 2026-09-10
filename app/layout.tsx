@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Archivo, Martian_Mono } from "next/font/google";
-import dynamic from "next/dynamic";
+import { Archivo, Familjen_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { MotionConfig } from "motion/react";
+import { GsapBootstrap } from "@/components/motion/GsapBootstrap";
 import { Nav } from "@/components/Nav";
 import { AskLauncher } from "@/components/command-palette/AskLauncher";
 import { AskPanel } from "@/components/command-palette/AskPanel";
@@ -12,15 +11,13 @@ import { getProfile, getSkillGroups } from "@/lib/cms";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const FlipMark = dynamic(() => import("@/components/contact/FlipMark"));
-
 const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
 });
 
-const martianMono = Martian_Mono({
-  variable: "--font-martian-mono",
+const familjen = Familjen_Grotesk({
+  variable: "--font-familjen",
   subsets: ["latin"],
 });
 
@@ -89,9 +86,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${martianMono.variable} h-full scroll-pt-20 antialiased sm:scroll-pt-16`}
+      className={`${archivo.variable} ${familjen.variable} h-full scroll-pt-20 antialiased sm:scroll-pt-16`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <GsapBootstrap />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
@@ -102,21 +100,18 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <MotionConfig reducedMotion="user">
-          <CommandPaletteProvider>
-            <Nav
-              available={profile.contact.availableForConsulting}
-              location={profile.contact.location}
-            />
-            <main id="main" className="flex-1">
-              {children}
-            </main>
-            <CommandPalette profile={profile} skillGroups={skillGroups} />
-            <AskPanel contact={profile.contact} />
-            <AskLauncher />
-            <FlipMark />
-          </CommandPaletteProvider>
-        </MotionConfig>
+        <CommandPaletteProvider>
+          <Nav
+            available={profile.contact.availableForConsulting}
+            location={profile.contact.location}
+          />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <CommandPalette profile={profile} skillGroups={skillGroups} />
+          <AskPanel contact={profile.contact} />
+          <AskLauncher />
+        </CommandPaletteProvider>
         <Analytics />
       </body>
     </html>

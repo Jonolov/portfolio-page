@@ -1,39 +1,57 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6f7f5;
-  --foreground: #121815;
-  --accent: #0b6130;
-  --band-background: #182420;
-  --band-foreground: #eafbf1;
-  --band-accent: #3ddc84;
+  /* "Warm neutral + one accent." Token names are kept from the previous
+     pass but repurposed, so the roles are what matter, not the names:
+       --paper  = bone, the primary warm ground (light, ink text)
+       --field  = oat, the secondary warm ground (light, ink text)
+       --ink    = the dark anchor: the contact close
+       --cyan / --clay / --clay-soft = the single accent, burnt sienna, on
+                  light grounds (text + fills that carry cream text)
+       --js-green = the same accent lightened for text on the dark --ink ground
+       --stone  = muted text on the warm grounds */
+  --ink: #1a1712;
+  --ink-fg: #f3efe7;
+  --paper: #f3efe7;
+  --paper-fg: #1a1712;
+  --field: #e7dfd0;
+  --field-fg: #1a1712;
+  --cyan: #a03f1c;
+  --cyan-fg: #fbf7f0;
+  --clay: #a03f1c;
+  --clay-fg: #fbf7f0;
+  --clay-soft: #a03f1c;
+  --js-green: #d9825c;
+  --stone: #63594a;
+
+  /* page defaults, consumed by the skip link / overlays / <body> */
+  --background: var(--paper);
+  --foreground: var(--paper-fg);
 }
 
 @theme inline {
+  --color-ink: var(--ink);
+  --color-ink-fg: var(--ink-fg);
+  --color-paper: var(--paper);
+  --color-paper-fg: var(--paper-fg);
+  --color-field: var(--field);
+  --color-field-fg: var(--field-fg);
+  --color-cyan: var(--cyan);
+  --color-cyan-fg: var(--cyan-fg);
+  --color-clay: var(--clay);
+  --color-clay-fg: var(--clay-fg);
+  --color-clay-soft: var(--clay-soft);
+  --color-js-green: var(--js-green);
+  --color-stone: var(--stone);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-band-background: var(--band-background);
-  --color-band-foreground: var(--band-foreground);
-  --color-band-accent: var(--band-accent);
   --font-sans: var(--font-archivo);
-  --font-mono: var(--font-martian-mono);
+  --font-display: var(--font-familjen);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #182420;
-    --foreground: #eafbf1;
-    --accent: #3ddc84;
-    --band-background: #f6f7f5;
-    --band-foreground: #121815;
-    --band-accent: #0b6130;
-  }
-}
-
-/* The contact-flip overlay scatters glyphs off-frame during its animation;
+/* The shard fields / decorative overlays can extend past the viewport edge;
    clip so that never adds a horizontal scrollbar. `body` is the containing
-   block for that absolutely-positioned overlay. */
+   block for those absolutely-positioned overlays. */
 html {
   overflow-x: clip;
 }
@@ -53,22 +71,5 @@ body {
 @keyframes caret-blink {
   50% {
     opacity: 0;
-  }
-}
-
-/* Nav brand: the block "J" scatters into place on load — each cell flies
-   in from a per-cell random offset (--bx/--by/--br, set inline) in a
-   random order. `both` holds each cell hidden through its delay; without
-   the animation (reduced motion, no CSS animation support) the cells are
-   just visible. */
-@utility animate-block-in {
-  animation: block-in 0.34s cubic-bezier(0.2, 0.9, 0.3, 1) both;
-}
-
-@keyframes block-in {
-  from {
-    opacity: 0;
-    transform: translate(var(--bx, 0), var(--by, 0)) rotate(var(--br, 0))
-      scale(0.4);
   }
 }

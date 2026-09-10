@@ -1,55 +1,65 @@
+"use client";
+
+import { useRef } from "react";
 import type { SideProject } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
-import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
-import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
+import { ProjectsReel } from "@/components/motion/ProjectsReel";
+import { useReveal } from "@/lib/gsap";
 
 export function Projects({ projects }: { projects: SideProject[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useReveal(ref);
+
   return (
     <section
       id="projects"
       aria-labelledby="projects-heading"
-      className="mx-auto max-w-3xl px-6 py-16 sm:py-24"
+      className="bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-28"
     >
-      <RevealOnScroll>
-        <SectionHeading
-          id="projects-heading"
-          eyebrow="side projects"
-          title="built for fun"
-        />
-      </RevealOnScroll>
-      <StaggerGroup>
-        <ul className="flex flex-col gap-6">
-          {projects.map((project) => (
-            <li key={project.name}>
-              <StaggerItem>
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block rounded border border-foreground/15 p-5 transition-colors hover:border-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:p-6"
-                >
-                  <h3 className="text-lg font-semibold tracking-tight">
-                    {project.name}
-                    <span className="ml-1.5 inline-block text-accent transition-transform group-hover:translate-x-0.5">
-                      ↗
-                    </span>
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </h3>
-                  <p className="mt-2 text-foreground/80">
-                    {project.description}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {project.tech.map((tech) => (
-                      <Tag key={tech}>{tech}</Tag>
-                    ))}
-                  </div>
-                </a>
-              </StaggerItem>
-            </li>
-          ))}
-        </ul>
-      </StaggerGroup>
+      <div ref={ref} className="mx-auto max-w-6xl">
+        <div data-reveal>
+          <SectionHeading
+            id="projects-heading"
+            index="04"
+            kicker="Side projects"
+            title="Built for fun"
+            accentClassName="text-cyan"
+          />
+        </div>
+
+        <div data-reveal>
+          <ProjectsReel>
+            {projects.map((project) => (
+              <a
+                key={project.name}
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block w-full max-w-xl shrink-0 snap-start rounded-2xl border-2 border-cyan bg-paper p-8 text-paper-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper-fg"
+              >
+                <h3 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
+                  {project.name}
+                  <span className="ml-1.5 inline-block text-cyan transition-transform group-hover:translate-x-0.5">
+                    ↗
+                  </span>
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </h3>
+                <p className="mt-4 text-lg leading-relaxed text-paper-fg/80">
+                  {project.description}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {project.tech.map((tech) => (
+                    <Tag key={tech} tone="dark">
+                      {tech}
+                    </Tag>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </ProjectsReel>
+        </div>
+      </div>
     </section>
   );
 }

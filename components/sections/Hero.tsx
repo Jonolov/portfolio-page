@@ -2,68 +2,92 @@
 
 import type { Profile } from "@/lib/types";
 import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
+import { KineticName } from "@/components/motion/KineticName";
+import { MagneticButton } from "@/components/motion/MagneticButton";
+import { ShardField } from "@/components/motion/ShardField";
 
 export function Hero({ profile }: { profile: Profile }) {
   const { setOpen } = useCommandPalette();
-  // Underline each initial — "J" and "S" — echoing the JS brand mark.
-  const nameWords = profile.name.split(" ");
+  const [first, ...restWords] = profile.name.split(" ");
+  const last = restWords.join(" ");
 
   return (
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="mx-auto flex w-full max-w-5xl flex-col justify-center px-4 py-16 sm:px-6 sm:py-24"
+      className="relative isolate overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-32"
     >
-      <p className="font-mono text-xs uppercase tracking-wide text-balance text-accent">
-        {profile.contact.location.toLowerCase()}, se ·{" "}
-        {profile.contact.company.toLowerCase()}
-      </p>
-      <h1
-        id="hero-heading"
-        aria-label={profile.name}
-        className="mt-5 font-mono text-[clamp(2.1rem,7.5vw,5.25rem)] font-bold leading-[1.35] tracking-tight"
-      >
-        {nameWords.map((word, i) => (
-          <span key={i} aria-hidden="true">
-            {i > 0 ? " " : null}
-            <span className="border-b-[0.14em] border-accent pb-[0.03em]">
-              {word.slice(0, 1)}
+      <ShardField
+        shards={[
+          { x: "83%", y: "3.5rem", size: 44, color: "bg-paper", radius: 14 },
+          { x: "93%", y: "24%", size: 12, color: "bg-cyan" },
+          { x: "71%", y: "46%", size: 22, color: "bg-paper", radius: 4 },
+          { x: "90%", y: "60%", size: 30, color: "bg-paper", radius: 8 },
+          { x: "80%", y: "84%", size: 15, color: "bg-cyan", radius: 5 },
+        ]}
+      />
+
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <p className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-cyan">
+          Stockholm · Consulting · Open
+        </p>
+
+        <h1
+          id="hero-heading"
+          aria-label={profile.name}
+          className="font-display text-[clamp(2.75rem,11vw,8.25rem)] font-bold uppercase leading-[0.9] tracking-[-0.04em]"
+        >
+          <KineticName>
+            <span aria-hidden="true">
+              {first}
+              <br />
+              <span className="text-clay-soft">{last.slice(0, 6)}</span>
+              <span className="[-webkit-text-stroke:2px_var(--field-fg)] [color:transparent]">
+                {last.slice(6)}
+              </span>
             </span>
-            {word.slice(1)}
-          </span>
-        ))}
-      </h1>
-      <p className="mt-6 max-w-xl text-lg text-foreground/70 sm:text-xl">
-        {profile.roleLine}
-        <span
-          className="ml-0.5 inline-block h-[1em] w-[0.5em] translate-y-[0.15em] bg-accent motion-safe:animate-caret"
-          aria-hidden="true"
-        />
-      </p>
-      <p className="mt-4 max-w-2xl text-base text-foreground/70 sm:text-lg">
-        {profile.heroHook}
-      </p>
-      <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
-        <a
-          href="#contact"
-          className="rounded border border-foreground bg-foreground px-5 py-3 font-mono text-sm font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          </KineticName>
+        </h1>
+
+        <p className="mt-9 max-w-2xl text-xl text-field-fg/80 sm:text-2xl">
+          {profile.roleLine}
+          <span
+            className="ml-1 inline-block h-[1em] w-[0.5em] translate-y-[0.14em] bg-cyan motion-safe:animate-caret"
+            aria-hidden="true"
+          />
+        </p>
+        <p className="mt-4 max-w-xl text-base text-field-fg/80 sm:text-lg">
+          {profile.heroHook}
+        </p>
+
+        <div className="mt-11 flex flex-col gap-3 sm:flex-row">
+          <MagneticButton>
+            <a
+              href="#contact"
+              className="w-full sm:w-auto rounded-lg bg-cyan px-6 py-4 text-center font-display font-semibold text-cyan-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
+            >
+              Get in touch →
+            </a>
+          </MagneticButton>
+          <MagneticButton>
+            <a
+              href="#experience"
+              className="w-full sm:w-auto rounded-lg border-2 border-field-fg px-6 py-4 text-center font-display font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
+            >
+              See the work
+            </a>
+          </MagneticButton>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="mt-8 w-fit rounded text-sm text-field-fg/85 transition-colors hover:text-cyan focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
         >
-          [ get in touch ]
-        </a>
-        <a
-          href="#experience"
-          className="rounded border border-foreground/25 px-5 py-3 font-mono text-sm font-medium transition-colors hover:border-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-        >
-          [ see experience ]
-        </a>
+          Press <kbd className="rounded border border-field-fg/40 px-1.5 py-0.5">⌘K</kbd> to
+          jump around the site
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="mt-8 flex w-fit items-center gap-2 rounded font-mono text-sm text-foreground/65 transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:mt-10"
-      >
-        [ <kbd>⌘k</kbd> ] jump around the site
-      </button>
     </section>
   );
 }
