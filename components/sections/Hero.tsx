@@ -2,6 +2,7 @@
 
 import type { Profile } from "@/lib/types";
 import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
+import { KineticName } from "@/components/motion/KineticName";
 
 export function Hero({ profile }: { profile: Profile }) {
   const { setOpen } = useCommandPalette();
@@ -40,14 +41,16 @@ export function Hero({ profile }: { profile: Profile }) {
           aria-label={profile.name}
           className="font-display text-[clamp(2.75rem,11vw,8.25rem)] font-bold uppercase leading-[0.9] tracking-[-0.04em]"
         >
-          <span aria-hidden="true">
-            {first}
-            <br />
-            <span className="text-[#ff9ec7]">{last.slice(0, 6)}</span>
-            <span className="[-webkit-text-stroke:2px_var(--field-fg)] [color:transparent]">
-              {last.slice(6)}
+          <KineticName>
+            <span aria-hidden="true">
+              {first}
+              <br />
+              <span className="text-[#ff9ec7]">{last.slice(0, 6)}</span>
+              <span className="[-webkit-text-stroke:2px_var(--field-fg)] [color:transparent]">
+                {last.slice(6)}
+              </span>
             </span>
-          </span>
+          </KineticName>
         </h1>
 
         <p className="mt-9 max-w-2xl text-xl text-field-fg/80 sm:text-2xl">
