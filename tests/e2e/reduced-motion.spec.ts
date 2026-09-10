@@ -63,6 +63,27 @@ test.describe("reduced motion", () => {
     await expect(caret.first()).toHaveCSS("animation-name", "none");
   });
 
+  test("contact mark and every contact link are visible and untransformed", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.locator("#contact").scrollIntoViewIfNeeded();
+
+    const mark = page.locator("#contact [data-contact-mark]");
+    await expect(mark).toBeVisible();
+    await expect(mark).toHaveCSS("transform", "none");
+
+    for (const name of [/@/, /LinkedIn/]) {
+      const link = page.locator("#contact").getByRole("link", { name });
+      await expect(link).toBeVisible();
+      await expect(link).toHaveCSS("opacity", "1");
+    }
+
+    const vp = page.viewportSize()!;
+    const box = await page.locator("#contact").boundingBox();
+    expect(box?.height ?? 0).toBeLessThan(vp.height * 1.6);
+  });
+
   test("command palette open/close transition has zero duration", async ({
     page,
   }) => {

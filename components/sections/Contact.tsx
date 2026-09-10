@@ -1,7 +1,14 @@
+"use client";
+
+import { useRef } from "react";
 import type { Profile } from "@/lib/types";
-import { Mark } from "@/components/ui/Mark";
+import { useReveal } from "@/lib/gsap";
+import { ContactMark } from "@/components/contact/ContactMark";
 
 export function Contact({ contact }: { contact: Profile["contact"] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useReveal(ref, { selector: "[data-contact-reveal]" });
+
   return (
     <section
       id="contact"
@@ -9,7 +16,10 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
       data-contact
       className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-ink px-6 py-28 text-ink-fg"
     >
-      <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+      <div
+        ref={ref}
+        className="mx-auto flex max-w-3xl flex-col items-center text-center"
+      >
         <h2
           id="contact-heading"
           className="text-sm font-semibold uppercase tracking-[0.12em] text-ink-fg/70"
@@ -17,27 +27,7 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
           <span className="text-js-green">05 — </span>Contact
         </h2>
 
-        <div
-          className="relative my-14 flex h-52 items-center justify-center"
-          aria-hidden="true"
-        >
-          <span
-            data-shard
-            className="absolute left-[calc(50%-90px)] top-16 h-8 w-8 rounded-lg bg-js-green"
-          />
-          <span
-            data-shard
-            className="absolute left-[calc(50%+60px)] top-16 h-6 w-6 bg-cyan"
-          />
-          <span
-            data-shard
-            className="absolute left-[calc(50%+40px)] top-40 h-7 w-7 rounded bg-pink"
-          />
-          <Mark
-            size="lg"
-            className="!text-[clamp(5rem,20vw,10rem)] text-js-green"
-          />
-        </div>
+        <ContactMark />
 
         <p className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
           Let&apos;s build something.

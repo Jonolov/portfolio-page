@@ -135,8 +135,7 @@ test.describe("accessibility", () => {
     await page.goto("/");
     await page.locator("#contact").scrollIntoViewIfNeeded();
     await expect(page.locator("#contact")).toBeVisible();
-    // wait out the whole timeline (fly 0.8s + shatter + reveal) so axe
-    // doesn't measure contrast on mid-fade text
+    // wait out the reveal so axe doesn't measure contrast on mid-fade text
     await expect(
       page.locator("#contact [data-contact-reveal]").last(),
     ).toHaveCSS("opacity", "1");
