@@ -14,7 +14,7 @@ export function ContactCard({ contact }: { contact: Profile["contact"] }) {
       ) : null}
       <a
         href={`mailto:${contact.email}`}
-        className="block font-display text-js-green underline underline-offset-4"
+        className="block font-display text-field underline underline-offset-4"
       >
         {contact.email}
       </a>

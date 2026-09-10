@@ -74,7 +74,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
           type="button"
           onClick={closeAsk}
           aria-label="Close"
-          className="rounded px-2 text-foreground/60 hover:text-js-green"
+          className="rounded px-2 text-foreground/60 hover:text-field"
         >
           ✕
         </button>
@@ -92,7 +92,7 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
                 key={s}
                 type="button"
                 onClick={() => submit(s)}
-                className="block w-full rounded-lg border border-foreground/10 px-3 py-2 text-left hover:border-js-green/40 hover:text-js-green"
+                className="block w-full rounded-lg border border-foreground/10 px-3 py-2 text-left hover:border-field/40 hover:text-field"
               >
                 {s}
               </button>

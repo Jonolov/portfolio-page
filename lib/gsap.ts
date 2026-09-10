@@ -44,8 +44,8 @@ interface RevealOptions {
 }
 
 /**
- * Stagger-reveals `[data-reveal]` descendants of `ref` as it scrolls into
- * view. Replaces <RevealOnScroll> / <Stagger>. Reduced motion: elements are
+ * Reveals `[data-reveal]` descendants of `ref` in sequence as it scrolls
+ * into view. Replaces the old reveal wrappers. Reduced motion: elements are
  * shown immediately, untransformed, with no ScrollTrigger.
  */
 export function useReveal<T extends HTMLElement>(
