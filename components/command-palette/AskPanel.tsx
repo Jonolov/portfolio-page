@@ -64,12 +64,14 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
       ref={dialogRef}
       aria-labelledby={headingId}
       onClose={closeAsk}
-      className="fixed left-1/2 top-4 m-0 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 border-0 bg-transparent p-0 backdrop:bg-foreground/20 backdrop:backdrop-blur-sm sm:top-24"
+      className="fixed inset-x-0 top-4 bottom-auto my-0 mx-auto w-[calc(100%-2rem)] max-w-lg border-0 bg-transparent p-0 backdrop:bg-foreground/20 backdrop:backdrop-blur-sm sm:top-24"
     >
-      {/* The <dialog> is a bare positioning shell — it takes the width
-          (`100%` resolves against the viewport minus its scrollbar, unlike
-          `100vw`), so the UA `dialog:not([open]) { display: none }` rule
-          keeps working. Sizing, flex layout and chrome live on the wrapper. */}
+      {/* The <dialog> is a bare positioning shell. It's centred with
+          inset-x-0 + mx-auto rather than left-1/2 + -translate-x-1/2: on
+          mobile Safari the translate version rounded a fraction of a pixel
+          past the edge and gave the page a horizontal scrollbar while open.
+          No `display` utility here, so `dialog:not([open]) { display:none }`
+          still hides it. Sizing and chrome live on the wrapper. */}
       <div className="flex max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-background text-foreground shadow-2xl sm:max-h-[calc(100dvh-8rem)]">
         <div className="flex items-center justify-between border-b border-foreground/10 px-4 py-3">
           <h2 id={headingId} className="font-display text-xs text-foreground/70">

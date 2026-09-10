@@ -74,6 +74,13 @@ test.describe("smoke", () => {
   });
 
   test("no horizontal overflow at narrow widths", async ({ page }) => {
+    const hOverflow = () =>
+      page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+
     for (const width of [320, 360, 390, 414]) {
       await page.setViewportSize({ width, height: 780 });
       await page.goto("/");
@@ -82,12 +89,18 @@ test.describe("smoke", () => {
         await page.locator(`#${id}`).scrollIntoViewIfNeeded();
         await page.waitForTimeout(300);
       }
-      const overflow = await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      );
-      expect(overflow, `horizontal overflow at ${width}px`).toBe(0);
+      expect(await hOverflow(), `page overflow at ${width}px`).toBe(0);
+
+      // …and with the Ask panel open
+      await page.locator("#hero").scrollIntoViewIfNeeded();
+      await page
+        .getByRole("button", { name: /ask jon-bot/i })
+        .click();
+      await expect(page.locator("dialog[open]")).toBeVisible();
+      expect(
+        await hOverflow(),
+        `overflow with Ask panel open at ${width}px`,
+      ).toBe(0);
     }
   });
 
