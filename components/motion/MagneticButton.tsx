@@ -56,7 +56,7 @@ export function MagneticButton({ children }: { children: ReactNode }) {
   );
 
   return (
-    <span ref={ref} className="inline-block">
+    <span ref={ref} className="inline-flex">
       {children}
     </span>
   );

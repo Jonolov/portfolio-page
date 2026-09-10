@@ -62,7 +62,7 @@ export function Hero({ profile }: { profile: Profile }) {
           <MagneticButton>
             <a
               href="#contact"
-              className="rounded-lg bg-cyan px-6 py-4 text-center font-display font-semibold text-cyan-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
+              className="w-full sm:w-auto rounded-lg bg-cyan px-6 py-4 text-center font-display font-semibold text-cyan-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
             >
               Get in touch →
             </a>
@@ -70,7 +70,7 @@ export function Hero({ profile }: { profile: Profile }) {
           <MagneticButton>
             <a
               href="#experience"
-              className="rounded-lg border-2 border-field-fg px-6 py-4 text-center font-display font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
+              className="w-full sm:w-auto rounded-lg border-2 border-field-fg px-6 py-4 text-center font-display font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
             >
               See the work
             </a>
