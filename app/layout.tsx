@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Familjen_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { MotionConfig } from "motion/react";
 import { GsapBootstrap } from "@/components/motion/GsapBootstrap";
 import { Nav } from "@/components/Nav";
 import { AskLauncher } from "@/components/command-palette/AskLauncher";
@@ -101,20 +100,18 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <MotionConfig reducedMotion="user">
-          <CommandPaletteProvider>
-            <Nav
-              available={profile.contact.availableForConsulting}
-              location={profile.contact.location}
-            />
-            <main id="main" className="flex-1">
-              {children}
-            </main>
-            <CommandPalette profile={profile} skillGroups={skillGroups} />
-            <AskPanel contact={profile.contact} />
-            <AskLauncher />
-          </CommandPaletteProvider>
-        </MotionConfig>
+        <CommandPaletteProvider>
+          <Nav
+            available={profile.contact.availableForConsulting}
+            location={profile.contact.location}
+          />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <CommandPalette profile={profile} skillGroups={skillGroups} />
+          <AskPanel contact={profile.contact} />
+          <AskLauncher />
+        </CommandPaletteProvider>
         <Analytics />
       </body>
     </html>

@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { CondensedRole, Role } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
-import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
-import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
+import { useReveal } from "@/lib/gsap";
 
 const HIGHLIGHT_TECH = new Set(["Next.js", "React", "Claude Code"]);
 
@@ -23,6 +22,8 @@ export function Experience({
   earlierRoles: CondensedRole[];
 }) {
   const [showEarlier, setShowEarlier] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useReveal(ref);
 
   return (
     <section
@@ -30,57 +31,53 @@ export function Experience({
       aria-labelledby="experience-heading"
       className="bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-28"
     >
-      <div className="mx-auto max-w-6xl">
-        <RevealOnScroll>
+      <div ref={ref} className="mx-auto max-w-6xl">
+        <div data-reveal>
           <SectionHeading
             id="experience-heading"
             index="02"
             kicker="Experience"
             title="Selected roles"
           />
-        </RevealOnScroll>
+        </div>
 
-        <StaggerGroup>
-          <ol className="flex flex-col">
-            {experience.map((role) => (
-              <li
-                key={role.company}
-                className="border-t-2 border-field-fg/20 py-8"
-              >
-                <StaggerItem>
-                  <div data-reveal>
-                    <p className="text-sm font-semibold text-cyan">
-                      {role.dates.start} — {role.dates.end}
-                    </p>
-                    <div className="mt-2.5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                      <h3 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
-                        {role.company}
-                      </h3>
-                      <p className="text-sm text-field-fg/75">{role.title}</p>
-                    </div>
-                    <p className="mt-4 max-w-3xl text-field-fg/85">
-                      {role.summary}
-                    </p>
-                    <ul className="mt-4 list-disc space-y-1 pl-5 text-field-fg/85">
-                      {role.highlights.map((highlight) => (
-                        <li key={highlight}>{highlight}</li>
-                      ))}
-                    </ul>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {role.tech.map((tech) => (
-                        <Tag key={tech} tone="light" variant={techVariant(tech)}>
-                          {tech}
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                </StaggerItem>
-              </li>
-            ))}
-          </ol>
-        </StaggerGroup>
+        <ol className="flex flex-col">
+          {experience.map((role) => (
+            <li
+              key={role.company}
+              className="border-t-2 border-field-fg/20 py-8"
+            >
+              <div data-reveal>
+                <p className="text-sm font-semibold text-cyan">
+                  {role.dates.start} — {role.dates.end}
+                </p>
+                <div className="mt-2.5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <h3 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
+                    {role.company}
+                  </h3>
+                  <p className="text-sm text-field-fg/75">{role.title}</p>
+                </div>
+                <p className="mt-4 max-w-3xl text-field-fg/85">
+                  {role.summary}
+                </p>
+                <ul className="mt-4 list-disc space-y-1 pl-5 text-field-fg/85">
+                  {role.highlights.map((highlight) => (
+                    <li key={highlight}>{highlight}</li>
+                  ))}
+                </ul>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {role.tech.map((tech) => (
+                    <Tag key={tech} tone="light" variant={techVariant(tech)}>
+                      {tech}
+                    </Tag>
+                  ))}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
 
-        <RevealOnScroll className="border-t-2 border-field-fg/20 pt-7">
+        <div data-reveal className="border-t-2 border-field-fg/20 pt-7">
           <button
             type="button"
             onClick={() => setShowEarlier((prev) => !prev)}
@@ -112,7 +109,7 @@ export function Experience({
               </li>
             ))}
           </ul>
-        </RevealOnScroll>
+        </div>
       </div>
     </section>
   );

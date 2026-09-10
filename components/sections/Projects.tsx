@@ -1,17 +1,23 @@
+"use client";
+
+import { useRef } from "react";
 import type { SideProject } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
-import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
+import { useReveal } from "@/lib/gsap";
 
 export function Projects({ projects }: { projects: SideProject[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useReveal(ref);
+
   return (
     <section
       id="projects"
       aria-labelledby="projects-heading"
       className="bg-pink px-6 py-24 text-pink-fg sm:px-16 sm:py-28"
     >
-      <div className="mx-auto max-w-6xl">
-        <RevealOnScroll>
+      <div ref={ref} className="mx-auto max-w-6xl">
+        <div data-reveal>
           <SectionHeading
             id="projects-heading"
             index="04"
@@ -19,9 +25,9 @@ export function Projects({ projects }: { projects: SideProject[] }) {
             title="Built for fun"
             accentClassName="text-pink-fg"
           />
-        </RevealOnScroll>
+        </div>
 
-        <div className="flex gap-6 overflow-x-auto pb-2">
+        <div data-reveal className="flex gap-6 overflow-x-auto pb-2">
           {projects.map((project) => (
             <a
               key={project.name}

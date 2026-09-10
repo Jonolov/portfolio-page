@@ -73,13 +73,29 @@ export function useReveal<T extends HTMLElement>(
       });
 
       mm.add(NO_PREFERENCE, () => {
-        gsap.from(targets, {
+        const tween = gsap.from(targets, {
           opacity: 0,
           y,
           duration: 0.5,
           ease: "power2.out",
           stagger,
-          scrollTrigger: { trigger: el, start, once: true },
+          paused: true,
+        });
+
+        ScrollTrigger.create({
+          trigger: el,
+          start,
+          once: true,
+          onEnter: () => {
+            const rect = el.getBoundingClientRect();
+            const inView =
+              rect.top < window.innerHeight && rect.bottom > 0;
+            // Scrolled to naturally: play the staggered reveal. Jumped past
+            // (deep link, restored scroll position, programmatic scroll):
+            // snap straight to the end so nothing sits mid-fade off-screen.
+            if (inView) tween.play();
+            else tween.progress(1);
+          },
         });
       });
 

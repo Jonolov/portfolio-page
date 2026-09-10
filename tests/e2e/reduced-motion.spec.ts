@@ -4,7 +4,7 @@ import { openAskPanel } from "./helpers";
 test.use({ contextOptions: { reducedMotion: "reduce" } });
 
 test.describe("reduced motion", () => {
-  test("hero content is visible immediately, with no animation dependency", async ({
+  test("hero content is visible immediately, no animation dependency", async ({
     page,
   }) => {
     await page.goto("/");
@@ -14,34 +14,27 @@ test.describe("reduced motion", () => {
     await expect(heading).toHaveCSS("transform", "none");
   });
 
-  test("below-the-fold sections are still fully visible once scrolled to, without a sliding transform", async ({
+  test("below-the-fold sections are fully visible once scrolled to", async ({
     page,
   }) => {
     await page.goto("/");
-
-    for (const id of ["about", "experience", "skills", "contact"]) {
+    for (const id of ["about", "experience", "skills", "projects", "contact"]) {
       const section = page.locator(`#${id}`);
       await section.scrollIntoViewIfNeeded();
-      await expect(section).toBeVisible();
-
       const heading = section.getByRole("heading", { level: 2 }).first();
       await expect(heading).toBeVisible();
       await expect(heading).toHaveCSS("opacity", "1");
     }
   });
 
-  test("experience cards render with no residual slide transform", async ({
-    page,
-  }) => {
+  test("revealed elements carry no residual transform", async ({ page }) => {
     await page.goto("/");
     await page.locator("#experience").scrollIntoViewIfNeeded();
-
-    const cards = page.locator("#experience li > div");
-    const count = await cards.count();
+    const revealed = page.locator("#experience [data-reveal]");
+    const count = await revealed.count();
     expect(count).toBeGreaterThan(0);
-
     for (let i = 0; i < count; i++) {
-      await expect(cards.nth(i)).toHaveCSS("transform", "none");
+      await expect(revealed.nth(i)).toHaveCSS("transform", "none");
     }
   });
 
@@ -65,7 +58,6 @@ test.describe("reduced motion", () => {
     const dialog = page.getByRole("dialog", { name: /ask/i });
     await dialog.getByRole("textbox").fill("hi");
     await page.keyboard.press("Enter");
-
     const caret = dialog.locator(".motion-safe\\:animate-caret");
     await expect(caret.first()).toBeVisible();
     await expect(caret.first()).toHaveCSS("animation-name", "none");
