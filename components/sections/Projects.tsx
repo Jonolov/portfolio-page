@@ -15,7 +15,7 @@ export function Projects({ projects }: { projects: SideProject[] }) {
     <section
       id="projects"
       aria-labelledby="projects-heading"
-      className="bg-pink px-6 py-24 text-pink-fg sm:px-16 sm:py-28"
+      className="bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-28"
     >
       <div ref={ref} className="mx-auto max-w-6xl">
         <div data-reveal>
@@ -24,7 +24,7 @@ export function Projects({ projects }: { projects: SideProject[] }) {
             index="04"
             kicker="Side projects"
             title="Built for fun"
-            accentClassName="text-pink-fg"
+            accentClassName="text-cyan"
           />
         </div>
 
@@ -36,7 +36,7 @@ export function Projects({ projects }: { projects: SideProject[] }) {
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block w-full max-w-xl shrink-0 snap-start rounded-2xl border-2 border-pink-fg bg-paper p-8 text-paper-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-fg"
+                className="group block w-full max-w-xl shrink-0 snap-start rounded-2xl border-2 border-field bg-paper p-8 text-paper-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
               >
                 <h3 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
                   {project.name}

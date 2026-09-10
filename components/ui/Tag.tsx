@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 type TagProps = {
   children: ReactNode;
-  variant?: "plain" | "cyan" | "pink";
+  variant?: "plain" | "cyan" | "clay";
   /** "light" = tag sits on a dark ground; "dark" = on paper. */
   tone?: "light" | "dark";
 };
@@ -12,8 +12,8 @@ const STYLES: Record<string, string> = {
   "plain-light": "border border-field-fg/25 text-field-fg/85",
   "cyan-dark": "bg-cyan font-semibold text-cyan-fg",
   "cyan-light": "bg-cyan font-semibold text-cyan-fg",
-  "pink-dark": "bg-pink font-semibold text-pink-fg",
-  "pink-light": "bg-pink font-semibold text-pink-fg",
+  "clay-dark": "bg-clay font-semibold text-clay-fg",
+  "clay-light": "bg-clay font-semibold text-clay-fg",
 };
 
 export function Tag({

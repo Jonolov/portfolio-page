@@ -19,13 +19,13 @@ export function Hero({ profile }: { profile: Profile }) {
     >
       <ShardField
         shards={[
-          { x: "83%", y: "3.5rem", size: 52, color: "bg-pink", radius: 16 },
-          { x: "62%", y: "16%", size: 14, color: "bg-paper", radius: 4 },
-          { x: "93%", y: "26%", size: 12, color: "bg-js-green" },
-          { x: "70%", y: "46%", size: 24, color: "bg-cyan" },
-          { x: "90%", y: "58%", size: 34, color: "bg-paper", radius: 10 },
-          { x: "78%", y: "80%", size: 18, color: "bg-cyan", radius: 6 },
-          { x: "88%", y: "90%", size: 26, color: "bg-pink", radius: 8 },
+          { x: "83%", y: "3.5rem", size: 44, color: "bg-clay", radius: 14 },
+          { x: "62%", y: "16%", size: 12, color: "bg-paper", radius: 4 },
+          { x: "93%", y: "26%", size: 10, color: "bg-cyan" },
+          { x: "70%", y: "46%", size: 20, color: "bg-paper", radius: 4 },
+          { x: "90%", y: "58%", size: 30, color: "bg-cyan", radius: 8 },
+          { x: "78%", y: "80%", size: 16, color: "bg-clay", radius: 6 },
+          { x: "88%", y: "90%", size: 22, color: "bg-paper", radius: 6 },
         ]}
       />
 
@@ -43,7 +43,7 @@ export function Hero({ profile }: { profile: Profile }) {
             <span aria-hidden="true">
               {first}
               <br />
-              <span className="text-pink-soft">{last.slice(0, 6)}</span>
+              <span className="text-clay-soft">{last.slice(0, 6)}</span>
               <span className="[-webkit-text-stroke:2px_var(--field-fg)] [color:transparent]">
                 {last.slice(6)}
               </span>

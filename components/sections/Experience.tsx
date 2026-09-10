@@ -8,8 +8,8 @@ import { useReveal } from "@/lib/gsap";
 
 const HIGHLIGHT_TECH = new Set(["Next.js", "React", "Claude Code"]);
 
-function techVariant(tech: string): "plain" | "cyan" | "pink" {
-  if (tech === "React") return "pink";
+function techVariant(tech: string): "plain" | "cyan" | "clay" {
+  if (tech === "React") return "clay";
   if (HIGHLIGHT_TECH.has(tech)) return "cyan";
   return "plain";
 }

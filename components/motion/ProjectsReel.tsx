@@ -48,7 +48,7 @@ export function ProjectsReel({ children }: { children: ReactNode }) {
         {children}
       </div>
       {reel ? (
-        <p data-reel-hint aria-hidden="true" className="mt-4 text-sm font-medium text-pink-fg">
+        <p data-reel-hint aria-hidden="true" className="mt-4 text-sm font-medium text-field-fg/80">
           drag the reel →
         </p>
       ) : null}

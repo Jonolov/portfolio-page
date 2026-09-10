@@ -82,7 +82,7 @@ export function ScrollMarquee({ items }: { items: string[] }) {
   return (
     <div
       aria-hidden="true"
-      className="overflow-hidden border-y-2 border-ink bg-cyan text-cyan-fg"
+      className="overflow-hidden border-y-2 border-js-green bg-ink text-ink-fg"
     >
       <div
         ref={trackRef}

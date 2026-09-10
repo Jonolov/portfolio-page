@@ -12,7 +12,7 @@ import { NO_PREFERENCE, REDUCED } from "@/lib/gsap";
 const SHARDS = [
   { left: "4%", top: "2%", size: 22, color: "bg-js-green", radius: 6 },
   { left: "87%", top: "-8%", size: 28, color: "bg-cyan", radius: 0 },
-  { left: "93%", top: "70%", size: 16, color: "bg-pink", radius: 5 },
+  { left: "93%", top: "70%", size: 16, color: "bg-clay", radius: 5 },
   { left: "-2%", top: "62%", size: 24, color: "bg-js-green", radius: 0 },
 ];
 

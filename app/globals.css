@@ -8,12 +8,14 @@
   --paper-fg: #0b120e;
   --field: #0b6130;
   --field-fg: #f6f7f5;
-  /* accents */
-  --cyan: #5cf2e6;
+  /* accents — kept few and calmer than the first pass. --cyan has to stay
+     bright enough to read as small text on --field (WCAG AA); --clay is the
+     warm fill that replaced the hot pink; --js-green is the single "pop". */
+  --cyan: #6fe0d4;
   --cyan-fg: #0b3d24;
-  --pink: #ff5da2;
-  --pink-fg: #3a0a1f;
-  --pink-soft: #ff9ec7;
+  --clay: #e08a70;
+  --clay-fg: #3d1508;
+  --clay-soft: #f0b6a4;
   --js-green: #3ddc84;
 
   /* page defaults, consumed by the skip link / overlays / <body> */
@@ -30,9 +32,9 @@
   --color-field-fg: var(--field-fg);
   --color-cyan: var(--cyan);
   --color-cyan-fg: var(--cyan-fg);
-  --color-pink: var(--pink);
-  --color-pink-fg: var(--pink-fg);
-  --color-pink-soft: var(--pink-soft);
+  --color-clay: var(--clay);
+  --color-clay-fg: var(--clay-fg);
+  --color-clay-soft: var(--clay-soft);
   --color-js-green: var(--js-green);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
