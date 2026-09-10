@@ -14,6 +14,11 @@ type BlockMarkProps = {
   cellClassName: string;
   /** Class for the accent (green underline) cells. */
   accentClassName: string;
+  /**
+   * Stagger the blocks in on mount (motion-safe only; static otherwise).
+   * For the nav brand — the contact sign-off is animated by <FlipMark>.
+   */
+  animated?: boolean;
 } & HTMLAttributes<HTMLSpanElement>;
 
 /**
@@ -26,6 +31,7 @@ export function BlockMark({
   gap,
   cellClassName,
   accentClassName,
+  animated = false,
   className,
   ...rest
 }: BlockMarkProps) {
@@ -43,8 +49,16 @@ export function BlockMark({
       {blockMarkCells().map((c, i) => (
         <span
           key={i}
-          style={{ gridRow: c.row + 1, gridColumn: c.col + 1 }}
-          className={c.accent ? accentClassName : cellClassName}
+          style={{
+            gridRow: c.row + 1,
+            gridColumn: c.col + 1,
+            // Reading-order stagger: blockMarkCells() is row-major, so the
+            // J draws top-to-bottom and the green bar lands last.
+            animationDelay: animated ? `${i * 0.022}s` : undefined,
+          }}
+          className={`${c.accent ? accentClassName : cellClassName} ${
+            animated ? "motion-safe:animate-block-in" : ""
+          }`}
         />
       ))}
     </span>

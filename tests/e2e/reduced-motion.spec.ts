@@ -54,6 +54,12 @@ test.describe("reduced motion", () => {
     await expect(page.locator("#contact [data-contact-mark]")).toBeVisible();
     await expect(page.locator("[data-nav-mark]")).toBeVisible();
 
+    // The nav mark's assemble-on-load stagger must not leave cells hidden.
+    await expect(page.locator("[data-nav-mark] > span").first()).toHaveCSS(
+      "opacity",
+      "1",
+    );
+
     const vp = page.viewportSize()!;
     const box = await page.locator("#contact").boundingBox();
     expect(box?.height ?? 0).toBeLessThan(vp.height * 1.6);

@@ -55,3 +55,17 @@ body {
     opacity: 0;
   }
 }
+
+/* Nav brand: the block "J" assembles on load, one cell at a time.
+   `both` holds each cell hidden through its delay; without the animation
+   (reduced motion, no CSS animation support) the cells are just visible. */
+@utility animate-block-in {
+  animation: block-in 0.3s ease-out both;
+}
+
+@keyframes block-in {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}

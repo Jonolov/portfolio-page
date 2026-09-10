@@ -83,6 +83,7 @@ export function Nav({
           >
             <BlockMark
               data-nav-mark
+              animated
               cell={NAV_MARK_CELL}
               gap={NAV_MARK_GAP}
               className="shrink-0"
