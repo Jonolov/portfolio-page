@@ -40,7 +40,7 @@ sections, in page order:
 | About    | `--paper`         | Numbered label `01 — About` + big uppercase `<h2>`, two-column prose. |
 | Experience | green           | `02 —`. Role cards stagger in; colour-pill tech tags; "show earlier roles" toggle unchanged. |
 | Skills   | `--paper`         | `03 —`. Plain group headings (no `#`), colour-pill tags in a 3-col grid. |
-| Projects | `--pink`          | `04 —`. Single restyled card. No reel (deferred), no "next project" placeholder. |
+| Projects | `--pink`          | `04 —`. `<ProjectsReel>` — Draggable + inertia + scroll-snap. Renders one plain card while `content/projects.ts` has a single entry; becomes a draggable horizontal reel (with the "drag →" hint) at 2+. No placeholder card. |
 | Contact  | `--ink`           | `05 —`. `<ContactMark>` — big green `JS` + accent shards that burst and settle on scroll-in. "Let's build something." headline, then status / email / company·location / LinkedIn. |
 
 **Type.** Drop `Martian_Mono`. `Familjen_Grotesk` (via `next/font/google`)
@@ -71,9 +71,10 @@ contract.
   reduced-motion contract, one font-ready refresh.
 - `useReveal` fully replaces `RevealOnScroll` + `Stagger`; `motion` package
   removed.
-- Seven effects: kinetic name, magnetic buttons, scroll-reactive marquee,
+- Eight effects: kinetic name, magnetic buttons, scroll-reactive marquee,
   section reveals, ambient shard parallax, **draggable shards with inertia**,
-  the contact `JS` shatter.
+  the **draggable projects reel** (inert at one card, live at 2+), the
+  contact `JS` shatter.
 - Zero regression to accessibility (axe `wcag2a/2aa/21a/21aa` = 0 violations)
   or the existing smoke behaviour. Contact stays reachable; `mailto:` correct.
 - Full reduced-motion and no-JS fallbacks — content always in the a11y tree,
@@ -84,8 +85,9 @@ contract.
 
 - No runtime old/new toggle. No preview-deploy requirement in the spec (Jon
   may still push one; not a gate).
-- No horizontal-scroll projects reel; no pinned role cards. Both deferred —
-  the reel revisited at 2+ side projects.
+- No pinned role cards (deferred). The projects reel *mechanism* ships, but
+  stays a single static card until `content/projects.ts` has 2+ entries — no
+  filler projects added to force it.
 - No CSS `animation-timeline: scroll()` work — that is sub-project 4, its own
   spec.
 - No changes to the Ask panel / command palette **behaviour** — restyle only.
@@ -134,6 +136,7 @@ Considered and rejected:
 | `MagneticButton.tsx` | Wraps a single CTA. Fine-pointer only: `pointermove` within ~40px translates ~6px toward the cursor via a quick `gsap.to`; springs back on leave. Reduced-motion / coarse pointer: inert passthrough. |
 | `ScrollMarquee.tsx` | The cyan ticker. Base loop tween; a `ScrollTrigger` `onUpdate` maps `getVelocity()` onto `tween.timeScale()` and flips direction with scroll. Content duplicated for a seamless wrap. Reduced-motion: static, no loop. |
 | `ShardField.tsx` | Per-section decorative squares. Idle drift + `pointermove` parallax; `Draggable` + `InertiaPlugin` so they can be flung and settle. Config prop: shard list `{x,y,size,color,radius}`. `aria-hidden`, `pointer-events` only on the shards themselves. Reduced-motion: static shards at rest, no drag. |
+| `ProjectsReel.tsx` | Wraps the projects card row. 1 card → renders a plain centred card, no drag, no hint. 2+ cards → a horizontal `Draggable` (`type: "x"`, `inertia: true`, `bounds` = the track) with CSS scroll-snap as the no-JS/reduced fallback, plus a "drag →" hint. `aria-hidden` only on the hint; cards stay real links in tab order and reachable by keyboard scroll. Reduced-motion: native scroll-snap row, no Draggable. |
 | `components/contact/ContactMark.tsx` | Rebuilt from scratch (replaces `FlipMark`). Big `JS` in `--font-display` / `--js-green` + 3–4 accent shards. `ScrollTrigger` on the contact section: `onEnter` → mark scales/rotates in, shards burst outward then ease to rest; `onLeaveBack` → reverse. Triggered, not scrubbed. `aria-hidden` — the real contact heading/copy sit under it and are always in the DOM. Reduced-motion: mark + shards rendered at rest, no trigger. |
 
 ### Section / shared component changes
@@ -147,7 +150,7 @@ Considered and rejected:
 | `components/sections/About.tsx` | Paper ground; `SectionHeading` (numbered) ; `useReveal` on the prose container. |
 | `components/sections/Experience.tsx` | Green ground; `useReveal` staggers the `<ol>` items; `Tag` → pill variants; dates `→` become `—`; "show/hide earlier roles" toggle unchanged (smoke test must pass). |
 | `components/sections/Skills.tsx` | Paper ground; plain group headings; `Tag` → pill; `useReveal`. |
-| `components/sections/Projects.tsx` | Pink ground; single restyled card; `useReveal`; no placeholder card. |
+| `components/sections/Projects.tsx` | Pink ground; renders `<ProjectsReel>` with the mapped project cards; `useReveal` on the heading block; no placeholder card. |
 | `components/sections/Contact.tsx` | Ink ground; `<ContactMark>` replaces `<BlockMark data-contact-mark>` + the `<FlipMark>` overlay in `layout.tsx`; `[data-contact-reveal]` copy kept, revealed by `useReveal`; `statusLine` → "● …"; add "Let's build something." headline. Keeps `id="contact"`, `aria-labelledby`, `mailto:` link, LinkedIn link + `sr-only` "(opens in a new tab)". |
 | `components/ui/SectionHeading.tsx` | Rewrite: rotated number label (`01 — About`) + big uppercase `<h2>` in `--font-display`. Same `id` / `eyebrow` / `title` props (or `number` replaces `eyebrow` — plan decides). |
 | `components/ui/Tag.tsx` | Rewrite: rounded colour-pill, `variant?: "plain" | "cyan" | "pink"` prop, default plain. |
@@ -267,6 +270,9 @@ selector it depends on.
 - Magnetic buttons feel responsive, spring back, don't trap the pointer.
 - Marquee speeds/reverses with scroll and never tears the loop seam.
 - Shards drag and fling with inertia; parallax is subtle, not seasick.
+- Projects: one card today renders plain (no drag hint); temporarily adding
+  a second entry to `content/projects.ts` turns it into a draggable,
+  inertia-flung, snap-settling reel; keyboard users can still scroll it.
 - Contact `JS` bursts and settles on enter, reverses on scroll-up, no
   double-vision with anything.
 - Mobile (390): every section, two-row nav, stacked CTAs, tag wrapping,
@@ -275,7 +281,7 @@ selector it depends on.
 
 ## Files
 
-**Created:** `lib/gsap.ts`; `components/motion/{GsapBootstrap,KineticName,MagneticButton,ScrollMarquee,ShardField}.tsx`;
+**Created:** `lib/gsap.ts`; `components/motion/{GsapBootstrap,KineticName,MagneticButton,ScrollMarquee,ShardField,ProjectsReel}.tsx`;
 `components/contact/ContactMark.tsx`; `components/ui/Mark.tsx`.
 
 **Modified:** `app/{layout.tsx,globals.css,opengraph-image.tsx}`;
@@ -304,7 +310,8 @@ and committed:
    `RevealOnScroll` / `Stagger` across all sections; remove `motion` from
    `package.json`.
 3. **Signature effects.** `<KineticName>`, `<MagneticButton>`,
-   `<ScrollMarquee>`, `<ShardField>` (incl. `Draggable` + inertia).
+   `<ScrollMarquee>`, `<ShardField>` (incl. `Draggable` + inertia),
+   `<ProjectsReel>`.
 4. **Contact.** `<ContactMark>`; delete `FlipMark` + `BlockMark` + `block-mark`;
    rewrite `reduced-motion.spec.ts`; delete `contact-flip.spec.ts`.
 
