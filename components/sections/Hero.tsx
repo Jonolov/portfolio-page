@@ -4,6 +4,7 @@ import type { Profile } from "@/lib/types";
 import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
 import { KineticName } from "@/components/motion/KineticName";
 import { MagneticButton } from "@/components/motion/MagneticButton";
+import { ShardField } from "@/components/motion/ShardField";
 
 export function Hero({ profile }: { profile: Profile }) {
   const { setOpen } = useCommandPalette();
@@ -16,21 +17,13 @@ export function Hero({ profile }: { profile: Profile }) {
       aria-labelledby="hero-heading"
       className="relative overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-32"
     >
-      {/* Decorative shards — replaced by <ShardField> in a later task. */}
-      <div aria-hidden="true">
-        <span
-          data-shard
-          className="absolute right-10 top-24 h-12 w-12 rounded-xl bg-pink sm:right-28"
-        />
-        <span
-          data-shard
-          className="absolute right-40 top-1/2 h-7 w-7 bg-cyan sm:right-72"
-        />
-        <span
-          data-shard
-          className="absolute bottom-24 right-16 hidden h-9 w-9 rounded-lg bg-paper sm:block"
-        />
-      </div>
+      <ShardField
+        shards={[
+          { x: "87%", y: "6rem", size: 48, color: "bg-pink", radius: 14 },
+          { x: "72%", y: "50%", size: 28, color: "bg-cyan" },
+          { x: "84%", y: "78%", size: 36, color: "bg-paper", radius: 10 },
+        ]}
+      />
 
       <div className="mx-auto max-w-6xl">
         <p className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-cyan">

@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import type { CondensedRole, Role } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Tag } from "@/components/ui/Tag";
+import { ShardField } from "@/components/motion/ShardField";
 import { useReveal } from "@/lib/gsap";
 
 const HIGHLIGHT_TECH = new Set(["Next.js", "React", "Claude Code"]);
@@ -29,8 +30,12 @@ export function Experience({
     <section
       id="experience"
       aria-labelledby="experience-heading"
-      className="bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-28"
+      className="relative overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-28"
     >
+      <ShardField
+        shards={[{ x: "90%", y: "3rem", size: 24, color: "bg-cyan" }]}
+      />
+
       <div ref={ref} className="mx-auto max-w-6xl">
         <div data-reveal>
           <SectionHeading
