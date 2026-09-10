@@ -1,34 +1,41 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6f7f5;
-  --foreground: #121815;
-  --accent: #0b6130;
-  --band-background: #182420;
-  --band-foreground: #eafbf1;
-  --band-accent: #3ddc84;
+  /* grounds */
+  --ink: #0b120e;
+  --ink-fg: #eafbf1;
+  --paper: #f6f7f5;
+  --paper-fg: #0b120e;
+  --field: #0b6130;
+  --field-fg: #f6f7f5;
+  /* accents */
+  --cyan: #5cf2e6;
+  --cyan-fg: #0b3d24;
+  --pink: #ff5da2;
+  --pink-fg: #3a0a1f;
+  --js-green: #3ddc84;
+
+  /* page defaults, consumed by the skip link / overlays / <body> */
+  --background: var(--paper);
+  --foreground: var(--paper-fg);
 }
 
 @theme inline {
+  --color-ink: var(--ink);
+  --color-ink-fg: var(--ink-fg);
+  --color-paper: var(--paper);
+  --color-paper-fg: var(--paper-fg);
+  --color-field: var(--field);
+  --color-field-fg: var(--field-fg);
+  --color-cyan: var(--cyan);
+  --color-cyan-fg: var(--cyan-fg);
+  --color-pink: var(--pink);
+  --color-pink-fg: var(--pink-fg);
+  --color-js-green: var(--js-green);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-band-background: var(--band-background);
-  --color-band-foreground: var(--band-foreground);
-  --color-band-accent: var(--band-accent);
   --font-sans: var(--font-archivo);
-  --font-mono: var(--font-martian-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #182420;
-    --foreground: #eafbf1;
-    --accent: #3ddc84;
-    --band-background: #f6f7f5;
-    --band-foreground: #121815;
-    --band-accent: #0b6130;
-  }
+  --font-display: var(--font-familjen);
 }
 
 /* The contact-flip overlay scatters glyphs off-frame during its animation;
@@ -53,22 +60,5 @@ body {
 @keyframes caret-blink {
   50% {
     opacity: 0;
-  }
-}
-
-/* Nav brand: the block "J" scatters into place on load — each cell flies
-   in from a per-cell random offset (--bx/--by/--br, set inline) in a
-   random order. `both` holds each cell hidden through its delay; without
-   the animation (reduced motion, no CSS animation support) the cells are
-   just visible. */
-@utility animate-block-in {
-  animation: block-in 0.34s cubic-bezier(0.2, 0.9, 0.3, 1) both;
-}
-
-@keyframes block-in {
-  from {
-    opacity: 0;
-    transform: translate(var(--bx, 0), var(--by, 0)) rotate(var(--br, 0))
-      scale(0.4);
   }
 }

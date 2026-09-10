@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Martian_Mono } from "next/font/google";
+import { Archivo, Familjen_Grotesk } from "next/font/google";
 import dynamic from "next/dynamic";
 import { Analytics } from "@vercel/analytics/next";
 import { MotionConfig } from "motion/react";
@@ -19,8 +19,8 @@ const archivo = Archivo({
   subsets: ["latin"],
 });
 
-const martianMono = Martian_Mono({
-  variable: "--font-martian-mono",
+const familjen = Familjen_Grotesk({
+  variable: "--font-familjen",
   subsets: ["latin"],
 });
 
@@ -89,7 +89,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${martianMono.variable} h-full scroll-pt-20 antialiased sm:scroll-pt-16`}
+      className={`${archivo.variable} ${familjen.variable} h-full scroll-pt-20 antialiased sm:scroll-pt-16`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <script
