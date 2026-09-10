@@ -11,8 +11,10 @@ export function About({ paragraphs }: { paragraphs: string[] }) {
       <RevealOnScroll>
         <SectionHeading
           id="about-heading"
-          eyebrow="about"
+          index="01"
+          kicker="About"
           title="how he works"
+          accentClassName="text-field"
         />
         <div className="flex flex-col gap-4 text-base text-foreground/80 sm:text-lg">
           {paragraphs.map((paragraph) => (

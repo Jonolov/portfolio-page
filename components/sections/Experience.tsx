@@ -25,7 +25,8 @@ export function Experience({
       <RevealOnScroll>
         <SectionHeading
           id="experience-heading"
-          eyebrow="experience"
+          index="02"
+          kicker="Experience"
           title="selected roles, most recent first"
         />
       </RevealOnScroll>

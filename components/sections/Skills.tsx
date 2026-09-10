@@ -14,8 +14,10 @@ export function Skills({ groups }: { groups: SkillGroup[] }) {
       <RevealOnScroll>
         <SectionHeading
           id="skills-heading"
-          eyebrow="skills"
+          index="03"
+          kicker="Skills"
           title="grouped by area"
+          accentClassName="text-field"
         />
       </RevealOnScroll>
       <StaggerGroup>

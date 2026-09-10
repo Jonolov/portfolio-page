@@ -14,8 +14,10 @@ export function Projects({ projects }: { projects: SideProject[] }) {
       <RevealOnScroll>
         <SectionHeading
           id="projects-heading"
-          eyebrow="side projects"
+          index="04"
+          kicker="Side projects"
           title="built for fun"
+          accentClassName="text-pink-fg"
         />
       </RevealOnScroll>
       <StaggerGroup>
