@@ -66,13 +66,13 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
           ))}
         </div>
 
-        <div className="flex flex-col items-center gap-3 font-mono text-sm">
+        <div className="flex w-full max-w-md flex-col items-center gap-3 font-mono text-sm">
           {contact.availableForConsulting ? (
             <p
               data-contact-reveal
-              className={
+              className={`max-w-full text-balance ${
                 banded ? "text-band-foreground/70" : "text-foreground/70"
-              }
+              }`}
             >
               status:{" "}
               <span className={banded ? "text-band-accent" : "text-accent"}>
@@ -81,10 +81,10 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
             </p>
           ) : null}
 
-          <p data-contact-reveal>
+          <p data-contact-reveal className="max-w-full">
             <a
               href={`mailto:${contact.email}`}
-              className={`rounded text-lg font-bold break-words underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:text-xl ${
+              className={`rounded text-sm font-bold [overflow-wrap:anywhere] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:text-lg ${
                 banded
                   ? "text-band-accent focus-visible:outline-band-foreground"
                   : "text-accent focus-visible:outline-foreground"
@@ -96,9 +96,9 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
 
           <p
             data-contact-reveal
-            className={
+            className={`max-w-full text-balance ${
               banded ? "text-band-foreground/70" : "text-foreground/70"
-            }
+            }`}
           >
             {contact.company.toLowerCase()} · {contact.location.toLowerCase()}
           </p>
