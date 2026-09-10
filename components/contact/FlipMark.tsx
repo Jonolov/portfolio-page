@@ -10,7 +10,7 @@ import {
   MARK_CELL,
   MARK_GAP,
   blockMarkCells,
-} from "@/components/contact/block-mark";
+} from "@/components/ui/block-mark";
 import { CONTACT_GROUND } from "@/components/contact/ground";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);

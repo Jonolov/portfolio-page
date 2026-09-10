@@ -3,7 +3,7 @@ import {
   BLOCK_MARK_COLS,
   BLOCK_MARK_ROWS,
   blockMarkCells,
-} from "@/components/contact/block-mark";
+} from "@/components/ui/block-mark";
 
 describe("blockMarkCells", () => {
   it("returns cells within the declared grid bounds", () => {

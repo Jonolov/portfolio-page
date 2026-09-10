@@ -1,18 +1,11 @@
 import type { Profile } from "@/lib/types";
-import {
-  BLOCK_MARK_COLS,
-  BLOCK_MARK_ROWS,
-  MARK_CELL,
-  MARK_GAP,
-  blockMarkCells,
-} from "@/components/contact/block-mark";
+import { BlockMark } from "@/components/ui/BlockMark";
+import { MARK_CELL, MARK_GAP } from "@/components/ui/block-mark";
 import { CONTACT_GROUND } from "@/components/contact/ground";
 
 const banded = CONTACT_GROUND === "banded";
 
 export function Contact({ contact }: { contact: Profile["contact"] }) {
-  const cells = blockMarkCells();
-
   return (
     <section
       id="contact"
@@ -39,32 +32,14 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
 
         {/* Static J — the accessible / no-JS / reduced-motion image.
             FlipMark overlays this exactly when it animates. */}
-        <div
+        <BlockMark
           data-contact-mark
-          aria-hidden="true"
-          className="my-16 grid"
-          style={{
-            gridTemplateColumns: `repeat(${BLOCK_MARK_COLS}, ${MARK_CELL})`,
-            gridTemplateRows: `repeat(${BLOCK_MARK_ROWS}, ${MARK_CELL})`,
-            gap: MARK_GAP,
-          }}
-        >
-          {cells.map((cell, i) => (
-            <span
-              key={i}
-              style={{ gridRow: cell.row + 1, gridColumn: cell.col + 1 }}
-              className={
-                cell.accent
-                  ? banded
-                    ? "bg-band-accent"
-                    : "bg-accent"
-                  : banded
-                    ? "bg-band-foreground"
-                    : "bg-foreground"
-              }
-            />
-          ))}
-        </div>
+          cell={MARK_CELL}
+          gap={MARK_GAP}
+          className="my-16"
+          cellClassName={banded ? "bg-band-foreground" : "bg-foreground"}
+          accentClassName={banded ? "bg-band-accent" : "bg-accent"}
+        />
 
         <div className="flex w-full max-w-md flex-col items-center gap-3 font-mono text-sm">
           {contact.availableForConsulting ? (
