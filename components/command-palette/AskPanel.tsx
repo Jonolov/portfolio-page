@@ -206,7 +206,10 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
                 e.currentTarget.form?.requestSubmit();
               }
             }}
-            className="flex-1 resize-none rounded-lg border border-foreground/10 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-foreground/70"
+            // text-base (16px) on mobile: iOS Safari auto-zooms into any
+            // focused field smaller than that, and the zoom is what pushed the
+            // page wider when the panel opened and focused this textarea.
+            className="flex-1 resize-none rounded-lg border border-foreground/10 bg-transparent px-3 py-2 text-base outline-none placeholder:text-foreground/70 sm:text-sm"
           />
           <button
             type="submit"

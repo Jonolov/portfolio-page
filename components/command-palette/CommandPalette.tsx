@@ -81,7 +81,7 @@ export function CommandPalette({
             ? "Press backspace to go back"
             : "Jump to a section, or ask whoami / stack…"
         }
-        className="w-full border-b border-foreground/10 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-foreground/70"
+        className="w-full border-b border-foreground/10 bg-transparent px-4 py-3 text-base outline-none placeholder:text-foreground/70 sm:text-sm"
       />
       <Command.List className="max-h-80 overflow-y-auto p-2">
         <Command.Empty className="px-2 py-6 text-center text-sm text-foreground/70">
