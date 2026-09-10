@@ -3,6 +3,7 @@
 import type { Profile } from "@/lib/types";
 import { useCommandPalette } from "@/components/command-palette/useCommandPalette";
 import { KineticName } from "@/components/motion/KineticName";
+import { MagneticButton } from "@/components/motion/MagneticButton";
 
 export function Hero({ profile }: { profile: Profile }) {
   const { setOpen } = useCommandPalette();
@@ -65,18 +66,22 @@ export function Hero({ profile }: { profile: Profile }) {
         </p>
 
         <div className="mt-11 flex flex-col gap-3 sm:flex-row">
-          <a
-            href="#contact"
-            className="rounded-lg bg-cyan px-6 py-4 text-center font-display font-semibold text-cyan-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
-          >
-            Get in touch →
-          </a>
-          <a
-            href="#experience"
-            className="rounded-lg border-2 border-field-fg px-6 py-4 text-center font-display font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
-          >
-            See the work
-          </a>
+          <MagneticButton>
+            <a
+              href="#contact"
+              className="rounded-lg bg-cyan px-6 py-4 text-center font-display font-semibold text-cyan-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
+            >
+              Get in touch →
+            </a>
+          </MagneticButton>
+          <MagneticButton>
+            <a
+              href="#experience"
+              className="rounded-lg border-2 border-field-fg px-6 py-4 text-center font-display font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-field-fg"
+            >
+              See the work
+            </a>
+          </MagneticButton>
         </div>
 
         <button
