@@ -10,6 +10,7 @@ const GRID = [
   "#..#.",
   "#..#.",
   ".##..",
+  ".....", // breathing room between the letter and the bar, like the SVG
   "=====",
 ];
 
