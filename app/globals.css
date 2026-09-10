@@ -6,7 +6,7 @@
   --ink-fg: #eafbf1;
   --paper: #f6f7f5;
   --paper-fg: #0b120e;
-  --field: #0b6130;
+  --field: #1a3a2f;
   --field-fg: #f6f7f5;
   /* accents — kept few and calmer than the first pass. --cyan has to stay
      bright enough to read as small text on --field (WCAG AA); --clay is the
