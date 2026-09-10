@@ -4,6 +4,7 @@ import { Experience } from "@/components/sections/Experience";
 import { Hero } from "@/components/sections/Hero";
 import { Projects } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
+import { ScrollMarquee } from "@/components/motion/ScrollMarquee";
 import {
   getEarlierRoles,
   getExperience,
@@ -25,6 +26,12 @@ export default async function Home() {
   return (
     <>
       <Hero profile={profile} />
+      <ScrollMarquee
+        items={[
+          "React", "Next.js", "TypeScript", "Node.js", "GraphQL",
+          "Design Systems", "Accessibility", "Performance",
+        ]}
+      />
       <About paragraphs={profile.about.paragraphs} />
       <Experience experience={experience} earlierRoles={earlierRoles} />
       <Skills groups={skillGroups} />
