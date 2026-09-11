@@ -4,9 +4,14 @@ import { useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { NO_PREFERENCE } from "@/lib/gsap";
+import { computeMagnetOffset } from "@/components/motion/magnet";
 
 const RADIUS = 90; // px from centre where the pull starts
 const PULL = 0.28; // fraction of the offset the button follows
+// Hard cap on travel: two of these sitting close together (e.g. the hero
+// CTAs) both chase the same pointer, so an unbounded pull can drag them
+// into each other. Capping each one's excursion keeps that gap intact.
+const MAX_OFFSET = 18;
 
 /**
  * Pulls its single child toward the pointer on fine-pointer devices.
@@ -33,9 +38,10 @@ export function MagneticButton({ children }: { children: ReactNode }) {
             gsap.to(el, { x: 0, y: 0, duration: 0.4, ease: "power3.out" });
             return;
           }
+          const { x, y } = computeMagnetOffset(dx, dy, PULL, MAX_OFFSET);
           gsap.to(el, {
-            x: dx * PULL,
-            y: dy * PULL,
+            x,
+            y,
             duration: 0.3,
             ease: "power2.out",
           });

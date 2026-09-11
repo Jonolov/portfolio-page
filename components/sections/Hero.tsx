@@ -13,7 +13,7 @@ export function Hero({ profile }: { profile: Profile }) {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="relative isolate overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:py-32"
+      className="relative isolate overflow-hidden bg-field px-6 py-24 text-field-fg sm:px-16 sm:pb-32 sm:pt-12"
     >
       <ShardField
         shards={[
@@ -22,12 +22,15 @@ export function Hero({ profile }: { profile: Profile }) {
           { x: "71%", y: "46%", size: 22, color: "bg-paper", radius: 4 },
           { x: "90%", y: "60%", size: 30, color: "bg-paper", radius: 8 },
           { x: "80%", y: "84%", size: 15, color: "bg-cyan", radius: 5 },
+          { x: "60%", y: "10%", size: 18, color: "bg-cyan", radius: 6 },
+          { x: "97%", y: "42%", size: 26, color: "bg-paper", radius: 10 },
+          { x: "64%", y: "70%", size: 10, color: "bg-cyan" },
         ]}
       />
 
       <div className="relative z-10 mx-auto max-w-6xl">
         <p className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-cyan">
-          Stockholm · Consulting · Open
+          Stockholm · Consulting · Open for engagements
         </p>
 
         <h1
@@ -58,7 +61,7 @@ export function Hero({ profile }: { profile: Profile }) {
           {profile.heroHook}
         </p>
 
-        <div className="mt-11 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-11 flex flex-col gap-4 sm:flex-row sm:gap-10">
           <MagneticButton>
             <a
               href="#contact"

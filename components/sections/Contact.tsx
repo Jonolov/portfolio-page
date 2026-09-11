@@ -7,6 +7,7 @@ import { ContactMark } from "@/components/contact/ContactMark";
 
 export function Contact({ contact }: { contact: Profile["contact"] }) {
   const ref = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLParagraphElement>(null);
   useReveal(ref, { selector: "[data-contact-reveal]" });
 
   return (
@@ -26,13 +27,20 @@ export function Contact({ contact }: { contact: Profile["contact"] }) {
           <span className="text-js-green">05 — </span>Contact
         </h2>
 
-        <ContactMark />
-
-        <p className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+        {/* This <p> comes before ContactMark in the tree (order-2 below
+            restores the original visual stacking) so its ref is attached
+            before ContactMark's mount effect runs — React attaches refs and
+            runs layout effects per sibling, depth-first, in tree order. */}
+        <p
+          ref={headlineRef}
+          className="order-2 font-display text-3xl font-bold tracking-tight sm:text-4xl"
+        >
           Let&apos;s build something.
         </p>
 
-        <div className="mt-8 flex w-full max-w-md flex-col items-center gap-3.5 text-sm">
+        <ContactMark headlineRef={headlineRef} className="order-1" />
+
+        <div className="order-last mt-8 flex w-full max-w-md flex-col items-center gap-3.5 text-sm">
           {contact.availableForConsulting ? (
             <p data-contact-reveal className="text-ink-fg/70">
               <span className="text-js-green">●</span> {contact.statusLine}

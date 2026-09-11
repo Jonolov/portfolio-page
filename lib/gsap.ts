@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { Draggable } from "gsap/Draggable";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { useGSAP } from "@gsap/react";
 
 let registered = false;
@@ -19,6 +20,7 @@ export function registerGsap(): void {
     SplitText,
     Draggable,
     InertiaPlugin,
+    MotionPathPlugin,
   );
   registered = true;
 }
@@ -54,8 +56,8 @@ export function useReveal<T extends HTMLElement>(
 ): void {
   const {
     selector = "[data-reveal]",
-    y = 16,
-    stagger = 0.08,
+    y = 32,
+    stagger = 0.12,
     start = "top 85%",
   } = opts;
 
@@ -76,8 +78,8 @@ export function useReveal<T extends HTMLElement>(
         const tween = gsap.from(targets, {
           opacity: 0,
           y,
-          duration: 0.5,
-          ease: "power2.out",
+          duration: 0.7,
+          ease: "power3.out",
           stagger,
           paused: true,
         });
