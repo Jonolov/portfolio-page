@@ -148,4 +148,24 @@ test.describe("ask panel — conversation", () => {
 
     await expect(page.getByText(/sending messages a bit fast/i)).toBeVisible();
   });
+
+  test("tells the visitor to start over when the conversation is too long", async ({
+    page,
+  }) => {
+    await page.route("**/api/chat", (route) =>
+      route.fulfill({
+        status: 400,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "too_long" }),
+      }),
+    );
+    await page.goto("/");
+    await openPanel(page);
+
+    const dialog = page.getByRole("dialog", { name: /ask/i });
+    await dialog.getByRole("textbox").fill("hi");
+    await page.keyboard.press("Enter");
+
+    await expect(page.getByText(/close the chat to start over/i)).toBeVisible();
+  });
 });

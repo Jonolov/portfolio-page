@@ -16,7 +16,11 @@ import {
   getSkillGroups,
 } from "@/lib/cms";
 import { ipFromHeaders } from "@/lib/chat/ip";
-import { withinLimits } from "@/lib/chat/limits";
+import {
+  MAX_OUTPUT_TOKENS,
+  MAX_STEPS,
+  withinLimits,
+} from "@/lib/chat/limits";
 import { rateLimit } from "@/lib/chat/rate-limit";
 import { buildSystemPrompt } from "@/lib/chat/system-prompt";
 
@@ -77,9 +81,9 @@ export async function POST(req: Request): Promise<Response> {
     }),
     messages: await convertToModelMessages(messages),
     tools: { showContactCard },
-    stopWhen: isStepCount(3),
+    stopWhen: isStepCount(MAX_STEPS),
     temperature: 0.3,
-    maxOutputTokens: 350,
+    maxOutputTokens: MAX_OUTPUT_TOKENS,
   });
 
   return result.toUIMessageStreamResponse();

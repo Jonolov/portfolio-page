@@ -172,7 +172,9 @@ export function AskPanel({ contact }: { contact: Profile["contact"] }) {
           >
             {/rate_limited/.test(error?.message ?? "")
               ? "You're sending messages a bit fast — give it a moment."
-              : `Something went wrong — email Jon directly at ${contact.email}.`}
+              : /too_long/.test(error?.message ?? "")
+                ? "This conversation got long — close the chat to start over."
+                : `Something went wrong — email Jon directly at ${contact.email}.`}
           </p>
         ) : null}
 
